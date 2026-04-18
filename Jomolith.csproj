@@ -1,0 +1,76 @@
+<Project Sdk="Godot.NET.Sdk/4.6.1">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Jomolith</RootNamespace>
+    <!-- Catch compiler-mismatch issues with the Introspection generator as early as possible -->
+    <WarningsAsErrors>CS9057</WarningsAsErrors>
+    <!-- Required for some nuget packages to work -->
+    <!-- godotengine/godot/issues/42271#issuecomment-751423827 -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <!-- To show generated files -->
+    <!-- <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles> -->
+    <!--
+      <CompilerGeneratedFilesOutputPath>.generated</CompilerGeneratedFilesOutputPath>
+    -->
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Title>Jomolith</Title>
+    <Version>1.0.0</Version>
+    <Description>Jomolith</Description>
+    <Copyright>© 2024 Natelytle</Copyright>
+    <Authors>Natelytle</Authors>
+    <Company>Natelytle</Company>
+
+    <SkipTests Condition="'$(SKIP_TESTS)' != ''">true</SkipTests>
+    <RunTests>false</RunTests>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="('$(Configuration)' == 'Debug' or '$(Configuration)' == 'ExportDebug') and '$(SkipTests)' != 'true' ">
+    <RunTests>true</RunTests>
+    <DefineConstants>$(DefineConstants);RUN_TESTS</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Production dependencies go here! -->
+    <PackageReference Include="Chickensoft.GameTools" Version="3.1.18" />
+    <PackageReference Include="Chickensoft.GodotNodeInterfaces" Version="3.0.12" />
+    <PackageReference Include="Chickensoft.Introspection" Version="3.0.2" />
+    <PackageReference Include="Chickensoft.Introspection.Generator" Version="3.0.2" />
+    <PackageReference Include="Chickensoft.LogicBlocks" Version="5.20.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(RunTests)' == 'true'">
+    <!-- Test dependencies go here! -->
+    <!-- Dependencies added here will not be included in release builds. -->
+    <PackageReference Include="Chickensoft.GoDotTest" Version="2.0.33" />
+    <!-- Used to drive test scenes when testing visual code -->
+    <PackageReference Include="Chickensoft.GodotTestDriver" Version="3.1.68" />
+    <!-- Bring your own assertion library for tests! -->
+    <!-- We're using Shouldly for this example, but you can use anything. -->
+    <PackageReference Include="Shouldly" Version="4.3.0" />
+    <!-- LightMock is a mocking library that works without reflection. -->
+    <PackageReference Include="LightMock.Generator" Version="1.2.3" />
+    <!-- LightMoq is a Chickensoft package which makes it more like Moq. -->
+    <PackageReference Include="LightMoq" Version="0.1.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(RunTests)' != 'true'">
+    <Compile Remove="test/**/*.cs" />
+    <None Remove="test/**/*" />
+    <EmbeddedResource Remove="test/**/*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Game\Core\" />
+    <Folder Include="Game\Edit\" />
+    <Folder Include="Game\Play\" />
+    <Folder Include="Game\State\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Tests\GameTest.cs.uid" />
+  </ItemGroup>
+</Project>
