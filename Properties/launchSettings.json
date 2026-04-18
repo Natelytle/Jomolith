@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "🕹 Debug Game": {
+      "commandName": "Executable",
+      "executablePath": "/usr/lib/godot-mono/godot.linuxbsd.editor.x86_64.mono",
+      "workingDirectory": "$(SolutionDir)",
+      "commandLineArgs": "--path \"./\""
+    },
+    "🧪 Debug Tests": {
+      "commandName": "Executable",
+      "executablePath": "/usr/lib/godot-mono/godot.linuxbsd.editor.x86_64.mono",
+      "workingDirectory": "$(SolutionDir)",
+      "commandLineArgs": "--path \"./\" --run-tests --quit-on-finish"
+    }
+  }
+}
