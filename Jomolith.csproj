@@ -34,12 +34,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <AdditionalFiles Include="**/*.tscn" />
+    </ItemGroup>
+
+    <ItemGroup>
         <!-- Production dependencies go here! -->
         <PackageReference Include="Chickensoft.GameTools" Version="3.1.18"/>
         <PackageReference Include="Chickensoft.GodotNodeInterfaces" Version="3.0.12"/>
         <PackageReference Include="Chickensoft.Introspection" Version="3.0.2"/>
         <PackageReference Include="Chickensoft.Introspection.Generator" Version="3.0.2"/>
         <PackageReference Include="Chickensoft.LogicBlocks" Version="5.20.0"/>
+        <PackageReference Include="Chickensoft.Sync" Version="2.3.0" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(RunTests)' == 'true'">
@@ -64,13 +69,22 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Game\Core\"/>
         <Folder Include="Game\Edit\"/>
-        <Folder Include="Game\Play\"/>
-        <Folder Include="Game\State\States\"/>
+        <Folder Include="Game\Play\Player\VIsuals\" />
+        <Folder Include="Game\Play\Tower\State\" />
     </ItemGroup>
 
     <ItemGroup>
+        <Content Include="Game\Core\Program.cs.uid" />
+        <Content Include="Game\Play\Player\State\PlayerLogic.cs.uid" />
+        <Content Include="Game\Play\Player\State\PlayerLogic.Data.cs.uid" />
+        <Content Include="Game\Play\Player\State\PlayerLogic.PlayerState.cs.uid" />
+        <Content Include="Game\Play\Player\State\PlayerLogic.Input.cs.uid" />
+        <Content Include="Game\Play\Player\State\PlayerLogic.Output.cs.uid" />
+        <Content Include="Game\State\GameLogic.Data.cs.uid" />
+        <Content Include="Game\State\GameLogic.Input.cs.uid" />
+        <Content Include="Game\State\GameLogic.Output.cs.uid" />
+        <Content Include="Game\State\GameLogic.GameState.cs.uid" />
         <Content Include="Properties\launchSettings.json"/>
         <Content Include="Tests\GameTest.cs.uid"/>
     </ItemGroup>

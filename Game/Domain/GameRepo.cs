@@ -6,51 +6,52 @@ namespace Jomolith.Game.Domain;
 ///     Pure application game logic repository shared between view-specific logic
 ///     blocks.
 /// </summary>
-public interface IAppRepo : IDisposable
+public interface IGameRepo : IDisposable
 {
+    public event Action? MainMenuEntered;
+    public event Action? TowerEntered;
+    public event Action? TowerExited;
+
+    public void OnMainMenuEntered();
+    public void OnEnterTower();
 }
 
 /// <summary>
-///     Pure application game logic repository — shared between view-specific logic
+///     Pure application game logic repository — shared between view-specific logic
 ///     blocks.
 /// </summary>
-public class GameRepo : IAppRepo
+public class GameRepo : IGameRepo
 {
-    private bool _disposedValue;
-    public event Action? SplashScreenSkipped;
     public event Action? MainMenuEntered;
-    public event Action? GameEntered;
+    public event Action? TowerEntered;
+    public event Action? TowerExited;
 
-    public void SkipSplashScreen()
-    {
-        SplashScreenSkipped?.Invoke();
-    }
+    private bool disposedValue;
 
     public void OnMainMenuEntered()
     {
         MainMenuEntered?.Invoke();
     }
 
-    public void OnEnterGame()
+    public void OnEnterTower()
     {
-        GameEntered?.Invoke();
+        TowerEntered?.Invoke();
     }
 
     #region Internals
 
     protected void Dispose(bool disposing)
     {
-        if (!_disposedValue)
+        if (!disposedValue)
         {
             if (disposing)
             {
                 // Dispose managed objects.
-                SplashScreenSkipped = null;
                 MainMenuEntered = null;
-                GameEntered = null;
+                TowerEntered = null;
             }
 
-            _disposedValue = true;
+            disposedValue = true;
         }
     }
 
