@@ -19,6 +19,7 @@ public partial class PlayerLogic
         public readonly record struct IsMoving;
         public readonly record struct IsIdle;
         public readonly record struct SetTimer(double Time);
-        public readonly record struct TimerUp();
+        public readonly record struct TimerUp;
+        public readonly record struct Enable;
     }
 }

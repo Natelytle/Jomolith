@@ -53,6 +53,7 @@ public partial class JomolithGame : Control, IJomolithGame
         }).Handle((in GameLogic.Output.EnterTower _) =>
         {
             MainMenu.Hide();
+            GameRepo.OnEnterTower();
         }).Handle((in GameLogic.Output.UnloadCurrentTower _) =>
         {
             

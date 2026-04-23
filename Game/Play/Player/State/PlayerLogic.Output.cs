@@ -13,18 +13,18 @@ public partial class PlayerLogic
             public readonly record struct Jump;
             public readonly record struct Fall;
             public readonly record struct Climb;
+            public readonly record struct Disabled;
+            public readonly record struct Enabled;
         }
 
         public readonly record struct ApplyForce(Vector3 Force, Vector3 Torque);
 
         public readonly record struct SetRotation(Vector3 Rotation);
 
-        public readonly record struct EnterTower;
-
-        public readonly record struct UnloadCurrentTower;
-
         public readonly record struct FloorVelocityChanged(Vector2 Velocity);
 
         public readonly record struct VerticalVelocityChanged(Vector2 Velocity);
+
+        public readonly record struct SetFrozen(bool Frozen);
     }
 }

@@ -8,17 +8,17 @@
 animation = &"RESET"
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_pfjsd"]
-input_0/name = "Animating"
+input_0/name = "Enabled"
 input_0/auto_advance = false
 input_0/break_loop_at_end = false
 input_0/reset = true
-input_1/name = "Reset"
+input_1/name = "Disabled"
 input_1/auto_advance = false
 input_1/break_loop_at_end = false
 input_1/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_be8nq"]
-graph_offset = Vector2(-550.78436, 48.31018)
+graph_offset = Vector2(-456.7655, 145.39685)
 nodes/StateMachine/node = ExtResource("3_ew836")
 nodes/StateMachine/position = Vector2(-260, 60)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_ybk30")
@@ -39,7 +39,7 @@ tree_root = SubResource("AnimationNodeBlendTree_be8nq")
 anim_player = NodePath("../Avatar/AnimationPlayer")
 parameters/StateMachine/Climb/Speed/scale = 1.0
 parameters/StateMachine/Walk/Speed/scale = 1.0
-parameters/Transitions/current_state = "Animating"
+parameters/Transitions/current_state = "Enabled"
 parameters/Transitions/transition_request = ""
 parameters/Transitions/current_index = 0
 

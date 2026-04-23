@@ -74,6 +74,12 @@ public partial class PlayerModel : Node3D, IPlayerModel
 			.Handle((in PlayerLogic.Output.Animations.Climb _) =>
 				AnimationStateMachine.Travel("Climb")
 			)
+			.Handle((in PlayerLogic.Output.Animations.Enabled _) =>
+				AnimationTree.Set("parameters/Transitions/transition_request", "Enabled")
+			)
+			.Handle((in PlayerLogic.Output.Animations.Disabled _) =>
+				AnimationTree.Set("parameters/Transitions/transition_request", "Disabled")
+			)
 			.Handle((in PlayerLogic.Output.FloorVelocityChanged output) =>
 				AnimationTree.Set("parameters/StateMachine/Walk/Speed/scale", (float)(output.Velocity.Length() / 16.0))
 			)

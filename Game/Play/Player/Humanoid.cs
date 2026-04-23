@@ -99,6 +99,9 @@ public partial class Humanoid : RigidBody3D, IHumanoid
 		}).Handle((in PlayerLogic.Output.SetRotation output) =>
 		{
 			Rotation = output.Rotation;
+		}).Handle((in PlayerLogic.Output.SetFrozen output) =>
+		{
+			Freeze = output.Frozen;
 		});
 		
 		this.Provide();

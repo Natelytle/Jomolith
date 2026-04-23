@@ -11,6 +11,6 @@ public partial class PlayerLogic : LogicBlock<PlayerLogic.PlayerState>, IPlayerL
 {
     public override Transition GetInitialState()
     {
-        return To<PlayerState.Falling>();
+        return To<PlayerState.Disabled>();
     }
 }

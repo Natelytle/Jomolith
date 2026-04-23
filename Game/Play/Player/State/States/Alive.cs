@@ -23,6 +23,15 @@ public partial class PlayerLogic
             protected abstract float BalanceKp { get; }
             protected abstract float BalanceKd { get; }
 
+            public Alive()
+            {
+                this.OnEnter(() =>
+                {
+                    Output(new Output.SetFrozen(false));
+                    Output(new Output.Animations.Enabled());
+                });
+            }
+
             public Transition On(in Input.PhysicsTick input)
             {
                 IHumanoid player = Get<IHumanoid>();
