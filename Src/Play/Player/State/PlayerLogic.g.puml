@@ -1,0 +1,58 @@
+@startuml PlayerLogic
+state "PlayerLogic State" as Jomolith_Play_Player_State_PlayerLogic_PlayerState {
+  state "Alive" as Jomolith_Play_Player_State_PlayerLogic_PlayerState_Alive {
+    state "FallingBase" as Jomolith_Play_Player_State_PlayerLogic_PlayerState_FallingBase {
+      state "Coyote" as Jomolith_Play_Player_State_PlayerLogic_PlayerState_Coyote
+      state "Falling" as Jomolith_Play_Player_State_PlayerLogic_PlayerState_Falling
+    }
+    state "Jumping" as Jomolith_Play_Player_State_PlayerLogic_PlayerState_Jumping
+    state "RunningBase" as Jomolith_Play_Player_State_PlayerLogic_PlayerState_RunningBase {
+      state "Climbing" as Jomolith_Play_Player_State_PlayerLogic_PlayerState_Climbing
+      state "Idle" as Jomolith_Play_Player_State_PlayerLogic_PlayerState_Idle
+      state "Landed" as Jomolith_Play_Player_State_PlayerLogic_PlayerState_Landed
+      state "Running" as Jomolith_Play_Player_State_PlayerLogic_PlayerState_Running
+    }
+  }
+  state "Dead" as Jomolith_Play_Player_State_PlayerLogic_PlayerState_Dead
+  state "Disabled" as Jomolith_Play_Player_State_PlayerLogic_PlayerState_Disabled
+}
+
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Alive --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Alive : ComputeForces
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Alive --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Alive : DesiredMovementVector
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Alive --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Alive : PhysicsTick
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Alive --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Alive : SetTimer
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Climbing --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Jumping : Jump
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Coyote --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Falling : TimerUp
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Coyote --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Jumping : Jump
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Coyote --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Running : HitFloor
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Disabled --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Idle : Enable
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_FallingBase --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Landed : HitFloor
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Idle --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Climbing : FacingLadder
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Idle --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Coyote : OffFloor
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Idle --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Running : IsMoving
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Jumping --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Falling : ComputeForces
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Jumping --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Falling : OffFloor
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Jumping --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Falling : TimerUp
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Jumping --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Jumping : ComputeForces
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Landed --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Landed : Jump
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Landed --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Running : TimerUp
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Running --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Climbing : FacingLadder
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Running --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Coyote : OffFloor
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Running --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Idle : IsIdle
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_RunningBase --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Jumping : Jump
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_RunningBase --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_RunningBase : OnFloor
+
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Alive : OnComputeForces → ApplyForce
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Alive : OnDesiredMovementVector → ApplyForce, FloorVelocityChanged
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Alive : OnEnter → Enabled, SetFrozen
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Climbing : OnEnter → Climb
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Disabled : OnEnter → Disabled, SetFrozen
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Falling : OnEnter → Fall
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Idle : OnEnter → Idle
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Jumping : OnComputeForces → ApplyForce
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Jumping : OnEnter → Jump
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_Running : OnEnter → Walk
+Jomolith_Play_Player_State_PlayerLogic_PlayerState_RunningBase : OnOnFloor → ApplyForce
+
+[*] --> Jomolith_Play_Player_State_PlayerLogic_PlayerState_Disabled
+@enduml

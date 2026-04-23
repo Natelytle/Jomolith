@@ -71,22 +71,18 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Game\Edit\" />
-        <Folder Include="Game\Play\Player\VIsuals\Avatar\" />
-        <Folder Include="Game\Play\Tower\State\" />
+        <Folder Include="Src\Game\" />
+        <Folder Include="Src\Play\Player\VIsuals\Avatar\" />
+        <Folder Include="Src\Play\Tower\State\" />
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Game\Core\Program.cs.uid" />
-        <Content Include="Game\Play\Player\State\PlayerLogic.cs.uid" />
-        <Content Include="Game\Play\Player\State\PlayerLogic.PlayerData.cs.uid" />
-        <Content Include="Game\Play\Player\State\PlayerLogic.PlayerState.cs.uid" />
-        <Content Include="Game\Play\Player\State\PlayerLogic.Input.cs.uid" />
-        <Content Include="Game\Play\Player\State\PlayerLogic.Output.cs.uid" />
-        <Content Include="Game\State\GameLogic.Data.cs.uid" />
-        <Content Include="Game\State\GameLogic.Input.cs.uid" />
-        <Content Include="Game\State\GameLogic.Output.cs.uid" />
-        <Content Include="Game\State\GameLogic.GameState.cs.uid" />
+        <Content Include="Src\Core\Program.cs.uid" />
+        <Content Include="Src\Play\Player\State\PlayerLogic.cs.uid" />
+        <Content Include="Src\Play\Player\State\PlayerLogic.PlayerData.cs.uid" />
+        <Content Include="Src\Play\Player\State\PlayerLogic.PlayerState.cs.uid" />
+        <Content Include="Src\Play\Player\State\PlayerLogic.Input.cs.uid" />
+        <Content Include="Src\Play\Player\State\PlayerLogic.Output.cs.uid" />
         <Content Include="Properties\launchSettings.json" />
         <Content Include="Tests\GameTest.cs.uid" />
     </ItemGroup>

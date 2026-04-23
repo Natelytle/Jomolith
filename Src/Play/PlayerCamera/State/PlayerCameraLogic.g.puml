@@ -1,0 +1,6 @@
+@startuml PlayerCameraLogic
+state "PlayerCameraLogic State" as Jomolith_Play_PlayerCamera_State_PlayerCameraLogic_CameraState {
+  state "Disabled" as Jomolith_Play_PlayerCamera_State_PlayerCameraLogic_CameraState_Disabled
+}
+[*] --> Jomolith_Play_PlayerCamera_State_PlayerCameraLogic_CameraState_Disabled
+@enduml

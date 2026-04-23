@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://gk2d2gqhahqn"]
+
+[ext_resource type="Script" uid="uid://ckihjk4nst56e" path="res://Src/Game/JomolithGame.cs" id="1_17mmo"]
+[ext_resource type="PackedScene" uid="uid://b0rmucuy7pjux" path="res://Src/Menu/MainMenu.tscn" id="2_b8gc2"]
+[ext_resource type="PackedScene" uid="uid://byjdu7p1a5ffk" path="res://Src/Play/Tower/Tower.tscn" id="3_nfa63"]
+
+[node name="Control" type="Control" unique_id=236038828]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_17mmo")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=590905431]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="TowerPreview" type="SubViewport" parent="SubViewportContainer" unique_id=673778125]
+unique_name_in_owner = true
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Tower" parent="SubViewportContainer/TowerPreview" unique_id=237947399 instance=ExtResource("3_nfa63")]
+
+[node name="MainMenu" parent="." unique_id=933423278 instance=ExtResource("2_b8gc2")]
+unique_name_in_owner = true
+layout_mode = 1
