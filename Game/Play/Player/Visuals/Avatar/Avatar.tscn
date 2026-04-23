@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bfbehx3mrexx0"]
 
-[ext_resource type="PackedScene" uid="uid://8aify2tys5k4" path="res://Game/Play/Player/VIsuals/Avatar/Avatar.glb" id="1_one4p"]
+[ext_resource type="PackedScene" uid="uid://8aify2tys5k4" path="res://Game/Play/Player/Visuals/Avatar/Avatar.glb" id="1_one4p"]
 
 [node name="Avatar" unique_id=2076474938 instance=ExtResource("1_one4p")]
 

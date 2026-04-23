@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dfnxcsu6tk23e"]
 
 [ext_resource type="Script" uid="uid://c1ulrj0rv43pr" path="res://Game/Play/Player/PlayerModel.cs" id="1_h0qy4"]
-[ext_resource type="PackedScene" uid="uid://bfbehx3mrexx0" path="res://Game/Play/Player/VIsuals/Avatar/Avatar.tscn" id="1_p245p"]
-[ext_resource type="AnimationNodeStateMachine" uid="uid://cngdfceynil4b" path="res://Game/Play/Player/VIsuals/Avatar/Animations/animation_node_state_machine.tres" id="3_ew836"]
+[ext_resource type="PackedScene" uid="uid://bfbehx3mrexx0" path="res://Game/Play/Player/Visuals/Avatar/Avatar.tscn" id="1_p245p"]
+[ext_resource type="AnimationNodeStateMachine" uid="uid://cngdfceynil4b" path="res://Game/Play/Player/Visuals/Avatar/Animations/animation_node_state_machine.tres" id="3_ew836"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ybk30"]
 animation = &"RESET"

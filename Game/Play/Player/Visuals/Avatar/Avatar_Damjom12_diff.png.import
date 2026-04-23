@@ -2,20 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ew23y72fx0nt"
-path.s3tc="res://.godot/imported/Avatar_Damjom81_diff.png-a991f44a6c0af60e77ffe9cc81d26848.s3tc.ctex"
+uid="uid://8e3xeyh6j8tn"
+path.s3tc="res://.godot/imported/Avatar_Damjom12_diff.png-d7cbfde51b13f2d2eae9a4c9f4ae8a89.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "35bb076621659b5c79c797916514bfbe"
+"md5": "a15b32104322a75f162b976bdf310c01"
 }
 
 [deps]
 
-source_file="res://Game/Play/Player/VIsuals/Avatar/Avatar_Damjom81_diff.png"
-dest_files=["res://.godot/imported/Avatar_Damjom81_diff.png-a991f44a6c0af60e77ffe9cc81d26848.s3tc.ctex"]
+source_file="res://Game/Play/Player/Visuals/Avatar/Avatar_Damjom12_diff.png"
+dest_files=["res://.godot/imported/Avatar_Damjom12_diff.png-d7cbfde51b13f2d2eae9a4c9f4ae8a89.s3tc.ctex"]
 
 [params]
 

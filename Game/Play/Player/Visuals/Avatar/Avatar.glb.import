@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://8aify2tys5k4"
-path="res://.godot/imported/Avatar.glb-a879b9a0813ce0cb62149ecab10cca69.scn"
+path="res://.godot/imported/Avatar.glb-a6fef6aa40d1cd05cafea8f8d7aeb96d.scn"
 
 [deps]
 
-source_file="res://Game/Play/Player/VIsuals/Avatar/Avatar.glb"
-dest_files=["res://.godot/imported/Avatar.glb-a879b9a0813ce0cb62149ecab10cca69.scn"]
+source_file="res://Game/Play/Player/Visuals/Avatar/Avatar.glb"
+dest_files=["res://.godot/imported/Avatar.glb-a6fef6aa40d1cd05cafea8f8d7aeb96d.scn"]
 
 [params]
 
@@ -41,7 +41,7 @@ _subresources={
 "animations": {
 "Climb": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Game/Play/Player/VIsuals/Avatar/Animations/Climb.tres",
+"save_to_file/fallback_path": "res://Game/Play/Player/Visuals/Avatar/Animations/Climb.tres",
 "save_to_file/keep_custom_tracks": "",
 "save_to_file/path": "uid://b72ns0r8gd40h",
 "settings/loop_mode": 0,
@@ -2097,7 +2097,7 @@ _subresources={
 },
 "Fall": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Game/Play/Player/VIsuals/Avatar/Animations/Fall.tres",
+"save_to_file/fallback_path": "res://Game/Play/Player/Visuals/Avatar/Animations/Fall.tres",
 "save_to_file/keep_custom_tracks": "",
 "save_to_file/path": "uid://ds5t8cbycuhj6",
 "settings/loop_mode": 0,
@@ -4153,7 +4153,7 @@ _subresources={
 },
 "Idle": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Game/Play/Player/VIsuals/Avatar/Animations/Idle.tres",
+"save_to_file/fallback_path": "res://Game/Play/Player/Visuals/Avatar/Animations/Idle.tres",
 "save_to_file/keep_custom_tracks": "",
 "save_to_file/path": "uid://2vfeilucgrgl",
 "settings/loop_mode": 0,
@@ -6209,7 +6209,7 @@ _subresources={
 },
 "Jump": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Game/Play/Player/VIsuals/Avatar/Animations/Jump.tres",
+"save_to_file/fallback_path": "res://Game/Play/Player/Visuals/Avatar/Animations/Jump.tres",
 "save_to_file/keep_custom_tracks": "",
 "save_to_file/path": "uid://c7ar0m2n7p64j",
 "settings/loop_mode": 0,
@@ -8265,7 +8265,7 @@ _subresources={
 },
 "RESET": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Game/Play/Player/VIsuals/Avatar/Animations/RESET.tres",
+"save_to_file/fallback_path": "res://Game/Play/Player/Visuals/Avatar/Animations/RESET.tres",
 "save_to_file/keep_custom_tracks": "",
 "save_to_file/path": "uid://pjpwkfgj5i75",
 "settings/loop_mode": 0,
@@ -10321,7 +10321,7 @@ _subresources={
 },
 "Walk": {
 "save_to_file/enabled": true,
-"save_to_file/fallback_path": "res://Game/Play/Player/VIsuals/Avatar/Animations/Walk.tres",
+"save_to_file/fallback_path": "res://Game/Play/Player/Visuals/Avatar/Animations/Walk.tres",
 "save_to_file/keep_custom_tracks": "",
 "save_to_file/path": "uid://ntnpat8y037x",
 "settings/loop_mode": 0,
