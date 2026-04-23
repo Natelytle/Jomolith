@@ -1,15 +1,30 @@
+using Godot;
+
 namespace Jomolith.Game.Play.Player.State;
 
 public partial class PlayerLogic
 {
     public static class Output
     {
-        public readonly record struct ShowMainMenu;
-        
-        public readonly record struct StartLoadingTower;
+        public static class Animations
+        {
+            public readonly record struct Idle;
+            public readonly record struct Walk;
+            public readonly record struct Jump;
+            public readonly record struct Fall;
+            public readonly record struct Climb;
+        }
+
+        public readonly record struct ApplyForce(Vector3 Force, Vector3 Torque);
+
+        public readonly record struct SetRotation(Vector3 Rotation);
 
         public readonly record struct EnterTower;
 
         public readonly record struct UnloadCurrentTower;
+
+        public readonly record struct FloorVelocityChanged(Vector2 Velocity);
+
+        public readonly record struct VerticalVelocityChanged(Vector2 Velocity);
     }
 }

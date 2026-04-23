@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://j847e625d02t"]
-
-[ext_resource type="Script" uid="uid://dgavc2gj8b5kc" path="res://Game/Play/Player/PlayerCharacter.cs" id="1_bqewm"]
-
-[node name="PlayableCharacter" type="RigidBody3D" unique_id=490938989]
-script = ExtResource("1_bqewm")

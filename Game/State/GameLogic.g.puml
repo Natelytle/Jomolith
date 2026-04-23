@@ -1,0 +1,19 @@
+@startuml GameLogic
+state "GameLogic State" as Jomolith_Game_State_GameLogic_GameState {
+  state "ExitingTower" as Jomolith_Game_State_GameLogic_GameState_ExitingTower
+  state "InMainMenu" as Jomolith_Game_State_GameLogic_GameState_InMainMenu
+  state "InTower" as Jomolith_Game_State_GameLogic_GameState_InTower
+  state "LoadingTower" as Jomolith_Game_State_GameLogic_GameState_LoadingTower
+}
+
+Jomolith_Game_State_GameLogic_GameState_ExitingTower --> Jomolith_Game_State_GameLogic_GameState_InMainMenu : MainMenuRequested
+Jomolith_Game_State_GameLogic_GameState_InMainMenu --> Jomolith_Game_State_GameLogic_GameState_LoadingTower : PlayTower
+Jomolith_Game_State_GameLogic_GameState_InTower --> Jomolith_Game_State_GameLogic_GameState_ExitingTower : ExitTower
+Jomolith_Game_State_GameLogic_GameState_LoadingTower --> Jomolith_Game_State_GameLogic_GameState_InTower : TowerLoaded
+
+Jomolith_Game_State_GameLogic_GameState_InTower : OnEnter → EnterTower
+Jomolith_Game_State_GameLogic_GameState_InTower : OnExit → UnloadCurrentTower
+Jomolith_Game_State_GameLogic_GameState_LoadingTower : OnEnter → StartLoadingTower
+
+[*] --> Jomolith_Game_State_GameLogic_GameState_InMainMenu
+@enduml
