@@ -24,6 +24,7 @@ public partial class PlayerLogic
             protected abstract float Gain { get; }
             protected abstract float BalanceKp { get; }
             protected abstract float BalanceKd { get; }
+            protected virtual float TurnAngleLimit => float.PositiveInfinity;
 
             public Alive()
             {
@@ -118,7 +119,7 @@ public partial class PlayerLogic
                 Vector3 desiredForce = correctionVector * player.Mass;
 
                 float angleToDesiredDirection = playerData.PlayerHeading.SignedAngleTo(targetMovementVector, Vector3.Up);
-                float desiredRotationalVelocity = 8.0f * angleToDesiredDirection;
+                float desiredRotationalVelocity = 8.0f * Math.Min(Math.Abs(angleToDesiredDirection), TurnAngleLimit) * Math.Sign(angleToDesiredDirection);
                 float desiredTorque = 100.0f * player.GetInertia().Y * (desiredRotationalVelocity - player.AngularVelocity.Y);
                 desiredTorque = Mathf.Clamp(desiredTorque, -1e5f, 1e5f);
 

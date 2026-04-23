@@ -13,6 +13,7 @@ public partial class PlayerLogic
             protected override float Gain => 150.0f;
             protected override float BalanceKp => 5000.0f;
             protected override float BalanceKd => 100.0f;
+            protected override float TurnAngleLimit => 1.0f;
 
             public virtual Transition On(in Input.HitFloor input)
             {

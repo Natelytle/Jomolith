@@ -16,7 +16,6 @@ public partial class PlayerLogic
             private const double max_jump_time = 0.5;
             private const float jump_power_multiplier = 1.06f;
 
-            // When in the jumping state, we can't really move and the character quits balancing.
             protected override float MaxForce => 0;
             protected override float Gain => 0;
             protected override float BalanceKp => 0;
@@ -66,6 +65,9 @@ public partial class PlayerLogic
 
                 return ToSelf();
             }
+
+            // No input in the jumping state
+            public override Transition On(in Input.DesiredMovementVector input) => ToSelf();
 
             public Transition On(in Input.TimerUp input)
             {
