@@ -4,26 +4,26 @@
 
 [node name="Avatar" unique_id=2076474938 instance=ExtResource("1_one4p")]
 
-[node name="Right Arm_2" parent="Skeleton3D" parent_id_path=PackedInt32Array(2124216107) index="0" unique_id=1146246726]
+[node name="Right Arm_2" parent="Skeleton3D" parent_id_path=PackedInt32Array(2073571135) index="0" unique_id=314226662]
 transform = Transform3D(1, -5.96047e-08, -3.1786485e-08, 2.7818032e-08, -1.1920935e-07, -1, 1.1920929e-07, 1, -5.9604616e-08, 1.7881393e-07, 0, -2.2450931e-07)
 
-[node name="Left Arm_2" parent="Skeleton3D" parent_id_path=PackedInt32Array(2124216107) index="1" unique_id=398882670]
+[node name="Left Arm_2" parent="Skeleton3D" parent_id_path=PackedInt32Array(2073571135) index="1" unique_id=229931880]
 transform = Transform3D(1, 1.1920932e-07, 2.7818146e-08, 8.74227e-08, 5.9604716e-08, -1, -5.9604645e-08, 1, 1.1920929e-07, 5.9604645e-08, 0, 1.9272315e-07)
 
-[node name="Right Leg_2" parent="Skeleton3D" parent_id_path=PackedInt32Array(2124216107) index="2" unique_id=1270005151]
+[node name="Right Leg_2" parent="Skeleton3D" parent_id_path=PackedInt32Array(2073571135) index="2" unique_id=786601375]
 transform = Transform3D(1, -2.9802258e-08, -6.1588864e-08, -6.158881e-08, 8.940697e-08, -1, 2.980235e-08, 1, 1.4901163e-07, 5.9604645e-08, 0, 7.3513775e-08)
 
-[node name="Left Leg_2" parent="Skeleton3D" parent_id_path=PackedInt32Array(2124216107) index="3" unique_id=400899726]
+[node name="Left Leg_2" parent="Skeleton3D" parent_id_path=PackedInt32Array(2073571135) index="3" unique_id=137087061]
 transform = Transform3D(1, 5.684342e-14, 8.742282e-08, 8.7422706e-08, 4.926492e-14, -1, 0, 1, 0, 1.1920929e-07, 2.3841858e-07, -1.351026e-07)
 
-[node name="Face" parent="Skeleton3D" parent_id_path=PackedInt32Array(2124216107) index="4" unique_id=1454946972]
+[node name="Face" parent="Skeleton3D" parent_id_path=PackedInt32Array(2073571135) index="4" unique_id=613820686]
 transform = Transform3D(1, 1.0728897e-21, -1.4210855e-14, -1.4210855e-14, 7.54979e-08, -1, 0, 1, 7.54979e-08, -2.842171e-14, 0, 0)
 
-[node name="Hair" parent="Skeleton3D" parent_id_path=PackedInt32Array(2124216107) index="5" unique_id=916505738]
+[node name="Hair" parent="Skeleton3D" parent_id_path=PackedInt32Array(2073571135) index="5" unique_id=785423847]
 transform = Transform3D(1, 1.0728897e-21, -1.4210855e-14, -1.4210855e-14, 7.54979e-08, -1, 0, 1, 7.54979e-08, -2.842171e-14, 0, 0)
 
-[node name="Head_2" parent="Skeleton3D" parent_id_path=PackedInt32Array(2124216107) index="6" unique_id=882366914]
+[node name="Head_2" parent="Skeleton3D" parent_id_path=PackedInt32Array(2073571135) index="6" unique_id=148516744]
 transform = Transform3D(1, 1.0728897e-21, -1.4210855e-14, -1.4210855e-14, 7.54979e-08, -1, 0, 1, 7.54979e-08, -2.842171e-14, 0, 0)
 
-[node name="Torso_2" parent="Skeleton3D" parent_id_path=PackedInt32Array(2124216107) index="7" unique_id=365310947]
+[node name="Torso_2" parent="Skeleton3D" parent_id_path=PackedInt32Array(2073571135) index="7" unique_id=1234927750]
 transform = Transform3D(1, 8.4703295e-22, -1.4210855e-14, -1.4210855e-14, 7.54979e-08, -1, 0, 1, 7.54979e-08, -2.842171e-14, 0, 0)
