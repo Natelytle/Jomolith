@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Jomolith.Play.Player.Utils;
+namespace Jomolith.Play.Player.Domain;
 
 public readonly record struct FloorData
 {

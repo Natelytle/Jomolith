@@ -4,8 +4,8 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 using Jomolith.Game.Domain;
+using Jomolith.Play.Player.Domain;
 using Jomolith.Play.Player.State;
-using Jomolith.Play.Player.Utils;
 using Jomolith.Play.Tower.Domain;
 
 namespace Jomolith.Play.Player;
