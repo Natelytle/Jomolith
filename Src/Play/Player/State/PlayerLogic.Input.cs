@@ -1,5 +1,5 @@
 using Godot;
-using Jomolith.Play.Player.Utils;
+using Jomolith.Play.Player.Domain;
 
 namespace Jomolith.Play.Player.State;
 
