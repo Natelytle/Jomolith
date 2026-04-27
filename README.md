@@ -1,222 +1,38 @@
-# Jomolith
-
-[![Chickensoft Badge][chickensoft-badge]][chickensoft-website] [![Discord][discord-badge]][discord] [![Read the docs][read-the-docs-badge]][docs] ![line coverage][line-coverage] ![branch coverage][branch-coverage]
-
-C# game template for Godot 4 with debug launch configurations, testing (locally and on CI/CD), code coverage, dependency update checks, and spell check working out-of-the-box!
-
----
 
 <p align="center">
-<img alt="Cardboard Box with Chickensoft Logo" src="icon.png" width="200">
+<img alt="Cardboard Box with Yuri Kissing" src="icon.png" width="256">
 </p>
 
-## 🥚 Getting Started
+# Jomolith
 
-This template allows you to easily create a C# game for Godot 4. Microsoft's `dotnet` tool allows you to easily create, install, and use templates.
+The best open-source tower climbing game in existence (probably)
 
-```sh
-# Install this template
-dotnet new install Jomolith
+--- 
 
-# Generate a new project based on this template
-dotnet new chickengame --name "MyGameName" --param:author "My Name"
+## 🗼 What is Jomolith?
 
-cd MyGameName
-dotnet build
-```
+Jomolith is one of the many projects designed with the intention of moving obbying, as a genre, away from its reliance on a closed source, always-online platform.
 
-## 💁 Getting Help
+This is an open source recreation of the Roblox player controller, including a (soon to be) editor and way to import and play towers locally, fully offline.
 
-*Is this template broken? Encountering obscure C# build problems?* We'll be happy to help you in the [Chickensoft Discord server][discord].
+In the future, online support will be added to share your towers, compare stats, and potentially even multiplayer.
 
-## 🏝 Environment Setup
+## 🚫 What isn't Jomolith?
 
-For the provided debug configurations and test coverage to work correctly, you must setup your development environment correctly. The [Chickensoft Setup Docs][setup-docs] describe how to setup your Godot and C# development environment, using Chickensoft's best practice recommendations.
+Jomolith does not, and will never claim to be a competitor to Roblox as a whole. There are many, many more-competent ventures in this regard. Jomolith is merely a game designed to preserve obbying, and empower the obby community.
 
-### VSCode Settings
+Jomolith is not a game meant to exclude any individual. The game is open source, and licensed under GPLv3 to ensure it stays that way. It will always be playable fully offline, and effort will be made to ensure it supports technology as low end as possible, and all playstyles seen in existing games, including controller and mobile.
 
-This template includes some Visual Studio Code settings in `.vscode/settings.json`. The settings facilitate terminal environments on Windows (Git Bash, PowerShell, Command Prompt) and macOS (zsh), as well as fixing some syntax colorization issues that Omnisharp suffers from. You'll also find settings that enable editor config support in Omnisharp and the .NET Roslyn analyzers for a more enjoyable coding experience.
+Jomolith is certainly not a full time job of mine. I may take breaks from developing this game, but pull-requests will always be welcome and I will be sure to take time out of my day to review them, if any occur.
 
-> Please double-check that the provided VSCode settings don't conflict with your existing settings.
+## ❔ How can I play Jomolith?
 
-## .NET Versioning
+Jomolith isn't yet ready to be played. It's in the middle of development, at the moment, and there's not much to see. The best way to play this at the moment is to sit patiently and wait for the first release on my site, which will be set up when I am confident in where the game is at.
 
-The included [`global.json`](./global.json) specifies the version of the .NET SDK and `Godot.NET.Sdk` that the game should use. Using a `global.json` file allows [Renovatebot] to provide your repository with automatic dependency update pull requests whenever a new version of [GodotSharp] is released.
+## 🌸 Where does the icon come from?
 
-## 👷 Testing
+Please Bully Me, Miss Villainess! Chapter 87
 
-An example test is included in `test/src/GameTest.cs` that demonstrates how to write a test for your package using [GoDotTest] and [godot-test-driver].
+## 🙏 Will the icon stay?
 
-> [GoDotTest] is an easy-to-use testing framework for Godot and C# that allows you to run tests from the command line, collect code coverage, and debug tests in VSCode.
-
-Tests run directly inside the game. The `.csproj` file is already pre-configured to prevent test scripts and test-only package dependencies from being included in release builds of your game!
-
-On CI/CD, software graphics drivers from [mesa] emulate a virtual graphics device for Godot to render to, allowing you to run visual tests in a headless environment.
-
-## 🏁 Application Entry Point
-
-The `Main.tscn` and `Main.cs` scene and script file are the entry point of your game. In general, you probably won't need to modify these unless you're doing something highly custom.
-
-If the game is running a release build, the `Main.cs` file will just immediately change the scene to `src/Game.tscn`. If the game is running in debug mode *and* GoDotTest has received the correct command line arguments to begin testing, the game will switch to the testing scene and hand off control to GoDotTest to run the game's tests.
-
-In general, prefer editing `src/Game.tscn` over `src/Main.tscn`.
-
-The provided debug configurations in `.vscode/launch.json` allow you to easily debug tests (or just the currently open test, provided its filename matches its class name).
-
-## 🚦 Test Coverage
-
-Code coverage requires a few `dotnet` global tools to be installed first. You should install these tools from the root of the project directory.
-
-The `nuget.config` file in the root of the project allows the correct version of `coverlet` to be installed from the coverlet nightly distributions. Overriding the coverlet version will be required [until coverlet releases a stable version with the fixes that allow it to work with Godot 4][coverlet-issues].
-
-```sh
-dotnet tool install --global coverlet.console
-dotnet tool update --global coverlet.console
-dotnet tool install --global dotnet-reportgenerator-globaltool
-dotnet tool update --global dotnet-reportgenerator-globaltool
-```
-
-> Running `dotnet tool update` for the global tool is often necessary on Apple Silicon computers to ensure the tools are installed correctly.
-
-You can collect code coverage and generate coverage badges by running the bash script `coverage.sh` (on Windows, you can use the Git Bash shell that comes with git).
-
-```sh
-# Must give coverage script permission to run the first time it is used.
-chmod +x ./coverage.sh
-
-# Run code coverage:
-./coverage.sh
-```
-
-You can also run test coverage through VSCode by opening the command palette and selecting `Tasks: Run Task` and then choosing `coverage`.
-
-If you are having trouble with `coverlet` finding your .NET runtime on Windows, you can use the PowerShell Script `coverage.ps1` instead.
-
-```ps
-.\coverage.ps1
-```
-
-## ⏯ Running the Project
-
-Several launch profiles are included for Visual Studio Code:
-
-- 🕹 **Debug Game**
-
-  Runs the game in debug mode, allowing you to set breakpoints and inspect variables.
-
-- 🎭 **Debug Current Scene**
-
-  Debugs the game and loads the scene with the **same name** and **in the same path** as the C# file that's actively selected in VSCode: e.g., a scene named `MyScene.tscn` must reside in the same directory as `MyScene.cs`, and you must have selected `MyScene.cs` as the active tab in VSCode before running the launch profile.
-
-  If GoDotTest is able to find a `.tscn` file with the same name in the same location, it will run the game in debug mode and load the scene.
-
-  > Naturally, Chickensoft recommends naming scenes after the C# script they use and keeping them in the same directory so that you can take advantage of this launch profile.
-  >
-  > ⚠️ It's very easy to rename a script class but forget to rename the scene file, or vice-versa. When that happens, this launch profile will pass in the *expected* name of the scene file based on the script's name, but Godot will fail to find a scene with that name since the script name and scene name are not the same.
-
-- 🧪 **Debug Tests**
-
-  Runs the game in debug mode, specifying the command line flags needed by GoDotTest to run the tests. Debugging works the same as usual, allowing you to set breakpoints within the game's C# test files.
-
-- 🔬 **Debug Current Test**
-
-  Debugs the game and loads the test class with the **same name** as the C# file that's actively selected in VSCode: e.g., a test file named `MyTest.cs` must contain a test class named `MyTest`, and you must have selected `MyTest.cs` as the active tab in VSCode before running the launch profile.
-
-  > ⚠️ It's very easy to rename a test class but forget to rename the test file, or vice-versa. When that happens, this launch profile will pass in the name of the file but GoDotTest will fail to find a class with that name since the filename and class name are not the same.
-
-Note that each launch profile will trigger a build (see `./.vscode/tasks.json`) before debugging the game.
-
-> ⚠️ **Important:** You must setup a `GODOT` environment variable for the launch configurations above. If you haven't done so already, please see the [Chickensoft Setup Docs][setup-docs].
-
-## 🏭 CI/CD
-
-This game includes various GitHub Actions workflows to help with development.
-
-## 🌈 Shaders
-
-You'll want to install [clang-format] and make sure it's available on your system `PATH` for automatic shader formatting to work whenever you save a `.gdshader` or `.gdshaderinc` file.
-
-- [Install on Windows](https://superuser.com/a/1611210)
-- On macOS, use [homebrew] and run `brew install clang-format`. You'll want to make sure that homebrew is able to update your shell's `PATH` so that the installed `clang-format` binary is available globally.
-- Linux: you know what to do
-
-> [!CAUTION]
-> On Windows, you **must** logout and log back in (or restart your computer) after updating environment variables. On macOS/Linux, you may need to restart your application (if not logout and log back in) for the updated `PATH` to be recognized.
-
-This template includes an updated version of the `.clang-format` file mentioned in the [Godot Shaders Style Guide](https://docs.godotengine.org/en/stable/tutorials/shaders/shaders_style_guide.html#applying-formatting-automatically).
-
-For syntax highlighting, we recommend the [Godot Tools](https://marketplace.visualstudio.com/items?itemName=geequlim.godot-tools) extension since it provides functionality for other Godot engine features as well.
-
-### 🚥 Tests
-
-Tests run directly inside the GitHub runner machine (using [chickensoft-games/setup-godot]) on every push to the repository. If the tests fail to pass, the workflow will also fail to pass.
-
-You can configure which simulated graphics environments (`vulkan` and/or `opengl3`) you want to run tests on in [`.github/workflows/visual_tests.yaml`](.github/workflows/visual_tests.yaml).
-
-Currently, tests can only be run from the `ubuntu` runners. If you know how to make the workflow install mesa and a virtual window manager on macOS and Windows, we'd love to hear from you!
-
-Tests are executed by running the Godot test project in `Jomolith` from the command line and passing in the relevant arguments to Godot so that [GoDotTest] can discover and run tests.
-
-### 🧑‍🏫 Spellcheck
-
-A spell check runs on every push to the repository. The spellcheck workflow settings can be configured in [`.github/workflows/spellcheck.yaml`](.github/workflows/spellcheck.yaml).
-
-The [Code Spell Checker][cspell] plugin for VSCode is recommended to help you catch typos before you commit them. If you need add a word to the dictionary or ignore a certain path, you can edit the project's `cspell.json` file.
-
-You can also words to the local `cspell.json` file from VSCode by hovering over a misspelled word and selecting `Quick Fix...` and then `Add "{word}" to config: cspell.json`.
-
-![Fix Spelling](docs/spelling_fix.png)
-
-### 🗂 Version Change
-
-The included workflow in [`.github/workflows/version_change.yaml`](.github/workflows/version_change.yaml) can be manually dispatched to open a pull request that replaces the version number in `Jomolith.csproj` with the version you specify in the workflow's inputs.
-
-![Version Change Workflow](docs/version_change.png)
-
-### 📦 Publish to Nuget
-
-The included workflow in [`.github/workflows/publish.yaml`](.github/workflows/publish.yaml) can be manually dispatched when you're ready to publish your package to Nuget.
-
-> To publish to nuget, you need a repository or organization secret named `NUGET_API_KEY` that contains your Nuget API key. The `NUGET_API_KEY` must be a GitHub actions secret to keep it safe!
-
-![Publish Workflow](docs/publish.png)
-
-### 🏚 Renovatebot
-
-This repository includes a [`renovate.json`](./renovate.json) configuration for use with [Renovatebot]. Renovatebot can automatically open pull requests to help you keep your dependencies up to date when it detects new dependency versions have been released. Because Godot has such a rapid release cycle, automating dependency updates can be a huge time saver if you're trying to stay on the latest version of Godot.
-
-![Renovatebot Pull Request](docs/renovatebot_pr.png)
-
-> Unlike Dependabot, Renovatebot is able to combine all dependency updates into a single pull request — a must-have for Godot C# repositories where each sub-project needs the same Godot.NET.Sdk versions. If dependency version bumps were split across multiple repositories, the builds would fail in CI.
-
-The easiest way to add Renovatebot to your repository is to [install it from the GitHub Marketplace][get-renovatebot]. Note that you have to grant it access to each organization and repository you want it to monitor.
-
-The included `renovate.json` includes a few configuration options to limit how often Renovatebot can open pull requests as well as regex's to filter out some poorly versioned dependencies to prevent invalid dependency version updates.
-
----
-
-🐣 Package generated from a 🐤 Chickensoft Template — <https://chickensoft.games>
-
-<!-- Links -->
-
-<!-- Header -->
-[chickensoft-badge]: https://chickensoft.games/img/badges/chickensoft_badge.svg
-[chickensoft-website]: https://chickensoft.games
-[discord-badge]: https://chickensoft.games/img/badges/discord_badge.svg
-[discord]: https://discord.gg/gSjaPgMmYW
-[read-the-docs-badge]: https://chickensoft.games/img/badges/read_the_docs_badge.svg
-[docs]: https://chickensoft.games/docs
-[line-coverage]: badges/line_coverage.svg
-[branch-coverage]: badges/branch_coverage.svg
-
-<!-- Article -->
-[GoDotTest]: https://github.com/chickensoft-games/go_dot_test
-[setup-docs]: https://chickensoft.games/docs/setup
-[cspell]: https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker
-[Renovatebot]: https://www.mend.io/free-developer-tools/renovate/
-[get-renovatebot]: https://github.com/apps/renovate
-[godot-test-driver]: https://github.com/derkork/godot-test-driver
-[coverlet-issues]: https://github.com/coverlet-coverage/coverlet/issues/1422
-[GodotSharp]: https://www.nuget.org/packages/GodotSharp/
-[chickensoft-games/setup-godot]: https://github.com/chickensoft-games/setup-godot
-[homebrew]: https://brew.sh/
+Until I come up with a logo for my game, but be warned the Yuri will live on culturally
