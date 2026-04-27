@@ -1,50 +1,87 @@
+using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
+using Chickensoft.Introspection;
+using Chickensoft.LogicBlocks;
 using Godot;
+using Jomolith.Game.Domain;
+using Jomolith.Play.PlayerCamera.LockModeState;
+using Jomolith.Play.PlayerCamera.PerspectiveState;
+using Jomolith.Play.Tower.Domain;
 
 namespace Jomolith.Play.PlayerCamera;
 
 public interface IPlayerCamera : INode3D
 {
-    /// <summary>
-    ///     Used for smooth lerping of the camera position when zooming.
-    /// </summary>
-    Vector3 SpringArmTargetPosition { get; }
-
-    /// <summary>Camera's local position within the camera system.</summary>
-    Vector3 CameraLocalPosition { get; }
-
-    /// <summary>Horizontal gimbal rotation in euler angles.</summary>
-    Vector3 GimbalRotationHorizontal { get; }
-
-    /// <summary>Vertical gimbal rotation in euler angles.</summary>
-    Vector3 GimbalRotationVertical { get; }
-
-    /// <summary>Camera's global transform basis.</summary>
-    Basis CameraBasis { get; }
-
-    /// <summary>
-    ///     Local position of the offset node that is a parent of the camera.
-    ///     Lets us offset the camera when in shift lock.
-    /// </summary>
-    Vector3 OffsetPosition { get; }
+    ILockModeLogic LockModeLogic { get; }
+    IPerspectiveLogic PerspectiveLogic { get; }
 }
 
+[Meta(typeof(IAutoNode))]
 public partial class PlayerCamera : Node3D, IPlayerCamera
 {
-    public Vector3 SpringArmTargetPosition { get; }
-    public Vector3 CameraLocalPosition { get; }
-    public Vector3 GimbalRotationHorizontal { get; }
-    public Vector3 GimbalRotationVertical { get; }
-    public Basis CameraBasis { get; }
-    public Vector3 OffsetPosition { get; }
+    public override void _Notification(int what) => this.Notify(what);
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
+    #region Dependencies
+    
+    [Dependency]
+    public ITowerRepo TowerRepo => this.DependOn<ITowerRepo>();
+    
+    [Dependency]
+    public IGameRepo GameRepo => this.DependOn<IGameRepo>();
+
+    #endregion 
+
+    #region State
+
+    public ILockModeLogic LockModeLogic { get; set; } = null!;
+    public LogicBlock<LockModeLogic.LockModeState>.IBinding LockModeBinding { get; set; } = null!;
+
+    public IPerspectiveLogic PerspectiveLogic { get; set; } = null!;
+    public LogicBlock<PerspectiveLogic.PerspectiveState>.IBinding PerspectiveBinding { get; set; } = null!;
+
+    #endregion
+    
+    public void Setup()
     {
+        LockModeLogic = new LockModeLogic();
     }
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
+    public void OnResolved()
+    {
+        LockModeBinding = LockModeLogic.Bind();
+
+        LockModeBinding
+            .Handle((in LockModeLogic.Output.ShiftLockEntered _) =>
+            {
+
+            })
+            .Handle((in LockModeLogic.Output.ShiftLockExited _) =>
+            {
+
+            });
+
+        PerspectiveBinding = PerspectiveLogic.Bind();
+
+        PerspectiveBinding
+            .Handle((in PerspectiveLogic.Output.FirstPersonEntered _) =>
+            {
+
+            })
+            .Handle((in PerspectiveLogic.Output.FirstPersonExited _) =>
+            {
+                
+            });
+
+        LockModeLogic.Start();
+        PerspectiveLogic.Start();
+    }
+
+    public void OnReady()
+    {
+        SetPhysicsProcess(true);
+    }
+
+    public void OnPhysicsProcess(double delta)
     {
     }
 }

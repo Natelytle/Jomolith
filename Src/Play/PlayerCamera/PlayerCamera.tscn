@@ -1,3 +1,15 @@
 [gd_scene format=3 uid="uid://ch726eqgjs65k"]
 
 [node name="PlayerCamera" type="Node3D" unique_id=540203270]
+
+[node name="FocusPosition" type="Node3D" parent="." unique_id=2041446435]
+unique_name_in_owner = true
+
+[node name="SpringArm3D" type="SpringArm3D" parent="FocusPosition" unique_id=1939305059]
+unique_name_in_owner = true
+
+[node name="CameraPosition" type="Node3D" parent="FocusPosition/SpringArm3D" unique_id=273130132]
+unique_name_in_owner = true
+
+[node name="Camera3D" type="Camera3D" parent="FocusPosition" unique_id=549436908]
+unique_name_in_owner = true

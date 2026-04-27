@@ -1,0 +1,10 @@
+@startuml LockModeLogic
+state "LockModeLogic State" as Jomolith_Play_PlayerCamera_LockModeState_LockModeLogic_LockModeState {
+  state "FreeCam" as Jomolith_Play_PlayerCamera_LockModeState_LockModeLogic_LockModeState_FreeCam
+  state "Locked" as Jomolith_Play_PlayerCamera_LockModeState_LockModeLogic_LockModeState_Locked
+}
+
+Jomolith_Play_PlayerCamera_LockModeState_LockModeLogic_LockModeState_FreeCam --> Jomolith_Play_PlayerCamera_LockModeState_LockModeLogic_LockModeState_Locked : ToggleShiftLock
+Jomolith_Play_PlayerCamera_LockModeState_LockModeLogic_LockModeState_Locked --> Jomolith_Play_PlayerCamera_LockModeState_LockModeLogic_LockModeState_FreeCam : ToggleShiftLock
+[*] --> Jomolith_Play_PlayerCamera_LockModeState_LockModeLogic_LockModeState_FreeCam
+@enduml
