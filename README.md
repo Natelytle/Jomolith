@@ -1,13 +1,12 @@
+# Jomolith
+
+The best open-source tower climbing game in existence (probably)
 
 <p align="center">
 <img alt="Cardboard Box with Yuri Kissing" src="icon.png" width="256">
 </p>
 
-# Jomolith
-
-The best open-source tower climbing game in existence (probably)
-
---- 
+---
 
 ## 🗼 What is Jomolith?
 
