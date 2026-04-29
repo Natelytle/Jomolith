@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://j847e625d02t"]
+
+[ext_resource type="Script" uid="uid://dgavc2gj8b5kc" path="res://Src/Play/Player/Humanoid/Humanoid.cs" id="1_hljhc"]
+[ext_resource type="PackedScene" uid="uid://dfnxcsu6tk23e" path="res://Src/Play/Player/Humanoid/PlayerModel.tscn" id="2_6hwek"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hljhc"]
+friction = 0.5
+bounce = 0.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6hwek"]
+size = Vector3(2, 1, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hljhc"]
+size = Vector3(2, 1, 1)
+
+[node name="Humanoid" type="RigidBody3D" unique_id=490938989]
+mass = 11.2
+physics_material_override = SubResource("PhysicsMaterial_hljhc")
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, 2.72, 0)
+inertia = Vector3(20, 8.6, 31)
+can_sleep = false
+linear_damp_mode = 1
+angular_damp_mode = 1
+script = ExtResource("1_hljhc")
+
+[node name="PlayerModel" parent="." unique_id=1326353092 instance=ExtResource("2_6hwek")]
+unique_name_in_owner = true
+
+[node name="RootPart" type="Node3D" parent="." unique_id=1498517779]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="TorsoCollisionShape" type="CollisionShape3D" parent="." unique_id=308006700]
+transform = Transform3D(-1, -8.742278e-08, -3.821371e-15, 0, -4.371139e-08, 1, -8.742278e-08, 1, 4.371139e-08, 0, 3, 0)
+shape = SubResource("BoxShape3D_6hwek")
+
+[node name="HeadCollisionShape" type="CollisionShape3D" parent="." unique_id=1211831495]
+transform = Transform3D(-1, -8.742278e-08, -3.821371e-15, 0, -4.371139e-08, 1, -8.742278e-08, 1, 4.371139e-08, 0, 4.5, 0)
+shape = SubResource("BoxShape3D_hljhc")
+
+[node name="LegRaycast" type="RayCast3D" parent="." unique_id=262084325]
+unique_name_in_owner = true
+
+[node name="ClimbRaycast" type="RayCast3D" parent="." unique_id=1877241456]
+unique_name_in_owner = true
+
+[node name="HeadRaycast" type="RayCast3D" parent="." unique_id=295686386]
+unique_name_in_owner = true

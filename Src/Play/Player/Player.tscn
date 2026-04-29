@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://ith6uwc624dw"]
+
+[ext_resource type="Script" uid="uid://brxi6q8qf3yjh" path="res://Src/Play/Player/Player.cs" id="1_5qbv3"]
+[ext_resource type="PackedScene" uid="uid://j847e625d02t" path="res://Src/Play/Player/Humanoid/Humanoid.tscn" id="2_nch3t"]
+[ext_resource type="PackedScene" uid="uid://ch726eqgjs65k" path="res://Src/Play/Player/Camera/Camera.tscn" id="3_xqynv"]
+
+[node name="Player" type="Node3D" unique_id=442935296]
+script = ExtResource("1_5qbv3")
+
+[node name="Humanoid" parent="." unique_id=490938989 instance=ExtResource("2_nch3t")]
+unique_name_in_owner = true
+
+[node name="PlayerCamera" parent="." unique_id=540203270 instance=ExtResource("3_xqynv")]
+unique_name_in_owner = true
