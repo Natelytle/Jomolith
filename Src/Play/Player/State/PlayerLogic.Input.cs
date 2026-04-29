@@ -8,6 +8,7 @@ public partial class PlayerLogic
     public static class Input
     {
         public readonly record struct PhysicsTick(double Delta);
+        public readonly record struct IntegrateForces;
         public readonly record struct ComputeForces(double Delta);
         public readonly record struct DesiredMovementVector(Vector2 DesiredMovement);
         public readonly record struct Jump;

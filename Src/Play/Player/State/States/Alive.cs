@@ -13,9 +13,9 @@ public partial class PlayerLogic
     {
         [Meta]
         public abstract partial record Alive : PlayerState, 
-            IGet<Input.PhysicsTick>, 
-            IGet<Input.ComputeForces>, 
-            IGet<Input.DesiredMovementVector>, 
+            IGet<Input.IntegrateForces>,
+            IGet<Input.ComputeForces>,
+            IGet<Input.DesiredMovementVector>,
             IGet<Input.SetTimer>
         {
             private const double idle_speed_threshold = 0.01;
@@ -35,47 +35,22 @@ public partial class PlayerLogic
                 });
             }
 
-            public Transition On(in Input.PhysicsTick input)
+            public Transition On(in Input.IntegrateForces input)
             {
-                IHumanoid player = Get<IHumanoid>();
-                ITowerRepo towerRepo = Get<ITowerRepo>();
-                PlayerData playerData = Get<PlayerData>();
+                var player = Get<IHumanoid>();
+                var towerRepo = Get<ITowerRepo>();
 
-                Input(new Input.ComputeForces(input.Delta));
-
-                Basis cameraBasis = towerRepo.CameraBasis.Value;
-                Vector2 desiredMoveDirection = player.GetGlobalInputVector(cameraBasis);
-
-                Input(new Input.DesiredMovementVector(desiredMoveDirection));
-
-                // Raycasts
-                FloorData floorData = player.GetFloorData(playerData.WasOnFloor);
-
-                if (floorData.FloorFound)
+                // Calculate shift lock rotation
+                if (towerRepo.IsPlayerRotationLocked.Value)
                 {
-                    if (!playerData.WasOnFloor)
-                        Input(new Input.HitFloor());
+                    float currentYaw = player.GlobalRotation.Y;
+                    float desiredYaw = towerRepo.CameraBasis.Value.GetEuler().Y;
+                    float angleDelta = Mathf.AngleDifference(currentYaw, desiredYaw);
 
-                    Input(new Input.OnFloor(floorData));
+                    Vector3 newRotation = player.Transform.Rotated(Vector3.Up, angleDelta).Basis.GetEuler();
+
+                    Output(new Output.SetRotation(newRotation));
                 }
-                else if (playerData.WasOnFloor)
-                {
-                    Input(new Input.OffFloor());
-                }
-
-                playerData.WasOnFloor = floorData.FloorFound;
-                playerData.FloorNormal = floorData.FloorNormal;
-                playerData.FloorPosition = floorData.FloorPosition;
-                playerData.FloorVelocity = floorData.FloorVelocity;
-
-                // Set player statistics
-                playerData.PlayerHeading = new Plane(Vector3.Up).Project(-player.Basis.Z).Normalized();
-
-                // Check & update our timer
-                if (playerData.Timer > 0 && playerData.Timer - input.Delta < 0)
-                    Input(new Input.TimerUp());
-
-                playerData.Timer -= input.Delta;
 
                 return ToSelf();
             }

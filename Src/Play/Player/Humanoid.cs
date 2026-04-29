@@ -15,8 +15,6 @@ public interface IHumanoid : IRigidBody3D, IProvide<IPlayerLogic>
 	IPlayerLogic PlayerLogic { get; }
 	
 	Vector3 GlobalRootPosition { get; }
-	
-	Vector3 LocalRootPosition { get; }
 
 	Vector2 GetGlobalInputVector(Basis cameraBasis);
 
@@ -48,9 +46,6 @@ public partial class Humanoid : RigidBody3D, IHumanoid
 
 	public IPlayerLogic PlayerLogic { get; set; } = null!;
 
-	public Vector3 GlobalRootPosition => RootPart.GlobalPosition;
-	public Vector3 LocalRootPosition => RootPart.Position;
-
 	public PlayerLogic.PlayerData PlayerData { get; set; } = null!;
 
 	public PlayerLogic.PlayerSettings Settings { get; set; } = null!;
@@ -70,6 +65,13 @@ public partial class Humanoid : RigidBody3D, IHumanoid
 	[Node] public IRayCast3D ClimbRaycast { get; set; } = null!;
 	
 	[Node] public IRayCast3D HeadRaycast { get; set; } = null!;
+
+	#endregion
+
+	#region Computed
+
+	public Vector3 GlobalRootPosition => RootPart.GlobalPosition;
+	public Vector3 LocalRootPosition => RootPart.Position;
 
 	#endregion
 
@@ -119,11 +121,16 @@ public partial class Humanoid : RigidBody3D, IHumanoid
 			PlayerLogic.Input(new PlayerLogic.Input.Jump());
 		}
 	}
-	
+
+	public override void _IntegrateForces(PhysicsDirectBodyState3D state)
+	{
+		PlayerLogic.Input(new PlayerLogic.Input.IntegrateForces());
+	}
+
 	public Vector2 GetGlobalInputVector(Basis cameraBasis)
 	{
 		Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
-		Vector3 rotated = (cameraBasis * new Vector3(inputDir.X, 0, inputDir.Y)) with { Y = 0 };
+		Vector3 rotated = (GlobalBasis.Rotated(Vector3.Up, cameraBasis.GetEuler().Y - Rotation.Y) * new Vector3(inputDir.X, 0, inputDir.Y)) with { Y = 0 };
 
 		return new Vector2(rotated.X, rotated.Z);
 	}
