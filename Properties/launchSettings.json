@@ -2,13 +2,13 @@
   "profiles": {
     "🕹 Debug Game": {
       "commandName": "Executable",
-      "executablePath": "/usr/lib/godot-mono/godot.linuxbsd.editor.x86_64.mono",
+      "executablePath": "/home/nathen/.config/godotenv/godot/bin/godot",
       "workingDirectory": "$(SolutionDir)",
       "commandLineArgs": "--path \"./\""
     },
     "🧪 Debug Tests": {
       "commandName": "Executable",
-      "executablePath": "/usr/lib/godot-mono/godot.linuxbsd.editor.x86_64.mono",
+      "executablePath": "/home/nathen/.config/godotenv/godot/bin/godot",
       "workingDirectory": "$(SolutionDir)",
       "commandLineArgs": "--path \"./\" --run-tests --quit-on-finish"
     }
