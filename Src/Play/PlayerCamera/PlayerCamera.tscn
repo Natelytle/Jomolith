@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://ch726eqgjs65k"]
 
+[ext_resource type="Script" uid="uid://d3qaasrge6cqm" path="res://Src/Play/PlayerCamera/PlayerCamera.cs" id="1_dtood"]
+
 [node name="PlayerCamera" type="Node3D" unique_id=540203270]
+script = ExtResource("1_dtood")
 
-[node name="FocusPosition" type="Node3D" parent="." unique_id=2041446435]
+[node name="OffsetNode" type="Node3D" parent="." unique_id=834444829]
 unique_name_in_owner = true
 
-[node name="SpringArm3D" type="SpringArm3D" parent="FocusPosition" unique_id=1939305059]
+[node name="SpringArm3D" type="SpringArm3D" parent="OffsetNode" unique_id=1939305059]
 unique_name_in_owner = true
 
-[node name="CameraPosition" type="Node3D" parent="FocusPosition/SpringArm3D" unique_id=273130132]
-unique_name_in_owner = true
-
-[node name="Camera3D" type="Camera3D" parent="FocusPosition" unique_id=549436908]
+[node name="Camera3D" type="Camera3D" parent="OffsetNode/SpringArm3D" unique_id=549436908]
 unique_name_in_owner = true

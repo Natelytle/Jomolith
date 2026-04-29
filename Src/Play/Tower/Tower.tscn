@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://byjdu7p1a5ffk"]
 
-[ext_resource type="Script" uid="uid://dda14mfrh1krt" path="res://Game/Play/Tower/Tower.cs" id="1_pokrj"]
-[ext_resource type="PackedScene" uid="uid://j847e625d02t" path="res://Game/Play/Player/Humanoid.tscn" id="2_qds6t"]
+[ext_resource type="Script" uid="uid://dda14mfrh1krt" path="res://Src/Play/Tower/Tower.cs" id="1_pokrj"]
+[ext_resource type="PackedScene" uid="uid://j847e625d02t" path="res://Src/Play/Player/Humanoid.tscn" id="2_qds6t"]
+[ext_resource type="PackedScene" uid="uid://ch726eqgjs65k" path="res://Src/Play/PlayerCamera/PlayerCamera.tscn" id="3_ptsiu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qds6t"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -28,10 +29,9 @@ shadow_enabled = true
 
 [node name="Humanoid" parent="." unique_id=1289233120 instance=ExtResource("2_qds6t")]
 
+[node name="PlayerCamera" parent="." unique_id=540203270 instance=ExtResource("3_ptsiu")]
+
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=797153187]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 use_collision = true
 size = Vector3(100, 1, 100)
-
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1520781576]
-transform = Transform3D(1, 0, 0, 0, 0.98049825, 0.19652805, 0, -0.19652805, 0.98049825, 0, 3.0670729, 5.2374735)

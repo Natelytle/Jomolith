@@ -78,6 +78,14 @@
 
     <ItemGroup>
         <Content Include="Src\Core\Program.cs.uid" />
+        <Content Include="Src\Play\PlayerCamera\State\PlayerCameraLogic.CameraData.cs.uid" />
+        <Content Include="Src\Play\PlayerCamera\State\PlayerCameraLogic.CameraSettings.cs.uid" />
+        <Content Include="Src\Play\PlayerCamera\State\PlayerCameraLogic.CameraState.cs.uid" />
+        <Content Include="Src\Play\PlayerCamera\State\PlayerCameraLogic.cs.uid" />
+        <Content Include="Src\Play\PlayerCamera\State\PlayerCameraLogic.Input.cs.uid" />
+        <Content Include="Src\Play\PlayerCamera\State\PlayerCameraLogic.Output.cs.uid" />
+        <Content Include="Src\Play\PlayerCamera\State\States\Locked.cs.uid" />
+        <Content Include="Src\Play\PlayerCamera\State\States\Unlocked.cs.uid" />
         <Content Include="Src\Play\Player\State\PlayerLogic.cs.uid" />
         <Content Include="Src\Play\Player\State\PlayerLogic.PlayerData.cs.uid" />
         <Content Include="Src\Play\Player\State\PlayerLogic.PlayerState.cs.uid" />
