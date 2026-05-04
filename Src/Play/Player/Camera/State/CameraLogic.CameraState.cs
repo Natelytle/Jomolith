@@ -3,7 +3,6 @@ using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
 using Godot;
 using Jomolith.Play.Player.Domain;
-using Jomolith.Play.Tower.Domain;
 
 namespace Jomolith.Play.Player.Camera.State;
 

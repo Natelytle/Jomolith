@@ -3,16 +3,16 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 using Jomolith.Game.Domain;
-using Jomolith.Play.Tower.Domain;
+using Jomolith.Play.Gameplay.Domain;
 
-namespace Jomolith.Play.Tower;
+namespace Jomolith.Play.Gameplay;
 
-public interface ITower : INode3D, IProvide<ITowerRepo>
+public interface IGameplay : INode3D, IProvide<IGameplayRepo>
 {
 }
 
 [Meta(typeof(IAutoNode))]
-public partial class Tower : Node3D, ITower
+public partial class Gameplay : Node3D, IGameplay
 {
     public override void _Notification(int what) => this.Notify(what);
 
@@ -25,19 +25,19 @@ public partial class Tower : Node3D, ITower
 
     #region Provisions
 
-    ITowerRepo IProvide<ITowerRepo>.Value() => TowerRepo;
+    IGameplayRepo IProvide<IGameplayRepo>.Value() => GameplayRepo;
 
     #endregion
 
     #region State
 
-    public ITowerRepo TowerRepo { get; set; } = null!;
+    public IGameplayRepo GameplayRepo { get; set; } = null!;
 
     #endregion
 
     public void Setup()
     {
-        TowerRepo = new TowerRepo();
+        GameplayRepo = new GameplayRepo();
     }
 
     public void OnResolved()

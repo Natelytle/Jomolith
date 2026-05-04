@@ -3,7 +3,6 @@ using Chickensoft.LogicBlocks;
 using Godot;
 using Jomolith.Play.Player.Domain;
 using Jomolith.Play.Player.Humanoid.Domain;
-using Jomolith.Play.Tower.Domain;
 
 namespace Jomolith.Play.Player.Humanoid.State;
 

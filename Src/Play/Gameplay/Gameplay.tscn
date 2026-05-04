@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://byjdu7p1a5ffk"]
 
-[ext_resource type="Script" uid="uid://dda14mfrh1krt" path="res://Src/Play/Tower/Tower.cs" id="1_pokrj"]
+[ext_resource type="Script" uid="uid://dda14mfrh1krt" path="res://Src/Play/Gameplay/Gameplay.cs" id="1_pokrj"]
 [ext_resource type="PackedScene" uid="uid://ith6uwc624dw" path="res://Src/Play/Player/Player.tscn" id="2_4qg2u"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qds6t"]

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ckihjk4nst56e" path="res://Src/Game/JomolithGame.cs" id="1_17mmo"]
 [ext_resource type="PackedScene" uid="uid://b0rmucuy7pjux" path="res://Src/Menu/MainMenu.tscn" id="2_b8gc2"]
-[ext_resource type="PackedScene" uid="uid://byjdu7p1a5ffk" path="res://Src/Play/Tower/Tower.tscn" id="3_nfa63"]
+[ext_resource type="PackedScene" uid="uid://byjdu7p1a5ffk" path="res://Src/Play/Gameplay/Gameplay.tscn" id="3_nfa63"]
 
 [node name="Control" type="Control" unique_id=236038828]
 layout_mode = 3

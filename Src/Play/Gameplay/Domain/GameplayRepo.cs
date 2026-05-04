@@ -3,9 +3,9 @@ using Chickensoft.Sync.Primitives;
 using Godot;
 using Jomolith.Game.Domain;
 
-namespace Jomolith.Play.Tower.Domain;
+namespace Jomolith.Play.Gameplay.Domain;
 
-public interface ITowerRepo : IDisposable
+public interface IGameplayRepo : IDisposable
 {
     /// <summary>Pause status.</summary>
     IAutoValue<bool> IsPaused { get; }
@@ -17,14 +17,14 @@ public interface ITowerRepo : IDisposable
     void Resume();
 }
 
-public class TowerRepo : ITowerRepo
+public class GameplayRepo : IGameplayRepo
 {
     public IAutoValue<bool> IsPaused => isPaused;
     private readonly AutoValue<bool> isPaused;
 
     private bool disposedValue;
 
-    public TowerRepo()
+    public GameplayRepo()
     {
         isPaused = new AutoValue<bool>(false);
     }

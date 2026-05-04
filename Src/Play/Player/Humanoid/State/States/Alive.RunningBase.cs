@@ -1,7 +1,5 @@
 using Chickensoft.Introspection;
-using Chickensoft.LogicBlocks;
 using Godot;
-using Jomolith.Play.Tower.Domain;
 
 namespace Jomolith.Play.Player.Humanoid.State;
 
