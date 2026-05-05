@@ -9,7 +9,7 @@ namespace Jomolith.Play.Player.Camera.State;
 public partial class CameraLogic
 {
     [Meta]
-    public abstract partial record CameraState : StateLogic<CameraState>, 
+    public abstract partial record CameraState : StateLogic<CameraState>,
         IGet<Input.PhysicsTick>,
         IGet<Input.MouseInputOccurred>,
         IGet<Input.RightClickPressed>,
@@ -25,14 +25,14 @@ public partial class CameraLogic
             ICamera camera = Get<ICamera>();
             CameraData data = Get<CameraData>();
             IPlayerRepo playerRepo = Get<IPlayerRepo>();
-            
+
             // Set the focus position to the position of the player.
             Vector3 playerCameraPosition = playerRepo.PlayerGlobalPosition.Value + 1.5f * playerRepo.PlayerBasis.Value.Y;
             Output(new Output.GlobalPositionChanged(playerCameraPosition));
-            
+
             // Spring arm should never be longer than the desired spring arm length.
             float newSpringArmLength = Math.Min(camera.SpringArmLength, camera.CameraDistance);
-            
+
             // Lerp it to the desired position from where it currently is.
             float lerpAmount = 1 - Mathf.Pow(0.5f, (float)input.Delta * 30);
             newSpringArmLength = Mathf.Lerp(newSpringArmLength, data.DesiredZoomLength, lerpAmount);
@@ -48,7 +48,7 @@ public partial class CameraLogic
         {
             CameraData data = Get<CameraData>();
 
-            if (!data.ShouldPan)
+            if (!data.CameraLocked)
                 return ToSelf();
 
             ICamera camera = Get<ICamera>();
@@ -69,14 +69,14 @@ public partial class CameraLogic
 
         public Transition On(in Input.RightClickPressed _)
         {
-            Get<CameraData>().RightClickPressed = true;
+            Output(new Output.SetRightClickPressed(true));
 
             return ToSelf();
         }
 
         public Transition On(in Input.RightClickReleased _)
         {
-            Get<CameraData>().RightClickPressed = false;
+            Output(new Output.SetRightClickPressed(false));
 
             return ToSelf();
         }
@@ -105,7 +105,7 @@ public partial class CameraLogic
 
             float currDistance = data.DesiredZoomLength;
             float newDistance = currDistance + (1 + currDistance * 0.5f) * input.ZoomStrength;
-            
+
             Input(new Input.FirstPersonExited());
 
             data.DesiredZoomLength = newDistance;

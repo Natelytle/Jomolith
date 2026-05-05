@@ -4,6 +4,7 @@ using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
 using Godot;
 using Jomolith.Game.Domain;
+using Jomolith.Play.Gameplay.Domain;
 using Jomolith.Play.Player.Domain;
 using Jomolith.Play.Player.Camera.State;
 
@@ -17,7 +18,7 @@ public interface ICamera : INode3D
     float HorizontalRotation { get; }
     float VerticalRotation { get; }
     float SpringArmLength { get; }
-    
+
     /// <summary>
     /// The distance the Camera3D is from the OffsetNode it is attached to. Basically, the current length of the spring arm.
     /// </summary>
@@ -32,17 +33,20 @@ public partial class Camera : Node3D, ICamera
     public override void _Notification(int what) => this.Notify(what);
 
     #region Dependencies
-    
+
     [Dependency]
     public IPlayerRepo PlayerRepo => this.DependOn<IPlayerRepo>();
-    
+
+    [Dependency]
+    public IGameplayRepo GameplayRepo => this.DependOn<IGameplayRepo>();
+
     [Dependency]
     public IGameRepo GameRepo => this.DependOn<IGameRepo>();
 
-    #endregion 
+    #endregion
 
     #region State
-    
+
     public ICameraLogic CameraLogic { get; set; } = null!;
 
     public CameraLogic.CameraData CameraData { get; set; } = null!;
@@ -52,7 +56,7 @@ public partial class Camera : Node3D, ICamera
     public LogicBlock<CameraLogic.CameraState>.IBinding CameraBinding { get; set; } = null!;
 
     #endregion
-    
+
     #region Nodes
 
     [Node] public Node3D OffsetNode { get; set; } = null!;
@@ -76,23 +80,23 @@ public partial class Camera : Node3D, ICamera
     public float CameraDistance => (Camera3D.GlobalPosition - OffsetNode.GlobalPosition).Length();
 
     #endregion
-    
+
     public void Setup()
     {
         CameraLogic = new CameraLogic();
 
         CameraData = new CameraLogic.CameraData
         {
-            CameraLocked = false,
+            CameraLockedState = false,
             DesiredZoomLength = 12.5f,
-            RightClickPressed = false
+            CameraLockedRightClick = false
         };
 
         Settings = new CameraLogic.CameraSettings
         {
             Sensitivity = 1.0f
         };
-        
+
         CameraLogic.Set(this as ICamera);
         CameraLogic.Set(PlayerRepo);
         CameraLogic.Set(GameRepo);
@@ -122,6 +126,22 @@ public partial class Camera : Node3D, ICamera
                 SpringArm3D.SpringLength = output.Length;
 
                 // TODO: Set character opacity to some value based on the length here
+            })
+            .Handle((in CameraLogic.Output.SetCameraLocked output) =>
+            {
+                CameraData.CameraLockedState = output.Value;
+
+                GameplayRepo.SetIsMouseCaptured(CameraData.CameraLocked);
+            })
+            .Handle((in CameraLogic.Output.SetRightClickPressed output) =>
+            {
+                CameraData.CameraLockedRightClick = output.Value;
+
+                GameplayRepo.SetIsMouseCaptured(CameraData.CameraLocked);
+            })
+            .Handle((in CameraLogic.Output.SetPlayerLocked output) =>
+            {
+                PlayerRepo.SetIsPlayerRotationLocked(output.Value);
             });
     }
 
@@ -142,7 +162,7 @@ public partial class Camera : Node3D, ICamera
         if (@event.IsAction("ZoomOut") && @event.IsPressed())
         {
             float zoomStrength = Input.GetActionStrength("ZoomOut");
-            
+
             CameraLogic.Input(new CameraLogic.Input.ZoomedOut(zoomStrength));
         }
 
@@ -154,6 +174,15 @@ public partial class Camera : Node3D, ICamera
         if (@event.IsAction("ToggleShiftLock") && @event.IsPressed())
         {
             CameraLogic.Input(new CameraLogic.Input.ToggleShiftLock());
+        }
+
+        if (@event is InputEventMouseButton button
+            && button.ButtonIndex is MouseButton.Right)
+        {
+            if (button.IsPressed() && !CameraData.CameraLockedRightClick)
+                CameraLogic.Input(new CameraLogic.Input.RightClickPressed());
+            if (button.IsReleased() && CameraData.CameraLockedRightClick)
+                CameraLogic.Input(new CameraLogic.Input.RightClickReleased());
         }
     }
 }

@@ -1,0 +1,4 @@
+@startuml GameplayLogic
+state "GameplayLogic State" as Jomolith_Play_Gameplay_State_GameplayLogic_GameplayState
+[*] --> Jomolith_Play_Gameplay_State_GameplayLogic_GameplayState
+@enduml

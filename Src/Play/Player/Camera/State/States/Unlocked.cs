@@ -15,22 +15,18 @@ public partial class CameraLogic
             {
                 this.OnEnter(() =>
                 {
-                    Get<CameraData>().CameraLocked = false;
-                    Get<IPlayerRepo>().SetIsPlayerRotationLocked(false);
+                    Output(new Output.SetCameraLocked(false));
+                    Output(new Output.SetPlayerLocked(false));
                 });
             }
 
             public Transition On(in Input.ToggleShiftLock input)
             {
-                Output(new Output.ShiftLockEntered(FirstPerson: false));
-
                 return To<ShiftLock>();
             }
 
             public Transition On(in Input.FirstPersonEntered input)
             {
-                Output(new Output.FirstPersonEntered(ShiftLock: false));
-
                 return To<FirstPerson>();
             }
         }

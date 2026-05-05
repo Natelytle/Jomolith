@@ -72,7 +72,6 @@
 
     <ItemGroup>
         <Folder Include="Src\Game\" />
-        <Folder Include="Src\Play\Tower\State\" />
     </ItemGroup>
 
     <ItemGroup>

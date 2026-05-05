@@ -1,24 +1,42 @@
 using System;
 using Chickensoft.Sync.Primitives;
-using Godot;
-using Jomolith.Game.Domain;
 
 namespace Jomolith.Play.Gameplay.Domain;
 
 public interface IGameplayRepo : IDisposable
 {
-    /// <summary>Pause status.</summary>
+    /// <summary>
+    /// Mouse captured status.
+    /// </summary>
+    IAutoValue<bool> IsMouseCaptured { get; }
+
+    /// <summary>
+    /// Pause status.
+    /// </summary>
     IAutoValue<bool> IsPaused { get; }
 
-    /// <summary>Pauses the game and releases the mouse.</summary>
+    /// <summary>
+    /// Sets the value of <see cref="IsMouseCaptured"/>.
+    /// </summary>
+    /// <param name="isMouseCaptured">The state to set.</param>
+    void SetIsMouseCaptured(bool isMouseCaptured);
+
+    /// <summary>
+    /// Pauses the game and releases the mouse.
+    /// </summary>
     void Pause();
 
-    /// <summary>Resumes the game and recaptures the mouse.</summary>
+    /// <summary>
+    /// Resumes the game and recaptures the mouse.
+    /// </summary>
     void Resume();
 }
 
 public class GameplayRepo : IGameplayRepo
 {
+    public IAutoValue<bool> IsMouseCaptured => isMouseCaptured;
+    private readonly AutoValue<bool> isMouseCaptured;
+
     public IAutoValue<bool> IsPaused => isPaused;
     private readonly AutoValue<bool> isPaused;
 
@@ -26,7 +44,13 @@ public class GameplayRepo : IGameplayRepo
 
     public GameplayRepo()
     {
+        isMouseCaptured = new AutoValue<bool>(false);
         isPaused = new AutoValue<bool>(false);
+    }
+
+    public void SetIsMouseCaptured(bool isMouseCaptured)
+    {
+        this.isMouseCaptured.Value = isMouseCaptured;
     }
 
     public void Pause()
@@ -48,6 +72,7 @@ public class GameplayRepo : IGameplayRepo
             if (disposing)
             {
                 // Dispose managed objects.
+                isMouseCaptured.Dispose();
                 isPaused.Dispose();
             }
 

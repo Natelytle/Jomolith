@@ -8,10 +8,10 @@ public partial class CameraLogic
     {
         public required float DesiredZoomLength;
 
-        public bool ShouldPan => RightClickPressed || CameraLocked;
+        public bool CameraLocked => CameraLockedRightClick || CameraLockedState;
 
-        public required bool RightClickPressed;
+        public required bool CameraLockedRightClick;
 
-        public required bool CameraLocked;
+        public required bool CameraLockedState;
     }
 }
