@@ -11,7 +11,7 @@ public partial class PlayerLogic
     public partial record PlayerState
     {
         [Meta]
-        public abstract partial record Alive : PlayerState, 
+        public abstract partial record Alive : PlayerState,
             IGet<Input.PhysicsTickAlive>,
             IGet<Input.ComputeForces>,
             IGet<Input.DesiredMovementVector>,
@@ -53,7 +53,7 @@ public partial class PlayerLogic
 
                 return ToSelf();
             }
-            
+
             // Separate from the physics tick loop, since we want to change it in the jumping state
             public virtual Transition On(in Input.ComputeForces _)
             {
@@ -88,13 +88,17 @@ public partial class PlayerLogic
 
                 Vector2 desiredMovementVector = input.DesiredMovement * settings.MoveSpeed;
                 Vector3 targetMovementVector = new Vector3(desiredMovementVector.X, 0, desiredMovementVector.Y);
-                Vector3 correctionVector = targetMovementVector - new Vector3(player.LinearVelocity.X, 0, player.LinearVelocity.Z);
+                Vector3 correctionVector = targetMovementVector -
+                                           new Vector3(player.LinearVelocity.X, 0, player.LinearVelocity.Z);
                 correctionVector = correctionVector.Normalized() * Math.Min(MaxForce, Gain * correctionVector.Length());
                 Vector3 desiredForce = correctionVector * player.Mass;
 
-                float angleToDesiredDirection = playerData.PlayerHeading.SignedAngleTo(targetMovementVector, Vector3.Up);
-                float desiredRotationalVelocity = 8.0f * Math.Min(Math.Abs(angleToDesiredDirection), TurnAngleLimit) * Math.Sign(angleToDesiredDirection);
-                float desiredTorque = 100.0f * player.GetInertia().Y * (desiredRotationalVelocity - player.AngularVelocity.Y);
+                float angleToDesiredDirection =
+                    playerData.PlayerHeading.SignedAngleTo(targetMovementVector, Vector3.Up);
+                float desiredRotationalVelocity = 8.0f * Math.Min(Math.Abs(angleToDesiredDirection), TurnAngleLimit) *
+                                                  Math.Sign(angleToDesiredDirection);
+                float desiredTorque = 100.0f * player.GetInertia().Y *
+                                      (desiredRotationalVelocity - player.AngularVelocity.Y);
                 desiredTorque = Mathf.Clamp(desiredTorque, -1e5f, 1e5f);
 
                 Output(new Output.ApplyForce(desiredForce, Vector3.Up * desiredTorque));

@@ -33,7 +33,7 @@ public partial class JomolithGame : Control, IJomolithGame
     {
         GameRepo = new GameRepo();
         GameLogic = new GameLogic();
-        
+
         GameLogic.Set(GameRepo);
     }
 
@@ -56,17 +56,15 @@ public partial class JomolithGame : Control, IJomolithGame
             GameRepo.OnEnterTower();
         }).Handle((in GameLogic.Output.UnloadCurrentTower _) =>
         {
-            
         });
-        
+
         this.Provide();
-        
+
         GameLogic.Start();
     }
 
     public void OnReady()
     {
-        
     }
 
     public void OnPlayTower() => GameLogic.Input(new GameLogic.Input.PlayTower());

@@ -16,7 +16,7 @@ public partial class PerspectiveLogic
                 return To<ThirdPerson>();
             }
         }
-        
+
         [Meta]
         public partial record ThirdPerson : PerspectiveState, IGet<Input.ToFirstPerson>
         {

@@ -53,7 +53,7 @@ public partial class PlayerLogic
                 Input(new Input.TimerUp());
 
             playerData.Timer -= input.Delta;
-            
+
             // Update player position
             playerRepo.SetPlayerGlobalPosition(player.GlobalRootPosition);
             playerRepo.SetPlayerBasis(player.GlobalBasis);

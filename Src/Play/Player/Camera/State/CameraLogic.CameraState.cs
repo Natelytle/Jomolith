@@ -27,7 +27,8 @@ public partial class CameraLogic
             IPlayerRepo playerRepo = Get<IPlayerRepo>();
 
             // Set the focus position to the position of the player.
-            Vector3 playerCameraPosition = playerRepo.PlayerGlobalPosition.Value + 1.5f * playerRepo.PlayerBasis.Value.Y;
+            Vector3 playerCameraPosition =
+                playerRepo.PlayerGlobalPosition.Value + 1.5f * playerRepo.PlayerBasis.Value.Y;
             Output(new Output.GlobalPositionChanged(playerCameraPosition));
 
             // Spring arm should never be longer than the desired spring arm length.
@@ -60,7 +61,8 @@ public partial class CameraLogic
             float newVerticalRotation = camera.VerticalRotation - moveVector.Y;
 
             // Clamp to 80 degrees.
-            newVerticalRotation = Math.Clamp(newVerticalRotation, float.DegreesToRadians(-80), float.DegreesToRadians(80));
+            newVerticalRotation =
+                Math.Clamp(newVerticalRotation, float.DegreesToRadians(-80), float.DegreesToRadians(80));
 
             Output(new Output.RotationChanged(newHorizontalRotation, newVerticalRotation));
 

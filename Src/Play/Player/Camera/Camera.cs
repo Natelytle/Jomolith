@@ -34,14 +34,11 @@ public partial class Camera : Node3D, ICamera
 
     #region Dependencies
 
-    [Dependency]
-    public IPlayerRepo PlayerRepo => this.DependOn<IPlayerRepo>();
+    [Dependency] public IPlayerRepo PlayerRepo => this.DependOn<IPlayerRepo>();
 
-    [Dependency]
-    public IGameplayRepo GameplayRepo => this.DependOn<IGameplayRepo>();
+    [Dependency] public IGameplayRepo GameplayRepo => this.DependOn<IGameplayRepo>();
 
-    [Dependency]
-    public IGameRepo GameRepo => this.DependOn<IGameRepo>();
+    [Dependency] public IGameRepo GameRepo => this.DependOn<IGameRepo>();
 
     #endregion
 

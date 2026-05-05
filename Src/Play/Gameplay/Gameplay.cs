@@ -20,8 +20,7 @@ public partial class Gameplay : Node3D, IGameplay
 
     #region Dependencies
 
-    [Dependency]
-    public IGameRepo GameRepo => this.DependOn<IGameRepo>();
+    [Dependency] public IGameRepo GameRepo => this.DependOn<IGameRepo>();
 
     #endregion
 

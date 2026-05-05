@@ -12,204 +12,207 @@ namespace Jomolith.Play.Player.Humanoid;
 
 public interface IHumanoid : IRigidBody3D, IProvide<IPlayerLogic>
 {
-	IPlayerLogic PlayerLogic { get; }
-	
-	Vector3 GlobalRootPosition { get; }
-	
-	void PhysicsTick(double delta);
+    IPlayerLogic PlayerLogic { get; }
 
-	Vector2 GetGlobalInputVector(Basis cameraBasis);
+    Vector3 GlobalRootPosition { get; }
 
-	FloorData GetFloorData(bool wasOnFloor);
+    void PhysicsTick(double delta);
+
+    Vector2 GetGlobalInputVector(Basis cameraBasis);
+
+    FloorData GetFloorData(bool wasOnFloor);
 }
 
 [Meta(typeof(IAutoNode))]
 public partial class Humanoid : RigidBody3D, IHumanoid
 {
-	public override void _Notification(int what) => this.Notify(what);
+    public override void _Notification(int what) => this.Notify(what);
 
-	#region Dependencies
+    #region Dependencies
 
-	[Dependency]
-	public IPlayerRepo PlayerRepo => this.DependOn<IPlayerRepo>();
+    [Dependency] public IPlayerRepo PlayerRepo => this.DependOn<IPlayerRepo>();
 
-	[Dependency]
-	public IGameRepo GameRepo => this.DependOn<IGameRepo>();
+    [Dependency] public IGameRepo GameRepo => this.DependOn<IGameRepo>();
 
-	#endregion
+    #endregion
 
-	#region Provisions
+    #region Provisions
 
-	IPlayerLogic IProvide<IPlayerLogic>.Value() => PlayerLogic;
+    IPlayerLogic IProvide<IPlayerLogic>.Value() => PlayerLogic;
 
-	#endregion
+    #endregion
 
-	#region State
+    #region State
 
-	public IPlayerLogic PlayerLogic { get; set; } = null!;
+    public IPlayerLogic PlayerLogic { get; set; } = null!;
 
-	public PlayerLogic.PlayerData PlayerData { get; set; } = null!;
+    public PlayerLogic.PlayerData PlayerData { get; set; } = null!;
 
-	public PlayerLogic.PlayerSettings Settings { get; set; } = null!;
-	
-	public PlayerLogic.IBinding PlayerBinding { get; set; } = null!;
+    public PlayerLogic.PlayerSettings Settings { get; set; } = null!;
 
-	#endregion
+    public PlayerLogic.IBinding PlayerBinding { get; set; } = null!;
 
-	#region Nodes
+    #endregion
 
-	[Node] public IPlayerModel PlayerModel { get; set; } = null!;
+    #region Nodes
 
-	[Node] public INode3D RootPart { get; set; } = null!;
+    [Node] public IPlayerModel PlayerModel { get; set; } = null!;
 
-	[Node] public IRayCast3D LegRaycast { get; set; } = null!;
-	
-	[Node] public IRayCast3D ClimbRaycast { get; set; } = null!;
-	
-	[Node] public IRayCast3D HeadRaycast { get; set; } = null!;
+    [Node] public INode3D RootPart { get; set; } = null!;
 
-	#endregion
+    [Node] public IRayCast3D LegRaycast { get; set; } = null!;
 
-	#region Computed
+    [Node] public IRayCast3D ClimbRaycast { get; set; } = null!;
 
-	public Vector3 GlobalRootPosition => RootPart.GlobalPosition;
-	public Vector3 LocalRootPosition => RootPart.Position;
+    [Node] public IRayCast3D HeadRaycast { get; set; } = null!;
 
-	#endregion
+    #endregion
 
-	public void Setup()
-	{
-		PlayerData = new PlayerLogic.PlayerData();
-		Settings = new PlayerLogic.PlayerSettings(1.0f, 16.0f, 50.0f);
-		PlayerLogic = new PlayerLogic();
-		
-		PlayerLogic.Set(this as IHumanoid);
-		PlayerLogic.Set(Settings);
-		PlayerLogic.Set(PlayerRepo);
-		PlayerLogic.Set(GameRepo);
-		PlayerLogic.Set(PlayerData);
-	}
+    #region Computed
 
-	// Called when the node enters the scene tree for the first time.
-	public void OnResolved()
-	{
-		PlayerBinding = PlayerLogic.Bind();
+    public Vector3 GlobalRootPosition => RootPart.GlobalPosition;
+    public Vector3 LocalRootPosition => RootPart.Position;
 
-		PlayerBinding.Handle((in PlayerLogic.Output.ApplyForce output) =>
-		{
-			ApplyCentralForce(output.Force);
-			ApplyTorque(output.Torque);
-		}).Handle((in PlayerLogic.Output.SetRotation output) =>
-		{
-			Rotation = output.Rotation;
-		}).Handle((in PlayerLogic.Output.SetFrozen output) =>
-		{
-			Freeze = output.Frozen;
-		});
-		
-		this.Provide();
-		
-		PlayerLogic.Start();
-	}
+    #endregion
 
-	public void PhysicsTick(double delta)
-	{
-		PlayerLogic.Input(new PlayerLogic.Input.PhysicsTick(delta));
+    public void Setup()
+    {
+        PlayerData = new PlayerLogic.PlayerData();
+        Settings = new PlayerLogic.PlayerSettings(1.0f, 16.0f, 50.0f);
+        PlayerLogic = new PlayerLogic();
 
-		if (Input.IsActionPressed("Jump"))
-		{
-			PlayerLogic.Input(new PlayerLogic.Input.Jump());
-		}
-	}
+        PlayerLogic.Set(this as IHumanoid);
+        PlayerLogic.Set(Settings);
+        PlayerLogic.Set(PlayerRepo);
+        PlayerLogic.Set(GameRepo);
+        PlayerLogic.Set(PlayerData);
+    }
 
-	public Vector2 GetGlobalInputVector(Basis cameraBasis)
-	{
-		Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
-		Vector3 rotated = (GlobalBasis.Rotated(Vector3.Up, cameraBasis.GetEuler().Y - Rotation.Y) * new Vector3(inputDir.X, 0, inputDir.Y)) with { Y = 0 };
+    // Called when the node enters the scene tree for the first time.
+    public void OnResolved()
+    {
+        PlayerBinding = PlayerLogic.Bind();
 
-		return new Vector2(rotated.X, rotated.Z);
-	}
+        PlayerBinding.Handle((in PlayerLogic.Output.ApplyForce output) =>
+        {
+            ApplyCentralForce(output.Force);
+            ApplyTorque(output.Torque);
+        }).Handle((in PlayerLogic.Output.SetRotation output) =>
+        {
+            Rotation = output.Rotation;
+        }).Handle((in PlayerLogic.Output.SetFrozen output) =>
+        {
+            Freeze = output.Frozen;
+        });
 
-	public FloorData GetFloorData(bool wasOnFloor)
-	{
-		float[] xPositions = [0, 0.8f, -0.8f];
-		float[] zPositions = [0, -0.4f, 0.4f];
+        this.Provide();
 
-		const float yOffset = -0.9f;
-		float yPosition = LocalRootPosition.Y + yOffset;
-		
-		// Get the raycast length depending on if we had a floor last frame.
-		float length = wasOnFloor ? 1.5f : 1.1f;
-		length += Math.Abs(LinearVelocity.Y) > 100 ? Math.Abs(LinearVelocity.Y) / 100.0f : 0;
-		length = length * 2 + 1;
+        PlayerLogic.Start();
+    }
 
-		LegRaycast.TargetPosition = new Vector3(0, -length, 0);
+    public void PhysicsTick(double delta)
+    {
+        PlayerLogic.Input(new PlayerLogic.Input.PhysicsTick(delta));
 
-		Vector3? floorNormal = null;
-		Vector3? floorLocation = null;
-		Vector3 floorVelocity = Vector3.Zero;
+        if (Input.IsActionPressed("Jump"))
+        {
+            PlayerLogic.Input(new PlayerLogic.Input.Jump());
+        }
+    }
 
-		Vector3 floorHitLocationSum = Vector3.Zero;
-		int count = 0;
+    public Vector2 GetGlobalInputVector(Basis cameraBasis)
+    {
+        Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
+        Vector3 rotated =
+            (GlobalBasis.Rotated(Vector3.Up, cameraBasis.GetEuler().Y - Rotation.Y) *
+             new Vector3(inputDir.X, 0, inputDir.Y)) with
+            {
+                Y = 0
+            };
 
-		// Check the center, then the sides.
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				// We skip the center raycast on the sides...
-				if (i > 0 && j == 0)
-					continue;
+        return new Vector2(rotated.X, rotated.Z);
+    }
 
-				LegRaycast.Position = new Vector3(xPositions[i], yPosition, zPositions[j]);
-				LegRaycast.ForceRaycastUpdate();
+    public FloorData GetFloorData(bool wasOnFloor)
+    {
+        float[] xPositions = [0, 0.8f, -0.8f];
+        float[] zPositions = [0, -0.4f, 0.4f];
 
-				if (LegRaycast.IsColliding())
-				{
-					Vector3 hitNormal = LegRaycast.GetCollisionNormal();
-					
-					// Ignore walls
-					if (hitNormal.AngleTo(Vector3.Up) > float.DegreesToRadians(89.9f))
-						continue;
+        const float yOffset = -0.9f;
+        float yPosition = LocalRootPosition.Y + yOffset;
 
-					floorHitLocationSum += LegRaycast.GetCollisionPoint();
-					count++;
+        // Get the raycast length depending on if we had a floor last frame.
+        float length = wasOnFloor ? 1.5f : 1.1f;
+        length += Math.Abs(LinearVelocity.Y) > 100 ? Math.Abs(LinearVelocity.Y) / 100.0f : 0;
+        length = length * 2 + 1;
 
-					floorNormal ??= LegRaycast.GetCollisionNormal();
-					floorLocation ??= LegRaycast.GetCollisionPoint();
-				}
-			}
+        LegRaycast.TargetPosition = new Vector3(0, -length, 0);
 
-			if (count != 0)
-				break;
-		}
-		
-		const float zPositionSecondary = 0.8f;
+        Vector3? floorNormal = null;
+        Vector3? floorLocation = null;
+        Vector3 floorVelocity = Vector3.Zero;
 
-		// We have 2 more checks, just do em manually
-		if (floorHitLocationSum.LengthSquared() > 0)
-		{
-			for (int i = -1; i < 2; i += 2)
-			{
-				LegRaycast.Position = new Vector3(0, yPosition, i * zPositionSecondary);
-				LegRaycast.ForceRaycastUpdate();
+        Vector3 floorHitLocationSum = Vector3.Zero;
+        int count = 0;
 
-				if (LegRaycast.IsColliding())
-				{
-					floorHitLocationSum += LegRaycast.GetCollisionPoint();
-					count++;
-				}
-			}
-		}
+        // Check the center, then the sides.
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                // We skip the center raycast on the sides...
+                if (i > 0 && j == 0)
+                    continue;
 
-		if (count > 0)
-			floorLocation = floorHitLocationSum / count;
+                LegRaycast.Position = new Vector3(xPositions[i], yPosition, zPositions[j]);
+                LegRaycast.ForceRaycastUpdate();
 
-		return new FloorData
-		{
-			FloorNormal = floorNormal,
-			FloorPosition = floorLocation,
-			FloorVelocity = floorVelocity
-		};
-	}
+                if (LegRaycast.IsColliding())
+                {
+                    Vector3 hitNormal = LegRaycast.GetCollisionNormal();
+
+                    // Ignore walls
+                    if (hitNormal.AngleTo(Vector3.Up) > float.DegreesToRadians(89.9f))
+                        continue;
+
+                    floorHitLocationSum += LegRaycast.GetCollisionPoint();
+                    count++;
+
+                    floorNormal ??= LegRaycast.GetCollisionNormal();
+                    floorLocation ??= LegRaycast.GetCollisionPoint();
+                }
+            }
+
+            if (count != 0)
+                break;
+        }
+
+        const float zPositionSecondary = 0.8f;
+
+        // We have 2 more checks, just do em manually
+        if (floorHitLocationSum.LengthSquared() > 0)
+        {
+            for (int i = -1; i < 2; i += 2)
+            {
+                LegRaycast.Position = new Vector3(0, yPosition, i * zPositionSecondary);
+                LegRaycast.ForceRaycastUpdate();
+
+                if (LegRaycast.IsColliding())
+                {
+                    floorHitLocationSum += LegRaycast.GetCollisionPoint();
+                    count++;
+                }
+            }
+        }
+
+        if (count > 0)
+            floorLocation = floorHitLocationSum / count;
+
+        return new FloorData
+        {
+            FloorNormal = floorNormal,
+            FloorPosition = floorLocation,
+            FloorVelocity = floorVelocity
+        };
+    }
 }

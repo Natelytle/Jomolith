@@ -16,7 +16,7 @@ public partial class PlayerLogic
             {
                 this.OnEnter(() => Input(new Input.SetTimer(jump_cooldown)));
             }
-            
+
             public override Transition On(in Input.Jump input)
             {
                 return ToSelf();

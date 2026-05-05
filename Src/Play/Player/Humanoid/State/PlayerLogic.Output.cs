@@ -9,11 +9,17 @@ public partial class PlayerLogic
         public static class Animations
         {
             public readonly record struct Idle;
+
             public readonly record struct Walk;
+
             public readonly record struct Jump;
+
             public readonly record struct Fall;
+
             public readonly record struct Climb;
+
             public readonly record struct Disabled;
+
             public readonly record struct Enabled;
         }
 

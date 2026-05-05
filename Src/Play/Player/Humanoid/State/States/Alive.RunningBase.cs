@@ -34,7 +34,8 @@ public partial class PlayerLogic
                 if (desiredYVelocity != null && desiredYVelocity > 0)
                 {
                     Vector3 antiGravityForce = -player.GetGravity() * player.Mass;
-                    Vector3 groundForce = Vector3.Up * 110 * (desiredYVelocity.Value - player.LinearVelocity.Y) * player.Mass;
+                    Vector3 groundForce = Vector3.Up * 110 * (desiredYVelocity.Value - player.LinearVelocity.Y) *
+                                          player.Mass;
 
                     Output(new Output.ApplyForce(antiGravityForce + groundForce, Vector3.Zero));
                 }

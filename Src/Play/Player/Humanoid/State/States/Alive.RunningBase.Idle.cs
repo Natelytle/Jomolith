@@ -14,7 +14,7 @@ public partial class PlayerLogic
             {
                 this.OnEnter(() => Output(new Output.Animations.Idle()));
             }
-            
+
             public Transition On(in Input.FacingLadder input)
             {
                 return To<Climbing>();

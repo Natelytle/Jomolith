@@ -13,7 +13,7 @@ public partial class PlayerLogic
         {
             private const double coyote_time = 0.125;
 
-            public Coyote() 
+            public Coyote()
             {
                 this.OnEnter(() => Input(new Input.SetTimer(coyote_time)));
             }
@@ -27,7 +27,7 @@ public partial class PlayerLogic
             {
                 return To<Falling>();
             }
-            
+
             // Skip the landing state when we're back on the ground from Coyote
             public override Transition On(in Input.HitFloor input)
             {

@@ -9,7 +9,7 @@ public partial class PlayerLogic
     public partial record PlayerState
     {
         [Meta]
-        public partial record Jumping : Alive, 
+        public partial record Jumping : Alive,
             IGet<Input.OffFloor>,
             IGet<Input.TimerUp>
         {
@@ -53,11 +53,12 @@ public partial class PlayerLogic
                 Vector3 jumpDirection = wasClimbing ? (Vector3.Up - playerData.PlayerHeading).Normalized() : Vector3.Up;
 
                 float currentJumpVelocity = player.LinearVelocity.Dot(jumpDirection);
-                float desiredJumpAcceleration = float.Round(1.0f / (float)input.Delta) * (desiredJumpSpeed - currentJumpVelocity);
+                float desiredJumpAcceleration =
+                    float.Round(1.0f / (float)input.Delta) * (desiredJumpSpeed - currentJumpVelocity);
 
                 if (playerData.HittingCeiling || desiredJumpAcceleration <= 0)
                     return To<Falling>();
-                
+
                 float desiredJumpForce = desiredJumpAcceleration * player.Mass;
                 Vector3 antiGravityForce = -player.GetGravity() * player.Mass;
 

@@ -16,7 +16,7 @@ public partial class LockModeLogic
                 return To<Locked>();
             }
         }
-        
+
         [Meta]
         public partial record Locked : LockModeState, IGet<Input.ToggleShiftLock>
         {

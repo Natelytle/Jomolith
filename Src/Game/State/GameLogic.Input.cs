@@ -9,7 +9,7 @@ public partial class GameLogic
         public readonly record struct LoadTower;
 
         public readonly record struct TowerLoaded;
-        
+
         public readonly record struct PlayTower;
 
         public readonly record struct ExitTower;
