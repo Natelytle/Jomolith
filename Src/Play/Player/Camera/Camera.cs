@@ -25,6 +25,8 @@ public interface ICamera : INode3D
     float CameraDistance { get; }
 
     void PhysicsTick(double delta);
+
+    void PostPhysicsTick();
 }
 
 [Meta(typeof(IAutoNode))]
@@ -145,6 +147,11 @@ public partial class Camera : Node3D, ICamera
     public void PhysicsTick(double delta)
     {
         CameraLogic.Input(new CameraLogic.Input.PhysicsTick(delta));
+    }
+
+    public void PostPhysicsTick()
+    {
+        CameraLogic.Input(new CameraLogic.Input.PostPhysicsTick());
     }
 
     public override void _UnhandledInput(InputEvent @event)

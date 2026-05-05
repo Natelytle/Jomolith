@@ -53,5 +53,8 @@ public partial class Player : Node3D, IPlayer, IProvide<IPlayerRepo>
         // an up-to-date camera rotation that it can use for shift lock.
         PlayerCamera.PhysicsTick(delta);
         Humanoid.PhysicsTick(delta);
+
+        // Tick the camera again to recenter it to the new humanoid position.
+        PlayerCamera.PostPhysicsTick();
     }
 }

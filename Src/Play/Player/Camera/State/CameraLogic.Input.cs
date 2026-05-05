@@ -8,6 +8,8 @@ public partial class CameraLogic
     {
         public readonly record struct PhysicsTick(double Delta);
 
+        public readonly record struct PostPhysicsTick;
+
         public readonly record struct MouseInputOccurred(InputEventMouseMotion Motion);
 
         public readonly record struct ZoomedIn(float ZoomStrength);
