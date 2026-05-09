@@ -1,3 +1,4 @@
+using System;
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
@@ -124,7 +125,7 @@ public partial class Camera : Node3D, ICamera
             {
                 SpringArm3D.SpringLength = output.Length;
 
-                // TODO: Set character opacity to some value based on the length here
+                PlayerRepo.SetAvatarOpacity(MathF.Pow(Math.Clamp(output.Length / 2, 0, 1), 2));
             })
             .Handle((in CameraLogic.Output.SetCameraLocked output) =>
             {

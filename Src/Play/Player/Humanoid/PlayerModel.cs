@@ -1,9 +1,12 @@
+using System.Collections.Generic;
+using System.Linq;
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Chickensoft.Sync.Primitives;
 using Godot;
 using Jomolith.Play.Player.Humanoid.State;
+using Jomolith.Play.Player.Humanoid.Utils;
 
 namespace Jomolith.Play.Player.Humanoid;
 
@@ -37,10 +40,20 @@ public partial class PlayerModel : Node3D, IPlayerModel
 
     #endregion
 
+    #region State
+
     public PlayerLogic.IBinding PlayerBinding { get; set; } = null!;
+
+    private PlayerModelMaterials Materials { get; set; } = null!;
+
+    #endregion
+
+    #region Nodes
 
     [Node("%AnimationTree")] public IAnimationTree AnimationTree { get; set; } = null!;
     public IAnimationNodeStateMachinePlayback AnimationStateMachine { get; set; } = null!;
+
+    #endregion
 
     // Called when the node enters the scene tree for the first time.
     public void OnReady()
@@ -51,6 +64,8 @@ public partial class PlayerModel : Node3D, IPlayerModel
                     ANIM_STATE_MACHINE
                 )
             );
+
+        Materials = new PlayerModelMaterials(this);
     }
 
     public void OnResolved()
@@ -84,6 +99,9 @@ public partial class PlayerModel : Node3D, IPlayerModel
             )
             .Handle((in PlayerLogic.Output.VerticalVelocityChanged output) =>
                 AnimationTree.Set("parameters/StateMachine/Climb/Speed/scale", (float)(output.Velocity.Length() / 12.0))
+            )
+            .Handle((in PlayerLogic.Output.Visual.SetTransparency output) =>
+                Materials.SetOpacity(output.Alpha)
             );
     }
 }

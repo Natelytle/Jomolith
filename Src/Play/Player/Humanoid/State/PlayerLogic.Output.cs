@@ -23,6 +23,11 @@ public partial class PlayerLogic
             public readonly record struct Enabled;
         }
 
+        public static class Visual
+        {
+            public readonly record struct SetTransparency(float Alpha);
+        }
+
         public readonly record struct ApplyForce(Vector3 Force, Vector3 Torque);
 
         public readonly record struct SetRotation(Vector3 Rotation);

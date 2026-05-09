@@ -18,6 +18,8 @@ public interface IPlayerRepo : IDisposable
     /// <summary>Camera's global transform basis.</summary>
     IAutoValue<Basis> CameraBasis { get; }
 
+    IAutoValue<float> AvatarOpacity { get; }
+
     void SetIsPlayerRotationLocked(bool isLocked);
 
     void SetPlayerGlobalPosition(Vector3 playerGlobalPosition);
@@ -25,6 +27,8 @@ public interface IPlayerRepo : IDisposable
     void SetPlayerBasis(Basis playerBasis);
 
     void SetCameraBasis(Basis cameraBasis);
+
+    void SetAvatarOpacity(float avatarOpacity);
 }
 
 public class PlayerRepo : IPlayerRepo
@@ -41,6 +45,9 @@ public class PlayerRepo : IPlayerRepo
     public IAutoValue<Basis> CameraBasis => cameraBasis;
     private readonly AutoValue<Basis> cameraBasis;
 
+    public IAutoValue<float> AvatarOpacity => avatarOpacity;
+    private readonly AutoValue<float> avatarOpacity;
+
     private bool disposedValue;
 
     public PlayerRepo()
@@ -49,6 +56,7 @@ public class PlayerRepo : IPlayerRepo
         playerGlobalPosition = new AutoValue<Vector3>(Vector3.Zero);
         playerBasis = new AutoValue<Basis>(Basis.Identity);
         cameraBasis = new AutoValue<Basis>(Basis.Identity);
+        avatarOpacity = new AutoValue<float>(1.0f);
     }
 
     public void SetIsPlayerRotationLocked(bool isPlayerRotationLocked)
@@ -71,6 +79,11 @@ public class PlayerRepo : IPlayerRepo
         this.cameraBasis.Value = cameraBasis;
     }
 
+    public void SetAvatarOpacity(float avatarOpacity)
+    {
+        this.avatarOpacity.Value = avatarOpacity;
+    }
+
     #region Internals
 
     protected void Dispose(bool disposing)
@@ -84,6 +97,7 @@ public class PlayerRepo : IPlayerRepo
                 playerGlobalPosition.Dispose();
                 playerBasis.Dispose();
                 cameraBasis.Dispose();
+                avatarOpacity.Dispose();
             }
 
             disposedValue = true;
