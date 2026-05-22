@@ -75,7 +75,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Src\Core\Program.cs.uid"/>
     <Content Include="Properties\launchSettings.json"/>
     <Content Include="Tests\GameTest.cs.uid"/>
   </ItemGroup>
