@@ -1,12 +1,11 @@
 using System;
 
-namespace Jomolith.Game.Domain;
+namespace Jomolith.App.Domain;
 
 /// <summary>
-///     Pure application game logic repository shared between view-specific logic
-///     blocks.
+///     Pure application game logic repository shared between view-specific logic blocks.
 /// </summary>
-public interface IGameRepo : IDisposable
+public interface IAppRepo : IDisposable
 {
     public event Action? MainMenuEntered;
     public event Action? TowerEntered;
@@ -17,10 +16,9 @@ public interface IGameRepo : IDisposable
 }
 
 /// <summary>
-///     Pure application game logic repository — shared between view-specific logic
-///     blocks.
+///     Pure application game logic repository — shared between view-specific logic blocks.
 /// </summary>
-public class GameRepo : IGameRepo
+public class AppRepo : IAppRepo
 {
     public event Action? MainMenuEntered;
     public event Action? TowerEntered;

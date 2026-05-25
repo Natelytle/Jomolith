@@ -1,27 +1,27 @@
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
-using Jomolith.Game.Domain;
+using Jomolith.App.Domain;
 
-namespace Jomolith.Game.State;
+namespace Jomolith.App.State;
 
-public partial class GameLogic
+public partial class AppLogic
 {
-    public partial record GameState
+    public partial record AppState
     {
         [Meta]
-        public partial record InTower : GameState, IGet<Input.ExitTower>
+        public partial record InTower : AppState, IGet<Input.ExitTower>
         {
             public InTower()
             {
                 this.OnEnter(() =>
                 {
-                    Get<IGameRepo>().OnEnterTower();
+                    Get<IAppRepo>().OnEnterTower();
                     Output(new Output.EnterTower());
                 });
                 this.OnExit(() => Output(new Output.UnloadCurrentTower()));
 
-                OnAttach(() => Get<IGameRepo>().TowerExited += OnTowerExited);
-                OnDetach(() => Get<IGameRepo>().TowerExited -= OnTowerExited);
+                OnAttach(() => Get<IAppRepo>().TowerExited += OnTowerExited);
+                OnDetach(() => Get<IAppRepo>().TowerExited -= OnTowerExited);
             }
 
             public void OnTowerExited()

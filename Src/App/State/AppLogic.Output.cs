@@ -1,6 +1,6 @@
-namespace Jomolith.Game.State;
+namespace Jomolith.App.State;
 
-public partial class GameLogic
+public partial class AppLogic
 {
     public static class Output
     {

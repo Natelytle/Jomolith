@@ -71,11 +71,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Src\Game\"/>
+    <Folder Include="Src\App\" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Properties\launchSettings.json"/>
-    <Content Include="Tests\GameTest.cs.uid"/>
+    <Content Include="Tests\AppTest.cs.uid" />
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@ using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
-using Jomolith.Game.Domain;
+using Jomolith.App.Domain;
 using Jomolith.Play.Gameplay.Domain;
 using Jomolith.Play.Gameplay.State;
 
@@ -20,7 +20,7 @@ public partial class Gameplay : Node3D, IGameplay
 
     #region Dependencies
 
-    [Dependency] public IGameRepo GameRepo => this.DependOn<IGameRepo>();
+    [Dependency] public IAppRepo GameRepo => this.DependOn<IAppRepo>();
 
     #endregion
 

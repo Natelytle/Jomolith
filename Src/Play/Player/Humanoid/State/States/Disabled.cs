@@ -1,6 +1,6 @@
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
-using Jomolith.Game.Domain;
+using Jomolith.App.Domain;
 
 namespace Jomolith.Play.Player.Humanoid.State;
 
@@ -19,8 +19,8 @@ public partial class PlayerLogic
                     Output(new Output.Animations.Disabled());
                 });
 
-                OnAttach(() => Get<IGameRepo>().TowerEntered += OnTowerEntered);
-                OnDetach(() => Get<IGameRepo>().TowerEntered -= OnTowerEntered);
+                OnAttach(() => Get<IAppRepo>().TowerEntered += OnTowerEntered);
+                OnDetach(() => Get<IAppRepo>().TowerEntered -= OnTowerEntered);
             }
 
             public Transition On(in Input.Enable input) => To<Idle>();

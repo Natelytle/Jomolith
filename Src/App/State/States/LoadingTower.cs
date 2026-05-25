@@ -1,14 +1,14 @@
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
 
-namespace Jomolith.Game.State;
+namespace Jomolith.App.State;
 
-public partial class GameLogic
+public partial class AppLogic
 {
-    public partial record GameState
+    public partial record AppState
     {
         [Meta]
-        public partial record LoadingTower : GameState, IGet<Input.TowerLoaded>
+        public partial record LoadingTower : AppState, IGet<Input.TowerLoaded>
         {
             public LoadingTower()
             {

@@ -53,6 +53,6 @@ public partial class Main : Node2D
     // ReSharper disable once InconsistentNaming
     private void RunScene()
     {
-        GetTree().ChangeSceneToFile("res://Src/Game/JomolithGame.tscn");
+        GetTree().ChangeSceneToFile("res://Src/App/JomolithApp.tscn");
     }
 }

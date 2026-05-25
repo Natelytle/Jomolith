@@ -1,15 +1,15 @@
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
-using Jomolith.Game.Domain;
+using Jomolith.App.Domain;
 
-namespace Jomolith.Game.State;
+namespace Jomolith.App.State;
 
-public partial class GameLogic
+public partial class AppLogic
 {
-    public partial record GameState
+    public partial record AppState
     {
         [Meta]
-        public partial record InMainMenu : GameState, IGet<Input.PlayTower>
+        public partial record InMainMenu : AppState, IGet<Input.PlayTower>
         {
             public Transition On(in Input.PlayTower input)
             {

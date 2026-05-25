@@ -3,7 +3,7 @@ using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
-using Jomolith.Game.Domain;
+using Jomolith.App.Domain;
 using Jomolith.Play.Player.Domain;
 using Jomolith.Play.Player.Humanoid.Domain;
 using Jomolith.Play.Player.Humanoid.State;
@@ -32,7 +32,7 @@ public partial class Humanoid : RigidBody3D, IHumanoid
 
     [Dependency] public IPlayerRepo PlayerRepo => this.DependOn<IPlayerRepo>();
 
-    [Dependency] public IGameRepo GameRepo => this.DependOn<IGameRepo>();
+    [Dependency] public IAppRepo GameRepo => this.DependOn<IAppRepo>();
 
     #endregion
 

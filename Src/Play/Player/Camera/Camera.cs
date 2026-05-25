@@ -4,7 +4,7 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
 using Godot;
-using Jomolith.Game.Domain;
+using Jomolith.App.Domain;
 using Jomolith.Play.Gameplay.Domain;
 using Jomolith.Play.Player.Domain;
 using Jomolith.Play.Player.Camera.State;
@@ -41,7 +41,7 @@ public partial class Camera : Node3D, ICamera
 
     [Dependency] public IGameplayRepo GameplayRepo => this.DependOn<IGameplayRepo>();
 
-    [Dependency] public IGameRepo GameRepo => this.DependOn<IGameRepo>();
+    [Dependency] public IAppRepo AppRepo => this.DependOn<IAppRepo>();
 
     #endregion
 
@@ -99,7 +99,7 @@ public partial class Camera : Node3D, ICamera
 
         CameraLogic.Set(this as ICamera);
         CameraLogic.Set(PlayerRepo);
-        CameraLogic.Set(GameRepo);
+        CameraLogic.Set(AppRepo);
         CameraLogic.Set(CameraData);
         CameraLogic.Set(Settings);
     }

@@ -3,15 +3,15 @@ using Chickensoft.GoDotTest;
 using Chickensoft.GodotTestDriver;
 using Chickensoft.GodotTestDriver.Drivers;
 using Godot;
-using Jomolith.Game;
+using Jomolith.App;
 using Shouldly;
 
 namespace Jomolith.Tests;
 
 public class GameTest : TestClass
 {
-    private Fixture _fixture = default!;
-    private JomolithGame _game = default!;
+    private Fixture fixture = default!;
+    private JomolithApp app = default!;
 
     public GameTest(Node testScene) : base(testScene)
     {
@@ -20,14 +20,14 @@ public class GameTest : TestClass
     [SetupAll]
     public async Task Setup()
     {
-        _fixture = new Fixture(TestScene.GetTree());
-        _game = await _fixture.LoadAndAddScene<JomolithGame>();
+        fixture = new Fixture(TestScene.GetTree());
+        app = await fixture.LoadAndAddScene<JomolithApp>();
     }
 
     [CleanupAll]
     public void Cleanup()
     {
-        _fixture.Cleanup();
+        fixture.Cleanup();
     }
 
     [Test]
