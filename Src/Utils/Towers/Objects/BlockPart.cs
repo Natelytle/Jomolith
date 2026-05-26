@@ -3,7 +3,7 @@ using Jomolith.Core.Objects;
 
 namespace Jomolith.Utils.Towers.Objects;
 
-public partial class Block : Part
+public partial class BlockPart : Part
 {
     protected override MeshInstance3D GetPartMesh(PartModel partModel) => new MeshInstance3D
     {

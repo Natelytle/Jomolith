@@ -3,7 +3,7 @@ using Jomolith.Core.Objects;
 
 namespace Jomolith.Utils.Towers.Objects;
 
-public partial class Cylinder : Part
+public partial class CylinderPart : Part
 {
     protected override MeshInstance3D GetPartMesh(PartModel partModel) => new MeshInstance3D
     {

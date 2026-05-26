@@ -33,11 +33,11 @@ public partial class WorkingTower : Node3D, IWorkingTower
         {
             Part part = partModel.Shape switch
             {
-                PartType.Block => new Block(),
-                PartType.Ball => new Ball(),
-                PartType.Cylinder => new Cylinder(),
-                PartType.Wedge => new Block(),
-                PartType.CornerWedge => new Block(),
+                PartType.Block => new BlockPart(),
+                PartType.Ball => new BallPart(),
+                PartType.Cylinder => new CylinderPart(),
+                PartType.Wedge => new BlockPart(),
+                PartType.CornerWedge => new BlockPart(),
                 _ => throw new ArgumentOutOfRangeException()
             };
 

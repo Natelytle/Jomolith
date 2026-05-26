@@ -32,6 +32,8 @@ public abstract partial class Part : RigidBody3D
 
             mesh.SetSurfaceOverrideMaterial(0, material);
 
+            mesh.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
+
             AddChild(mesh);
         }
 
