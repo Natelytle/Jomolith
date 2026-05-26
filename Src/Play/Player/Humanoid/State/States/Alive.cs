@@ -15,7 +15,8 @@ public partial class PlayerLogic
             IGet<Input.PhysicsTickAlive>,
             IGet<Input.ComputeForces>,
             IGet<Input.DesiredMovementVector>,
-            IGet<Input.SetTimer>
+            IGet<Input.SetTimer>,
+            IGet<Input.ToggleNoclip>
         {
             private const double idle_speed_threshold = 0.01;
 
@@ -126,6 +127,11 @@ public partial class PlayerLogic
                 playerData.Timer = input.Time;
 
                 return ToSelf();
+            }
+
+            public Transition On(in Input.ToggleNoclip input)
+            {
+                return To<Noclip>();
             }
         }
     }

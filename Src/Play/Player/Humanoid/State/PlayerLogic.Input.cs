@@ -36,5 +36,7 @@ public partial class PlayerLogic
         public readonly record struct TimerUp;
 
         public readonly record struct Enable;
+
+        public readonly record struct ToggleNoclip;
     }
 }

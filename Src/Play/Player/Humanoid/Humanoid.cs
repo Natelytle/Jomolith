@@ -20,6 +20,8 @@ public interface IHumanoid : IRigidBody3D, IProvide<IPlayerLogic>
 
     Vector2 GetGlobalInputVector(Basis cameraBasis);
 
+    Vector2 GetUnadjustedInputVector();
+
     FloorData GetFloorData(bool wasOnFloor);
 }
 
@@ -103,6 +105,9 @@ public partial class Humanoid : RigidBody3D, IHumanoid
         }).Handle((in PlayerLogic.Output.SetFrozen output) =>
         {
             Freeze = output.Frozen;
+        }).Handle((in PlayerLogic.Output.ChangePosition output) =>
+        {
+            Position += output.Delta;
         });
 
         this.Provide();
@@ -118,6 +123,11 @@ public partial class Humanoid : RigidBody3D, IHumanoid
         {
             PlayerLogic.Input(new PlayerLogic.Input.Jump());
         }
+
+        if (Input.IsActionJustPressed("ToggleNoclip"))
+        {
+            PlayerLogic.Input(new PlayerLogic.Input.ToggleNoclip());
+        }
     }
 
     public Vector2 GetGlobalInputVector(Basis cameraBasis)
@@ -131,6 +141,13 @@ public partial class Humanoid : RigidBody3D, IHumanoid
             };
 
         return new Vector2(rotated.X, rotated.Z);
+    }
+
+    public Vector2 GetUnadjustedInputVector()
+    {
+        Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
+
+        return inputDir;
     }
 
     public FloorData GetFloorData(bool wasOnFloor)

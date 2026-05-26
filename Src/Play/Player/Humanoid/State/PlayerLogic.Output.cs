@@ -37,5 +37,7 @@ public partial class PlayerLogic
         public readonly record struct VerticalVelocityChanged(Vector2 Velocity);
 
         public readonly record struct SetFrozen(bool Frozen);
+
+        public readonly record struct ChangePosition(Vector3 Delta);
     }
 }
