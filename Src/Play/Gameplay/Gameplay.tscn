@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://byjdu7p1a5ffk"]
 
 [ext_resource type="Script" uid="uid://dda14mfrh1krt" path="res://Src/Play/Gameplay/Gameplay.cs" id="1_pokrj"]
-[ext_resource type="PackedScene" uid="uid://ith6uwc624dw" path="res://Src/Play/Player/Player.tscn" id="2_4qg2u"]
+[ext_resource type="PackedScene" uid="uid://ith6uwc624dw" path="res://Src/Play/Player/Player.tscn" id="2_k1lvc"]
+[ext_resource type="Script" uid="uid://bxatedv2dlk7r" path="res://Src/Utils/Towers/WorkingTower.cs" id="2_pqf3r"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qds6t"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -16,8 +17,16 @@ sky = SubResource("Sky_oec1c")
 tonemap_mode = 2
 glow_enabled = true
 
-[node name="Tower" type="Node3D" unique_id=237947399]
+[node name="Gameplay" type="Node3D" unique_id=237947399]
 script = ExtResource("1_pokrj")
+
+[node name="Player" parent="." unique_id=442935296 instance=ExtResource("2_k1lvc")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 500, -300)
+
+[node name="Tower" type="Node3D" parent="." unique_id=745167324]
+unique_name_in_owner = true
+script = ExtResource("2_pqf3r")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=257455089]
 environment = SubResource("Environment_e6l0g")
@@ -25,10 +34,3 @@ environment = SubResource("Environment_e6l0g")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1097424557]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
 shadow_enabled = true
-
-[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=797153187]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
-use_collision = true
-size = Vector3(100, 1, 100)
-
-[node name="Player" parent="." unique_id=442935296 instance=ExtResource("2_4qg2u")]

@@ -3,20 +3,34 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 using Jomolith.App.Domain;
+using Jomolith.Core;
 using Jomolith.Play.Gameplay.Domain;
 using Jomolith.Play.Gameplay.State;
+using Jomolith.Play.Player;
+using Jomolith.Utils.Towers;
 
 namespace Jomolith.Play.Gameplay;
 
 public interface IGameplay : INode3D, IProvide<IGameplayRepo>
 {
     IGameplayLogic GameplayLogic { get; }
+
+    public void LoadTower(ITowerModel towerModel);
+
+    event Gameplay.TowerLoadedEventHandler? TowerLoaded;
 }
 
 [Meta(typeof(IAutoNode))]
 public partial class Gameplay : Node3D, IGameplay
 {
     public override void _Notification(int what) => this.Notify(what);
+
+    #region Loading
+
+    [Signal]
+    public delegate void TowerLoadedEventHandler();
+
+    #endregion
 
     #region Dependencies
 
@@ -37,6 +51,14 @@ public partial class Gameplay : Node3D, IGameplay
     public IGameplayLogic GameplayLogic { get; set; } = null!;
 
     public GameplayLogic.IBinding GameplayBinding { get; set; } = null!;
+
+    #endregion
+
+    #region Nodes
+
+    [Node] public IWorkingTower Tower { get; set; } = null!;
+
+    [Node] public IPlayer Player { get; set; } = null!;
 
     #endregion
 
@@ -66,6 +88,16 @@ public partial class Gameplay : Node3D, IGameplay
 
         GameplayLogic.Start();
     }
+
+    // TODO: Make async
+    public void LoadTower(ITowerModel towerModel)
+    {
+        Tower.Load(towerModel);
+
+        finishedLoadingTower();
+    }
+
+    private void finishedLoadingTower() => EmitSignal(SignalName.TowerLoaded);
 
     private void setPauseMode(bool pause) => GetTree().Paused = pause;
 }

@@ -10,9 +10,9 @@ namespace Jomolith.Core.Objects;
 /// <summary>
 ///     The part class, which contains per-part information.
 /// </summary>
-public class Part : TowerObject
+public class PartModel : TowerObjectModel
 {
-    public Part()
+    public PartModel()
     {
         Shape = PartType.Block;
         Position = Vector3.Zero;
@@ -44,10 +44,10 @@ public class Part : TowerObject
 
     public VisualProperties VisualProperties { get; set; }
 
-    public static Part FromDto(PartDto dto)
+    public static PartModel FromDto(PartDto dto)
     {
         // We don't copy over children, we let addPartRecursive handle this in TowerData.
-        Part part = new Part
+        PartModel partModel = new PartModel
         {
             Name = dto.Name,
             Shape = dto.Shape,
@@ -61,6 +61,6 @@ public class Part : TowerObject
             Id = Guid.NewGuid()
         };
 
-        return part;
+        return partModel;
     }
 }

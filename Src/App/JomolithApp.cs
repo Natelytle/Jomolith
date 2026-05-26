@@ -4,7 +4,9 @@ using Chickensoft.Introspection;
 using Godot;
 using Jomolith.App.Domain;
 using Jomolith.App.State;
+using Jomolith.Core;
 using Jomolith.Menu;
+using Jomolith.Play.Gameplay;
 
 namespace Jomolith.App;
 
@@ -21,13 +23,22 @@ public partial class JomolithApp : Control, IJomolithApp
 
     #endregion
 
+    #region State
+
     public IAppRepo AppRepo { get; set; } = null!;
     public IAppLogic AppLogic { get; set; } = null!;
 
     public AppLogic.IBinding AppBinding { get; set; } = null!;
 
+    #endregion
+
+    #region Nodes
+
     [Node] public IMainMenu MainMenu { get; set; } = null!;
-    [Node] public ISubViewport TowerPreview { get; set; } = null!;
+    [Node] public ISubViewport GameplayPreview { get; set; } = null!;
+    [Node] public IGameplay Gameplay { get; set; } = null!;
+
+    #endregion
 
     public void Setup()
     {
@@ -49,7 +60,10 @@ public partial class JomolithApp : Control, IJomolithApp
             MainMenu.Show();
         }).Handle((in AppLogic.Output.StartLoadingTower _) =>
         {
-            AppLogic.Input(new AppLogic.Input.TowerLoaded());
+            ITowerModel model = TowerDeserializer.LoadFromFile("ToBF.json")!;
+
+            Gameplay.TowerLoaded += OnTowerLoaded;
+            Gameplay.LoadTower(model);
         }).Handle((in AppLogic.Output.EnterTower _) =>
         {
             MainMenu.Hide();
@@ -69,4 +83,10 @@ public partial class JomolithApp : Control, IJomolithApp
 
     public void OnPlayTower() => AppLogic.Input(new AppLogic.Input.PlayTower());
     public void OnEditTower() { }
+
+    public void OnTowerLoaded()
+    {
+        Gameplay.TowerLoaded -= OnTowerLoaded;
+        AppLogic.Input(new AppLogic.Input.TowerLoaded());
+    }
 }

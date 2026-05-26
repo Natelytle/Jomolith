@@ -2,11 +2,11 @@ using System;
 
 namespace Jomolith.Core.Objects;
 
-public abstract class TowerObject
+public abstract class TowerObjectModel
 {
     public string ClassName => GetType().Name;
 
-    protected TowerObject()
+    protected TowerObjectModel()
     {
         Name = ClassName;
         Id = Guid.NewGuid();

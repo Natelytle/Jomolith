@@ -22,41 +22,41 @@ using Jomolith.Core.Objects;
 
 namespace Jomolith.Core;
 
-public class TowerData
+public class TowerSceneModel
 {
     // Hierarchical information
     private readonly Dictionary<Guid, HashSet<Guid>> childrenMap = new Dictionary<Guid, HashSet<Guid>>();
     private readonly Dictionary<Guid, Guid> parentMap = new Dictionary<Guid, Guid>();
-    private readonly Dictionary<Guid, TowerObject> towerObjects = new Dictionary<Guid, TowerObject>();
+    private readonly Dictionary<Guid, TowerObjectModel> towerObjects = new Dictionary<Guid, TowerObjectModel>();
 
-    public TowerData()
+    public TowerSceneModel()
     {
         // Every tower has a root object
         RootId = Guid.NewGuid();
     }
 
-    private Guid RootId { get; }
-    public IReadOnlyDictionary<Guid, TowerObject> TowerObjects => towerObjects;
+    public Guid RootId { get; }
+    public IReadOnlyDictionary<Guid, TowerObjectModel> TowerObjects => towerObjects;
 
     #region Parts
 
-    public TowerObject FindPart(Guid id)
+    public TowerObjectModel FindPart(Guid id)
     {
-        if (!towerObjects.TryGetValue(id, out TowerObject? towerObject))
+        if (!towerObjects.TryGetValue(id, out TowerObjectModel? towerObject))
             throw new InvalidOperationException($"Tried to access object {id}, which does not exist.");
 
         return towerObject;
     }
 
-    public void AddTowerObject(TowerObject towerObject, Guid? parentId = null)
+    public void AddTowerObject(TowerObjectModel towerObjectModel, Guid? parentId = null)
     {
-        if (towerObjects.ContainsKey(towerObject.Id))
-            throw new InvalidOperationException($"Object {towerObject.Id} already exists");
+        if (towerObjects.ContainsKey(towerObjectModel.Id))
+            throw new InvalidOperationException($"Object {towerObjectModel.Id} already exists");
 
-        towerObjects.Add(towerObject.Id, towerObject);
+        towerObjects.Add(towerObjectModel.Id, towerObjectModel);
 
         // Set the parent to the root if not specified.
-        SetParent(towerObject.Id, parentId ?? RootId);
+        SetParent(towerObjectModel.Id, parentId ?? RootId);
     }
 
     public void RemovePart(Guid id)
@@ -206,13 +206,13 @@ public class TowerData
 
     private TowerObjectDto buildSerializable(Guid id)
     {
-        TowerObject towerObject = FindPart(id);
+        TowerObjectModel towerObjectModel = FindPart(id);
 
         var children = GetChildren(id).Select(buildSerializable).ToList();
 
-        TowerObjectDto dto = towerObject switch
+        TowerObjectDto dto = towerObjectModel switch
         {
-            Part part => new PartDto
+            PartModel part => new PartDto
             {
                 Name = part.Name,
                 Shape = part.Shape,
@@ -225,7 +225,7 @@ public class TowerData
                 VisualProperties = part.VisualProperties,
                 Children = children
             },
-            _ => throw new InvalidOperationException($"Unknown object type {towerObject.GetType().Name}")
+            _ => throw new InvalidOperationException($"Unknown object type {towerObjectModel.GetType().Name}")
         };
 
         return dto;
@@ -243,16 +243,16 @@ public class TowerData
 
     private void addObjectsRecursive(TowerObjectDto towerObjectDto, Guid? parentId = null)
     {
-        TowerObject towerObject = towerObjectDto switch
+        TowerObjectModel towerObjectModel = towerObjectDto switch
         {
-            PartDto partDto => Part.FromDto(partDto),
+            PartDto partDto => PartModel.FromDto(partDto),
             _ => throw new InvalidOperationException($"Unknown dto {towerObjectDto.GetType().Name}")
         };
 
-        AddTowerObject(towerObject, parentId);
+        AddTowerObject(towerObjectModel, parentId);
 
         foreach (var child in towerObjectDto.Children)
-            addObjectsRecursive(child, towerObject.Id);
+            addObjectsRecursive(child, towerObjectModel.Id);
     }
 
     #endregion
