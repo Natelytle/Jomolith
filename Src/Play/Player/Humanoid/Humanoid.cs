@@ -68,6 +68,10 @@ public partial class Humanoid : RigidBody3D, IHumanoid
 
     [Node] public IRayCast3D HeadRaycast { get; set; } = null!;
 
+    [Node] public ICollisionShape3D HeadCollisionShape { get; set; } = null!;
+
+    [Node] public ICollisionShape3D TorsoCollisionShape { get; set; } = null!;
+
     #endregion
 
     #region Computed
@@ -88,6 +92,9 @@ public partial class Humanoid : RigidBody3D, IHumanoid
         PlayerLogic.Set(PlayerRepo);
         PlayerLogic.Set(GameRepo);
         PlayerLogic.Set(PlayerData);
+
+        PlayerModel.HeadMoved += updateHeadTransform;
+        PlayerModel.TorsoMoved += updateTorsoTransform;
     }
 
     // Called when the node enters the scene tree for the first time.
@@ -231,5 +238,15 @@ public partial class Humanoid : RigidBody3D, IHumanoid
             FloorPosition = floorLocation,
             FloorVelocity = floorVelocity
         };
+    }
+
+    private void updateHeadTransform(Transform3D newTransform)
+    {
+        HeadCollisionShape.GlobalTransform = newTransform;
+    }
+
+    private void updateTorsoTransform(Transform3D newTransform)
+    {
+        TorsoCollisionShape.GlobalTransform = newTransform;
     }
 }

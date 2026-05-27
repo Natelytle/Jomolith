@@ -16,8 +16,8 @@ public delegate void OnTorsoMovedHandler(Basis newPosition);
 
 public interface IPlayerModel : INode3D
 {
-    event OnHeadMovedHandler HeadMoved;
-    event OnTorsoMovedHandler TorsoMoved;
+    event PlayerModel.HeadMovedEventHandler? HeadMoved;
+    event PlayerModel.TorsoMovedEventHandler? TorsoMoved;
 }
 
 [Meta(typeof(IAutoNode))]
@@ -35,8 +35,11 @@ public partial class PlayerModel : Node3D, IPlayerModel
 
     #region Events
 
-    public event OnHeadMovedHandler? HeadMoved;
-    public event OnTorsoMovedHandler? TorsoMoved;
+    [Signal]
+    public delegate void HeadMovedEventHandler(Transform3D newTransform);
+
+    [Signal]
+    public delegate void TorsoMovedEventHandler(Transform3D newTransform);
 
     #endregion
 
@@ -53,6 +56,9 @@ public partial class PlayerModel : Node3D, IPlayerModel
     [Node("%AnimationTree")] public IAnimationTree AnimationTree { get; set; } = null!;
     public IAnimationNodeStateMachinePlayback AnimationStateMachine { get; set; } = null!;
 
+    [Node("Avatar/Skeleton3D/Head_2")] public IBoneAttachment3D Head { get; set; } = null!;
+    [Node("Avatar/Skeleton3D/Torso_2")] public IBoneAttachment3D Torso { get; set; } = null!;
+
     #endregion
 
     // Called when the node enters the scene tree for the first time.
@@ -66,6 +72,8 @@ public partial class PlayerModel : Node3D, IPlayerModel
             );
 
         Materials = new PlayerModelMaterials(this);
+
+        SetPhysicsProcess(true);
     }
 
     public void OnResolved()
@@ -103,5 +111,15 @@ public partial class PlayerModel : Node3D, IPlayerModel
             .Handle((in PlayerLogic.Output.Visual.SetTransparency output) =>
                 Materials.SetOpacity(output.Alpha)
             );
+    }
+
+    public void OnPhysicsProcess(double delta)
+    {
+        // The bone attachments are at the bottom of the model, so we need to add the difference manually.
+        const float headTransformOffset = 4.5f;
+        const float torsoTransformOffset = 3.0f;
+
+        EmitSignal(SignalName.HeadMoved, Head.GlobalTransform with { Origin = Head.GlobalTransform.Origin - Head.GlobalTransform.Basis.Z * headTransformOffset });
+        EmitSignal(SignalName.TorsoMoved, Torso.GlobalTransform with { Origin = Torso.GlobalTransform.Origin - Torso.GlobalTransform.Basis.Z * torsoTransformOffset });
     }
 }
