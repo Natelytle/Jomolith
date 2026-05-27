@@ -46,6 +46,11 @@ public partial class PlayerLogic
             playerData.FloorPosition = floorData.FloorPosition;
             playerData.FloorVelocity = floorData.FloorVelocity;
 
+            if (player.IsClimbing())
+                Input(new Input.FacingLadder());
+            else
+                Input(new Input.AwayLadder());
+
             // Set player statistics
             playerData.PlayerHeading = new Plane(Vector3.Up).Project(-player.Basis.Z).Normalized();
 
@@ -62,10 +67,10 @@ public partial class PlayerLogic
             return ToSelf();
         }
 
-        public virtual void ProcessPhysics(double delta) { }
+        protected virtual void ProcessPhysics(double delta) { }
 
-        public virtual void ComputeForces(double delta) { }
+        protected virtual void ComputeForces(double delta) { }
 
-        protected void SetTimer(double time) => timer = time;
+        private void setTimer(double time) => timer = time;
     }
 }

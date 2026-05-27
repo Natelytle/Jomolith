@@ -23,6 +23,8 @@ public interface IHumanoid : IRigidBody3D, IProvide<IPlayerLogic>
     Vector3 GetNoclipInputVector(Basis cameraBasis);
 
     FloorData GetFloorData(bool wasOnFloor);
+
+    bool IsClimbing();
 }
 
 [Meta(typeof(IAutoNode))]
@@ -245,6 +247,58 @@ public partial class Humanoid : RigidBody3D, IHumanoid
             FloorPosition = floorLocation,
             FloorVelocity = floorVelocity
         };
+    }
+
+    public bool IsClimbing()
+    {
+        const float yPositionInitial = -2.7f + 1 / 7.0f;
+        const float yPositionIncrements = 1 / 7.0f;
+        const float zSearchLengthTruss = 1.05f;
+        const float zSearchLengthLadder = 0.7f;
+
+        // TODO: Searching for trusses
+
+        // Searching for ladders
+        bool hitUnderCyanRaycast = false;
+        bool airOverFirstHit = false;
+        int distanceOfAirFromFirstHit = 0;
+        bool redRaysHit = false;
+        bool secondHitExists = false;
+
+        ClimbRaycast.TargetPosition = new Vector3(0, 0, -zSearchLengthLadder);
+
+        for (int i = 0; i < 27; i++)
+        {
+            ClimbRaycast.Position = LocalRootPosition + new Vector3(0, yPositionInitial + i * yPositionIncrements, 0);
+            ClimbRaycast.ForceRaycastUpdate();
+
+            if (i < 3 && ClimbRaycast.IsColliding())
+            {
+                redRaysHit = true;
+            }
+
+            if (i < 17 && ClimbRaycast.IsColliding())
+            {
+                hitUnderCyanRaycast = true;
+            }
+
+            if (hitUnderCyanRaycast && ClimbRaycast.IsColliding())
+            {
+                distanceOfAirFromFirstHit++;
+            }
+
+            if (hitUnderCyanRaycast && !ClimbRaycast.IsColliding() && distanceOfAirFromFirstHit < 17)
+            {
+                airOverFirstHit = true;
+            }
+
+            if (redRaysHit && i < 26 && airOverFirstHit && ClimbRaycast.IsColliding())
+            {
+                secondHitExists = true;
+            }
+        }
+
+        return hitUnderCyanRaycast && airOverFirstHit && (!redRaysHit || secondHitExists);
     }
 
     private void updateHeadTransform(Transform3D newTransform)

@@ -11,7 +11,7 @@ public partial class PlayerLogic
         [Meta]
         public partial record Falling : FallingBase, IGet<Input.OnFloor>
         {
-            private const double rootPartHeight = 3f;
+            private const double root_part_height = 3f;
 
             public Falling()
             {
@@ -24,7 +24,7 @@ public partial class PlayerLogic
 
                 double floorDistance = (input.FloorData.FloorPosition.GetValueOrDefault() - player.GlobalRootPosition).Length();
 
-                if (floorDistance < rootPartHeight && player.LinearVelocity.Y <= 0)
+                if (floorDistance < root_part_height && player.LinearVelocity.Y <= 0)
                     return To<Running>();
 
                 return ToSelf();

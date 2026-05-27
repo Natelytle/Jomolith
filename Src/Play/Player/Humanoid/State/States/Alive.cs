@@ -13,7 +13,8 @@ public partial class PlayerLogic
         [Meta]
         public abstract partial record Alive : PlayerState,
             IGet<Input.DesiredMovementVector>,
-            IGet<Input.ToggleNoclip>
+            IGet<Input.ToggleNoclip>,
+            IGet<Input.FacingLadder>
         {
             private const double idle_speed_threshold = 0.01;
 
@@ -72,7 +73,7 @@ public partial class PlayerLogic
                 return To<Noclip>();
             }
 
-            public override void ProcessPhysics(double delta)
+            protected override void ProcessPhysics(double delta)
             {
                 var player = Get<IHumanoid>();
                 var playerRepo = Get<IPlayerRepo>();
@@ -90,7 +91,7 @@ public partial class PlayerLogic
                 }
             }
 
-            public override void ComputeForces(double delta)
+            protected override void ComputeForces(double delta)
             {
                 IHumanoid player = Get<IHumanoid>();
 
@@ -110,6 +111,11 @@ public partial class PlayerLogic
                 Vector3 appliedTorque = (playerBasis * torqueLocal) with { Y = 0 };
 
                 Output(new Output.ApplyForce(Vector3.Zero, appliedTorque));
+            }
+
+            public Transition On(in Input.FacingLadder input)
+            {
+                return To<Climbing>();
             }
         }
     }

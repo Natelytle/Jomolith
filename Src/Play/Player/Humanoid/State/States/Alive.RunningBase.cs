@@ -21,7 +21,7 @@ public partial class PlayerLogic
                 return To<Jumping>();
             }
 
-            public Transition On(in Input.OnFloor input)
+            public virtual Transition On(in Input.OnFloor input)
             {
                 IHumanoid player = Get<IHumanoid>();
                 PlayerData playerData = Get<PlayerData>();

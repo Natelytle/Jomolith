@@ -23,7 +23,7 @@ public partial class PlayerLogic
                 });
             }
 
-            public override void ProcessPhysics(double delta)
+            protected override void ProcessPhysics(double delta)
             {
                 IHumanoid player = Get<IHumanoid>();
                 IPlayerRepo playerRepo = Get<IPlayerRepo>();

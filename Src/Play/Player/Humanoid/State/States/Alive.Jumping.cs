@@ -42,7 +42,7 @@ public partial class PlayerLogic
                     var playerSettings = Get<PlayerSettings>();
                     desiredJumpSpeed = playerSettings.JumpPower * jump_power_multiplier;
 
-                    SetTimer(max_jump_time);
+                    setTimer(max_jump_time);
                     Output(new Output.Animations.Jump());
                 });
             }
@@ -52,7 +52,7 @@ public partial class PlayerLogic
                 return To<Falling>();
             }
 
-            public override void ComputeForces(double delta)
+            protected override void ComputeForces(double delta)
             {
                 PlayerData playerData = Get<PlayerData>();
                 IHumanoid player = Get<IHumanoid>();
