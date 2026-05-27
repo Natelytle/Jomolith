@@ -12,12 +12,8 @@ public partial class PlayerLogic
     {
         [Meta]
         public partial record Noclip : PlayerState,
-            IGet<Input.PhysicsTickAlive>,
-            IGet<Input.Jump>,
             IGet<Input.ToggleNoclip>
         {
-            private Vector3 noclipDirection = Vector3.Zero;
-
             public Noclip()
             {
                 this.OnEnter(() =>
@@ -27,32 +23,28 @@ public partial class PlayerLogic
                 });
             }
 
-            public Transition On(in Input.PhysicsTickAlive input)
+            public override void ProcessPhysics(double delta)
             {
                 IHumanoid player = Get<IHumanoid>();
                 IPlayerRepo playerRepo = Get<IPlayerRepo>();
 
-                Vector2 unadjustedMovementVector = player.GetUnadjustedInputVector();
-                noclipDirection += new Vector3(unadjustedMovementVector.X, 0, unadjustedMovementVector.Y);
+                Vector3 desiredMoveDirection = player.GetNoclipInputVector(playerRepo.CameraBasis.Value);
 
                 // Rotate around the head
-                player.GlobalPosition += player.GlobalRootPosition + player.GlobalBasis.Y * 1.5f - player.GlobalPosition;
-                player.GlobalRotation = playerRepo.CameraBasis.Value.GetEuler();
-                player.GlobalPosition -= player.GlobalRootPosition + player.GlobalBasis.Y * 1.5f - player.GlobalPosition;
+                Transform3D newTransform = player.GlobalTransform;
+
+                // Move the origin up to where the head was, so that when we rotate around the origin we rotate around our head position.
+                // The center of the head is 4.5 studs above the origin.
+                newTransform.Origin += newTransform.Basis.Y * 4.5f;
+                newTransform.Basis = playerRepo.CameraBasis.Value;
+
+                // Move it back down to where it *should* be after the head was moved
+                newTransform.Origin -= newTransform.Basis.Y * 4.5f;
 
                 // Actually move
-                player.GlobalPosition += player.Basis * noclipDirection.Normalized() * (float)input.Delta * 32f;
+                newTransform.Origin += desiredMoveDirection * (float)delta * 32f;
 
-                noclipDirection = Vector3.Zero;
-
-                return ToSelf();
-            }
-
-            public Transition On(in Input.Jump input)
-            {
-                noclipDirection += Vector3.Up;
-
-                return ToSelf();
+                Output(new Output.SetTransform(newTransform));
             }
 
             public Transition On(in Input.ToggleNoclip input)

@@ -38,6 +38,6 @@ public partial class PlayerLogic
 
         public readonly record struct SetFrozen(bool Frozen);
 
-        public readonly record struct ChangePosition(Vector3 Delta);
+        public readonly record struct SetTransform(Transform3D newTransform);
     }
 }

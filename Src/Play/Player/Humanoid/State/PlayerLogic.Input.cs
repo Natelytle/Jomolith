@@ -9,13 +9,11 @@ public partial class PlayerLogic
     {
         public readonly record struct PhysicsTick(double Delta);
 
-        public readonly record struct PhysicsTickAlive(double Delta);
-
-        public readonly record struct ComputeForces(double Delta);
-
         public readonly record struct DesiredMovementVector(Vector2 DesiredMovement);
 
         public readonly record struct Jump;
+
+        public readonly record struct JumpFinished;
 
         public readonly record struct FacingLadder;
 
@@ -30,8 +28,6 @@ public partial class PlayerLogic
         public readonly record struct IsMoving;
 
         public readonly record struct IsIdle;
-
-        public readonly record struct SetTimer(double Time);
 
         public readonly record struct TimerUp;
 

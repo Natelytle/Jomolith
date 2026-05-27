@@ -11,14 +11,16 @@ public partial class PlayerLogic
     [Meta]
     public abstract partial record PlayerState : StateLogic<PlayerState>, IGet<Input.PhysicsTick>
     {
+        private double timer;
+
         public Transition On(in Input.PhysicsTick input)
         {
             IHumanoid player = Get<IHumanoid>();
             IPlayerRepo playerRepo = Get<IPlayerRepo>();
             PlayerData playerData = Get<PlayerData>();
 
-            Input(new Input.ComputeForces(input.Delta));
-            Input(new Input.PhysicsTickAlive(input.Delta));
+            ComputeForces(input.Delta);
+            ProcessPhysics(input.Delta);
 
             Basis cameraBasis = playerRepo.CameraBasis.Value;
             Vector2 desiredMoveDirection = player.GetGlobalInputVector(cameraBasis);
@@ -49,10 +51,10 @@ public partial class PlayerLogic
             playerData.PlayerHeading = new Plane(Vector3.Up).Project(-player.Basis.Z).Normalized();
 
             // Check & update our timer
-            if (playerData.Timer > 0 && playerData.Timer - input.Delta < 0)
+            if (timer > 0 && timer - input.Delta <= 0)
                 Input(new Input.TimerUp());
 
-            playerData.Timer -= input.Delta;
+            timer -= input.Delta;
 
             // Update player position
             playerRepo.SetPlayerGlobalPosition(player.GlobalRootPosition);
@@ -60,5 +62,11 @@ public partial class PlayerLogic
 
             return ToSelf();
         }
+
+        public virtual void ProcessPhysics(double delta) { }
+
+        public virtual void ComputeForces(double delta) { }
+
+        protected void SetTimer(double time) => timer = time;
     }
 }

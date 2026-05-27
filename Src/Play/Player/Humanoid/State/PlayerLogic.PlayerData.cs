@@ -6,8 +6,6 @@ public partial class PlayerLogic
 {
     public record PlayerData
     {
-        public double Timer;
-
         public bool WasOnFloor;
         public Vector3? FloorNormal;
         public Vector3? FloorPosition;

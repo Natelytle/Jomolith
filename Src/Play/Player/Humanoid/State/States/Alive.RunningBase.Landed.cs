@@ -1,5 +1,6 @@
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
+using Godot;
 
 namespace Jomolith.Play.Player.Humanoid.State;
 
@@ -14,7 +15,7 @@ public partial class PlayerLogic
 
             public Landed()
             {
-                this.OnEnter(() => Input(new Input.SetTimer(jump_cooldown)));
+                this.OnEnter(() => SetTimer(jump_cooldown));
             }
 
             public override Transition On(in Input.Jump input)

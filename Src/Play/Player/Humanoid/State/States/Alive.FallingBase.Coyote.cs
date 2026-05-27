@@ -15,7 +15,7 @@ public partial class PlayerLogic
 
             public Coyote()
             {
-                this.OnEnter(() => Input(new Input.SetTimer(coyote_time)));
+                this.OnEnter(() => SetTimer(coyote_time));
             }
 
             public Transition On(in Input.Jump input)

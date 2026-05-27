@@ -1,3 +1,4 @@
+using System;
 using Chickensoft.Introspection;
 using Godot;
 
@@ -41,6 +42,15 @@ public partial class PlayerLogic
                 }
 
                 return ToSelf();
+            }
+
+            protected override float ComputeTorque(Vector3 movementVector, PlayerData playerData, IHumanoid player, bool isRotationLocked)
+            {
+                // No torque in shift lock in the running state.
+                float angleDifference = isRotationLocked ? 0 : playerData.PlayerHeading.SignedAngleTo(movementVector, Vector3.Up);
+                float desiredAngVel = 8.0f * Math.Abs(angleDifference) * Math.Sign(angleDifference);
+
+                return 100.0f * player.GetInertia().Y * (desiredAngVel - player.AngularVelocity.Y);
             }
         }
     }

@@ -11,10 +11,13 @@ public partial class PlayerLogic
         [Meta]
         public partial record Jumping : Alive,
             IGet<Input.OffFloor>,
-            IGet<Input.TimerUp>
+            IGet<Input.TimerUp>,
+            IGet<Input.JumpFinished>
         {
             private const double max_jump_time = 0.5;
             private const float jump_power_multiplier = 1.06f;
+
+            private const float jump_speed_epsilon = 1e-3f;
 
             protected override float MaxForce => 0;
             protected override float Gain => 0;
@@ -35,7 +38,7 @@ public partial class PlayerLogic
                     var playerSettings = Get<PlayerSettings>();
                     desiredJumpSpeed = playerSettings.JumpPower * jump_power_multiplier;
 
-                    Input(new Input.SetTimer(max_jump_time));
+                    SetTimer(max_jump_time);
                     Output(new Output.Animations.Jump());
                 });
             }
@@ -45,7 +48,7 @@ public partial class PlayerLogic
                 return To<Falling>();
             }
 
-            public override Transition On(in Input.ComputeForces input)
+            public override void ComputeForces(double delta)
             {
                 PlayerData playerData = Get<PlayerData>();
                 IHumanoid player = Get<IHumanoid>();
@@ -54,26 +57,30 @@ public partial class PlayerLogic
 
                 float currentJumpVelocity = player.LinearVelocity.Dot(jumpDirection);
                 float desiredJumpAcceleration =
-                    float.Round(1.0f / (float)input.Delta) * (desiredJumpSpeed - currentJumpVelocity);
+                    float.Round(1.0f / (float)delta) * (desiredJumpSpeed - currentJumpVelocity);
 
-                if (playerData.HittingCeiling || desiredJumpAcceleration <= 0)
-                    return To<Falling>();
+                if (playerData.HittingCeiling || desiredJumpSpeed - currentJumpVelocity <= jump_speed_epsilon)
+                {
+                    Input(new Input.JumpFinished());
+
+                    return;
+                }
 
                 float desiredJumpForce = desiredJumpAcceleration * player.Mass;
                 Vector3 antiGravityForce = -player.GetGravity() * player.Mass;
 
                 Output(new Output.ApplyForce(jumpDirection * desiredJumpForce + antiGravityForce, Vector3.Zero));
-
-                return ToSelf();
             }
 
             // No input in the jumping state
             public override Transition On(in Input.DesiredMovementVector input) => ToSelf();
 
-            public Transition On(in Input.TimerUp input)
-            {
-                return To<Falling>();
-            }
+            // No torque in the jumping state.
+            protected override float ComputeTorque(Vector3 movementVector, PlayerData playerData, IHumanoid player, bool isRotationLocked) => 0;
+
+            public Transition On(in Input.TimerUp input) => To<Falling>();
+
+            public Transition On(in Input.JumpFinished input) => To<Falling>();
         }
     }
 }

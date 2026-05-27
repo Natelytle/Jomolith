@@ -20,7 +20,7 @@ public interface IHumanoid : IRigidBody3D, IProvide<IPlayerLogic>
 
     Vector2 GetGlobalInputVector(Basis cameraBasis);
 
-    Vector2 GetUnadjustedInputVector();
+    Vector3 GetNoclipInputVector(Basis cameraBasis);
 
     FloorData GetFloorData(bool wasOnFloor);
 }
@@ -112,9 +112,9 @@ public partial class Humanoid : RigidBody3D, IHumanoid
         }).Handle((in PlayerLogic.Output.SetFrozen output) =>
         {
             Freeze = output.Frozen;
-        }).Handle((in PlayerLogic.Output.ChangePosition output) =>
+        }).Handle((in PlayerLogic.Output.SetTransform output) =>
         {
-            Position += output.Delta;
+            GlobalTransform = output.newTransform;
         });
 
         this.Provide();
@@ -150,11 +150,15 @@ public partial class Humanoid : RigidBody3D, IHumanoid
         return new Vector2(rotated.X, rotated.Z);
     }
 
-    public Vector2 GetUnadjustedInputVector()
+    public Vector3 GetNoclipInputVector(Basis cameraBasis)
     {
-        Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
+        float xAxis = Input.GetAxis("MoveLeft", "MoveRight");
+        float yAxis = Input.GetAxis("MoveDown", "MoveUp");
+        float zAxis = Input.GetAxis("MoveForward", "MoveBackward");
 
-        return inputDir;
+        Vector3 vector = cameraBasis * new Vector3(xAxis, yAxis, zAxis).Normalized();
+
+        return vector;
     }
 
     public FloorData GetFloorData(bool wasOnFloor)
