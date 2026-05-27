@@ -19,7 +19,7 @@ public partial class PlayerLogic
 
         public readonly record struct AwayLadder;
 
-        public readonly record struct HitFloor;
+        public readonly record struct HitFloor(float VerticalVelocity);
 
         public readonly record struct OnFloor(FloorData FloorData);
 

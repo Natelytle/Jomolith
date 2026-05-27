@@ -17,7 +17,11 @@ public partial class PlayerLogic
             private const double max_jump_time = 0.5;
             private const float jump_power_multiplier = 1.06f;
 
-            private const float jump_speed_epsilon = 1e-3f;
+            // Lower this value to increase the chance of a high jump on walls.
+            private const float jump_accel_epsilon = 5e-4f;
+
+            // Increase this value to decrease the chance of a high jump without touching a wall.
+            private const float jump_accel_correction = 1e-3f;
 
             protected override float MaxForce => 0;
             protected override float Gain => 0;
@@ -59,12 +63,16 @@ public partial class PlayerLogic
                 float desiredJumpAcceleration =
                     float.Round(1.0f / (float)delta) * (desiredJumpSpeed - currentJumpVelocity);
 
-                if (playerData.HittingCeiling || desiredJumpSpeed - currentJumpVelocity <= jump_speed_epsilon)
+                if (playerData.HittingCeiling || desiredJumpAcceleration <= jump_accel_epsilon)
                 {
                     Input(new Input.JumpFinished());
 
                     return;
                 }
+
+                // If we aren't touching a wall, we give the character a little boost. Hacky but works for high jumps
+                if (player.GetContactCount() == 0)
+                    desiredJumpAcceleration += jump_accel_correction;
 
                 float desiredJumpForce = desiredJumpAcceleration * player.Mass;
                 Vector3 antiGravityForce = -player.GetGravity() * player.Mass;

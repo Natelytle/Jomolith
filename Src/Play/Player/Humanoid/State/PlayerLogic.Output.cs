@@ -38,6 +38,8 @@ public partial class PlayerLogic
 
         public readonly record struct SetFrozen(bool Frozen);
 
-        public readonly record struct SetTransform(Transform3D newTransform);
+        public readonly record struct SetTransform(Transform3D NewTransform);
+
+        public readonly record struct SetFriction(float Friction);
     }
 }

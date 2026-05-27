@@ -1,5 +1,6 @@
 using System;
 using Chickensoft.Introspection;
+using Chickensoft.LogicBlocks;
 using Godot;
 
 namespace Jomolith.Play.Player.Humanoid.State;
@@ -11,6 +12,16 @@ public partial class PlayerLogic
         [Meta]
         public abstract partial record FallingBase : Alive, IGet<Input.HitFloor>
         {
+            private const float falling_friction = 0.14f;
+            private const float running_friction = 0.5f;
+
+            protected FallingBase()
+            {
+                this.OnEnter(() => Output(new Output.SetFriction(falling_friction)));
+
+                this.OnExit(() => Output(new Output.SetFriction(running_friction)));
+            }
+
             protected override float MaxForce => 143.0f;
             protected override float Gain => 150.0f;
             protected override float BalanceKp => 5000.0f;
@@ -20,7 +31,10 @@ public partial class PlayerLogic
 
             public virtual Transition On(in Input.HitFloor input)
             {
-                return To<Landed>();
+                if (input.VerticalVelocity <= 0)
+                    return To<Landed>();
+
+                return ToSelf();
             }
 
             protected override float ComputeTorque(Vector3 movementVector, PlayerData playerData, IHumanoid player, bool isRotationLocked)

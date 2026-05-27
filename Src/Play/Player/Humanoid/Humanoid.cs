@@ -114,7 +114,10 @@ public partial class Humanoid : RigidBody3D, IHumanoid
             Freeze = output.Frozen;
         }).Handle((in PlayerLogic.Output.SetTransform output) =>
         {
-            GlobalTransform = output.newTransform;
+            GlobalTransform = output.NewTransform;
+        }).Handle((in PlayerLogic.Output.SetFriction output) =>
+        {
+            PhysicsMaterialOverride.Friction = output.Friction;
         });
 
         this.Provide();

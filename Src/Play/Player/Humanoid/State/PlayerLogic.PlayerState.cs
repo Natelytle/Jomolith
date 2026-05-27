@@ -32,12 +32,11 @@ public partial class PlayerLogic
 
             if (floorData.FloorFound)
             {
-                if (!playerData.WasOnFloor)
-                    Input(new Input.HitFloor());
+                Input(new Input.HitFloor(player.LinearVelocity.Y));
 
                 Input(new Input.OnFloor(floorData));
             }
-            else if (playerData.WasOnFloor)
+            else
             {
                 Input(new Input.OffFloor());
             }
