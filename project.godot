@@ -90,13 +90,16 @@ ToggleNoclip={
 common/physics_ticks_per_second=240
 common/physics_jitter_fix=0.0
 3d/physics_engine="Rapier3D"
+jolt_physics_3d/simulation/penetration_slop=0.05
+jolt_physics_3d/simulation/baumgarte_stabilization_factor=0.5
 3d/default_gravity=196.2
 rapier/solver/preset=2
-rapier/solver/num_iterations=20
+rapier/solver/num_internal_pgs_iterations=4
+rapier/solver/num_internal_stabilization_iterations=4
 rapier/solver/normalized_allowed_linear_error=0.05
 rapier/solver/normalized_max_corrective_velocity=20.0
-rapier/solver/normalized_prediction_distance=0.0001
-rapier/solver/contact_damping_ratio=0.7
+rapier/solver/normalized_prediction_distance=0.012
+rapier/solver/contact_damping_ratio=1.0
 rapier/solver/contact_natural_frequency=120.0
 
 [rendering]
