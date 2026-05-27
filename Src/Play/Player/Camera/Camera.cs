@@ -94,7 +94,7 @@ public partial class Camera : Node3D, ICamera
 
         Settings = new CameraLogic.CameraSettings
         {
-            Sensitivity = 1.0f
+            Sensitivity = 0.24f
         };
 
         CameraLogic.Set(this as ICamera);
