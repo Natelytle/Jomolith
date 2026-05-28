@@ -1,0 +1,20 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bcfy5m3xshbty"]
+
+[ext_resource type="Shader" uid="uid://bv4x4nwivu8cw" path="res://Src/Resources/Shaders/Plastic.gdshader" id="1_3g2ku"]
+[ext_resource type="CompressedTexture2DArray" uid="uid://b1ilxyj5tdvg8" path="res://Src/Resources/Textures/PlasticAlbedo.png" id="2_bji0t"]
+[ext_resource type="CompressedTexture2DArray" uid="uid://dl6kkw478dhw1" path="res://Src/Resources/Textures/PlasticNormal.png" id="3_k1a0b"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_3g2ku")
+shader_parameter/surfaceVariant0IsSmooth = true
+shader_parameter/detailFadeStart = 128.0
+shader_parameter/detailFadeEnd = 256.0
+shader_parameter/texturesAlbedo = ExtResource("2_bji0t")
+shader_parameter/textureAlbedoBase = Color(0.49019608, 0.49019608, 0.49019608, 1)
+shader_parameter/simpleAlbedo = Color(1, 1, 1, 1)
+shader_parameter/albedoScale = 1.0
+shader_parameter/texturesNormal = ExtResource("3_k1a0b")
+shader_parameter/normalScale = 1.0
+shader_parameter/uvScale = Vector2(0.5, 0.5)
+shader_parameter/specular = 0.0999999977648

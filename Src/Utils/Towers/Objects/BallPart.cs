@@ -5,14 +5,8 @@ namespace Jomolith.Utils.Towers.Objects;
 
 public partial class BallPart : Part
 {
-    protected override MeshInstance3D GetPartMesh(PartModel partModel) => new MeshInstance3D
-    {
-        Mesh = new SphereMesh
-        {
-            Radius = partModel.SphereRadius,
-            Height = partModel.SphereRadius * 2.0f
-        }
-    };
+    protected override Vector3 GetMeshScale(PartModel partModel) =>
+        new Vector3(partModel.SphereRadius, partModel.SphereRadius, partModel.SphereRadius);
 
     protected override CollisionShape3D GetPartCollisionShape(PartModel partModel) => new CollisionShape3D
     {

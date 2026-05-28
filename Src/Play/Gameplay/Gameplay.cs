@@ -87,6 +87,8 @@ public partial class Gameplay : Node3D, IGameplay
         this.Provide();
 
         GameplayLogic.Start();
+
+        Tower.Initialize();
     }
 
     // TODO: Make async

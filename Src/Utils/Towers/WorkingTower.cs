@@ -6,17 +6,46 @@ using Godot;
 using Jomolith.Core;
 using Jomolith.Core.Objects;
 using Jomolith.Core.Objects.Enums;
+using Jomolith.Utils.Rendering.Parts;
 using Jomolith.Utils.Towers.Objects;
 
 namespace Jomolith.Utils.Towers;
 
 public interface IWorkingTower : INode3D
 {
+    void Initialize();
     void Load(ITowerModel towerModel);
 }
 
 public partial class WorkingTower : Node3D, IWorkingTower
 {
+    [Export] public Mesh[] Meshes;
+    [Export] public Material[] Materials;
+
+    private readonly List<Part> parts = new List<Part>();
+    private PartHeap heap;
+
+    public void Initialize()
+    {
+        heap = new PartHeap
+        {
+            Meshes = Meshes,
+            Materials = Materials,
+
+            UsesColor = true,
+            UsesCustomData = true,
+
+            BlockCapacity = 2048,
+            BlockGeometricSorting = false,
+            BlockGeometricSize = 1024,
+
+            DefragThreshold = 0.5f,
+            MaxSwapsPerFrame = 1024
+        };
+
+        AddChild(heap);
+    }
+
     public void Load(ITowerModel towerModel)
     {
         clearParts();
@@ -42,6 +71,8 @@ public partial class WorkingTower : Node3D, IWorkingTower
             };
 
             part.Initialize(partModel);
+            part.AddToPartHeap(heap);
+            parts.Add(part);
 
             AddChild(part);
         }
@@ -49,10 +80,11 @@ public partial class WorkingTower : Node3D, IWorkingTower
 
     private void clearParts()
     {
-        foreach (Node? child in GetChildren())
+        foreach (Part part in parts)
         {
-            child.QueueFree();
-            RemoveChild(child);
+            part.RemoveFromPartHeap();
+            part.QueueFree();
+            RemoveChild(part);
         }
     }
 }

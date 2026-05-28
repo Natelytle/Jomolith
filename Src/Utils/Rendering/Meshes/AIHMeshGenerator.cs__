@@ -1,0 +1,399 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using ArrayType = Godot.Mesh.ArrayType;
+
+public sealed class AIHMeshGenerator {
+	public enum UVAxis : int {
+		XAxis = 0,
+		YAxis = 1,
+		ZAxis = 2,
+		HypoZYAxis = 3,
+		HypoXYAxis = 4,
+	}
+
+	private static bool UVAxisIsSlope(UVAxis axis)
+		=> (int)axis > 2;
+
+	public enum SurfaceID : int {
+#pragma warning disable CA1069 // Disable "enum has same constant value" warning because it's intentional
+		Xp = 0,
+		Xn = 1,
+		Yp = 2,
+		Yn = 3,
+		Zp = 4,
+		Zn = 5,
+
+		Right = 0,
+		Left = 1,
+		Top = 2,
+		Bottom = 3,
+		Back = 4,
+		Front = 5
+#pragma warning restore CA1069
+	}
+
+	public enum SlopeMode {
+		Full,
+		Left,
+		Right
+	}
+
+	private Vector3 currentVPosition = Vector3.Zero;
+	private Vector3 currentVNormal = Vector3.Zero;
+	private Vector3 currentVTangent = Vector3.Zero;
+	private float currentVBiTanHand = 1f; // Bitangent handedness
+	private Vector2 currentVTextureUV = Vector2.Zero;
+	private UVAxis currentVAxisEnum = UVAxis.XAxis;
+	private SurfaceID currentVSurfaceEnum = SurfaceID.Right;
+
+	private int latestVertIndex = 0;
+	private List<Vector3> bufferVPositions = new();
+	private List<Vector3> bufferVNormals = new();
+	private List<float> bufferVTangents = new();
+	private List<Vector2> bufferVTextureUVs = new();
+	private List<Color> bufferVCustom0 = new();
+
+	private bool indicesAdded = false;
+	private List<int> indices = new();
+
+/*
+	private unsafe TTo[] ReinterpretArray<TFrom, TTo>(TFrom[] fromArray) 
+	where TFrom : unmanaged
+	where TTo : unmanaged {
+		int resultBytes = sizeof(TFrom) * fromArray.Length;
+		int resultLength = resultBytes / sizeof(TTo);
+		TTo[] toArray = new TTo[resultLength];
+		Buffer.BlockCopy(fromArray, 0, toArray, 0, resultBytes);
+
+		return toArray;
+	}
+*/
+	private void AddVertex() {
+
+		bufferVPositions.Add(currentVPosition);
+		bufferVNormals.Add(currentVNormal);
+
+		// Tangents are technically Vector4s, but godot will only take a PackedFloatArray, so we must turn them into a float[]
+		bufferVTangents.Add(currentVTangent.X);
+		bufferVTangents.Add(currentVTangent.Y);
+		bufferVTangents.Add(currentVTangent.Z);
+		bufferVTangents.Add(currentVBiTanHand);
+
+		bufferVTextureUVs.Add(currentVTextureUV);
+
+		// Custom data needs to be packed into Color structs
+		Color custom0 = PackCustom0(currentVAxisEnum, currentVSurfaceEnum);
+
+		bufferVCustom0.Add(custom0);
+	}
+
+	private static Vector3 RotateByAxisDifference(Vector3 target, Vector3 from, Vector3 to) {
+		Vector3 cross = from.Cross(to);
+		// If the cross product is about zero, that means there is no rotation difference
+		// Simply return the target vector, unrotated
+		if (cross.IsZeroApprox()) return target;
+		Vector3 rotAxis = cross.Normalized();
+
+		float dot = from.Dot(to);
+		float angle = MathF.Acos(Math.Clamp(dot, -1f, 1f));
+
+		// Turn the axis-angle pair into a basis which we can then use to actually rotate the vector
+		Basis rotation = new(rotAxis, angle);
+		return target * rotation;
+	}
+
+	private static Color PackCustom0(UVAxis uvAxis, SurfaceID surfaceID) {
+		int packedI = (int)uvAxis | ((int)surfaceID << 4);
+		float r = Unsafe.As<int, float>(ref packedI);
+
+		return new Color(r, 0f, 0f, 0f);
+	}
+
+	public void BuildQuad(
+		UVAxis uvAxis,
+		SurfaceID surfaceID,
+
+		Vector3 xAxis,
+		Vector3 yAxis,
+
+		int segmentsX,
+		int segmentsY,
+		bool curveX,
+		bool curveY
+	) {
+
+		// Cool maths
+		Vector3 zAxis = xAxis.Cross(yAxis);
+		Vector3 origin = (-xAxis - yAxis - zAxis) * 0.5f;
+
+		// These vertex attributes are constant across all vertices generated for this quad
+		currentVBiTanHand = 1f;
+		currentVAxisEnum = uvAxis;
+		currentVSurfaceEnum = surfaceID;
+
+		// Construct and add the vertices
+		for (int x = 0; x < segmentsX; x++) {
+			float tX = (float)x / (float)(segmentsX - 1);
+
+			for (int y = 0; y < segmentsY; y++) {
+				float tY = (float)y / (float)(segmentsY - 1);
+
+				Vector2 uv = new(tX, 1f - tY);
+				Vector3 pos = origin + (xAxis * tX) + (yAxis * tY);
+				Vector3 uncurvedNormal = -zAxis; // The normal vector before curving
+
+				if (UVAxisIsSlope(uvAxis)) {
+					uncurvedNormal = (yAxis - zAxis).Normalized();
+					pos += zAxis * tY;
+				}
+				Vector3 normal = uncurvedNormal;
+				Vector3 tangent;
+
+				if (curveX && curveY) {
+					// To curve along both X and Y axes, all we gotta do is normalize the position
+					pos = pos.Normalized();
+					normal = pos;
+
+				} else if (curveX) {
+					// To curve along a single axis, we simply do whatever we were doing in 3D, but in 2D!!!
+					// But we have to make use of YUCKY linear algebra to make this work in world-space
+
+					float localX = pos.Dot(xAxis);
+					float localZ = pos.Dot(zAxis);
+					Vector2 normalized2D = new Vector2(localX, localZ).Normalized(); // Normalize along this plane
+
+					pos = (xAxis * normalized2D.X) + (yAxis * tY) - (yAxis * 0.5f) + (zAxis * normalized2D.Y);
+					normal = (xAxis * normalized2D.X) + (zAxis * normalized2D.Y);
+
+				} else if (curveY) { // FIXME
+					// Same jazz as curveX
+					
+					float localY = pos.Dot(yAxis);
+					float localZ = pos.Dot(zAxis);
+					Vector2 normalized2D = new Vector2(localY, localZ).Normalized() * 0.5f;
+
+					pos = (xAxis * tX) - (xAxis * 0.5f) + (yAxis * normalized2D.X) + (zAxis * normalized2D.Y);
+					normal = (yAxis * normalized2D.X) + (zAxis * normalized2D.Y);
+				}
+
+				// If the normal rotated, the tangent should be rotated
+				tangent = RotateByAxisDifference(-xAxis, uncurvedNormal, normal);
+
+				// From here the bitangent can be easily inferred, it's just the cross product of the normal and tangent
+				//Vector3 bitangent = normal.Cross(tangent);
+
+				/*
+				// Pack custom data into a color struct
+				Color packedCustom0 = PackCustom0(uvAxis, surfaceID);
+
+				st.SetNormal(normal);
+				st.SetTangent(new Plane(tangent, 1f));
+				st.SetUV(uv);
+				st.SetCustom(0, packedCustom0);
+				st.AddVertex(pos);
+				*/
+				currentVPosition = pos;
+				currentVNormal = normal;
+				currentVTangent = xAxis;
+				currentVTextureUV = uv;
+
+				AddVertex();
+			}
+		}
+
+		void PushVertIndex(int x, int y)
+			=> indices.Add(latestVertIndex + (x * segmentsY) + y);
+
+		// Add the indices to form the quads
+		// For every vertex, with the exception of vertices at the end of the xAxis and yAxis..
+		//	- Get the indices of this vertex and all 3 neighboring vertices
+		//	- Push them into the SurfaceTool
+		for (int x = 0; x < segmentsX - 1; x++) {
+			for (int y = 0; y < segmentsY - 1; y++) {
+				// Tri 1
+				PushVertIndex(x + 1, y + 0);
+				PushVertIndex(x + 0, y + 1);
+				PushVertIndex(x + 0, y + 0);
+
+				// Tri 2
+				PushVertIndex(x + 0, y + 1);
+				PushVertIndex(x + 1, y + 0);
+				PushVertIndex(x + 1, y + 1);
+			}
+		}
+
+		latestVertIndex += segmentsX * segmentsY;
+	}
+
+	public void BuildSlope(
+		UVAxis uvAxis,
+		SurfaceID surfaceID,
+
+		Vector3 xAxis,
+		Vector3 yAxis,
+
+		SlopeMode mode = SlopeMode.Full
+	) {
+		// Cool maths
+		Vector3 zAxis = xAxis.Cross(yAxis);
+		Vector3 origin = (-xAxis - yAxis - zAxis) * 0.5f;
+
+		// These vertex attributes are constant across all vertices generated for this slope
+		currentVBiTanHand = 1f;
+		currentVAxisEnum = uvAxis;
+		currentVSurfaceEnum = surfaceID;
+
+		for (int x = 0; x < 1; x++) {
+			for (int y = 0; y < 1; y++) {
+
+				if (y == 1) {
+				}
+
+				float tX = (float)x;
+				float tY = (float)y;
+
+				Vector2 uv = new(tX, 1f - tY);
+				Vector3 pos = origin + (xAxis * tX) + (yAxis * tY) + (zAxis * tY);
+				Vector3 normal = (yAxis - zAxis).Normalized();
+
+				/*
+				st.SetNormal(normal);
+				st.SetTangent(new Plane(xAxis, 1f));
+				st.SetUV(uv);
+				st.SetCustom(0, new Color());
+				st.AddVertex(pos);
+				*/
+				currentVPosition = pos;
+				currentVNormal = normal;
+				currentVTangent = xAxis;
+				currentVTextureUV = uv;
+
+				AddVertex();
+			}
+		}
+	}
+
+	public void BuildCircle(
+		UVAxis uvAxis,
+		SurfaceID surfaceID,
+
+		Vector3 xAxis,
+		Vector3 zAxis,
+
+		int segments
+	) {
+		Vector3 yAxis = xAxis.Cross(zAxis);
+
+		// Pack custom data into a color struct
+		//Color packedCustom0 = PackCustom0(uvAxis, surfaceID);
+
+		// Create the center vertex
+		/*
+		st.SetNormal(yAxis);
+		st.SetTangent(new Plane(-xAxis, 1f));
+		st.SetUV(Vector2.One * 0.5f);
+		st.SetCustom(0, packedCustom0);
+		st.AddVertex(yAxis * 0.5f);
+		*/
+		currentVPosition = yAxis * 0.5f;
+		currentVNormal = yAxis;
+		currentVTangent = -xAxis;
+		currentVBiTanHand = 1f;
+		currentVTextureUV = Vector2.One * 0.5f;
+
+		currentVAxisEnum = uvAxis;
+		currentVSurfaceEnum = surfaceID;
+
+		AddVertex();
+
+		void PushVertex(float localX, float localZ) {
+			Vector2 uv = (new Vector2(localX, localZ) + Vector2.One) * 0.5f;
+
+			// No need to set normal and tangent information since it's all the same
+			/*
+			st.SetUV(uv);
+			st.AddVertex((xAxis * localX + yAxis + zAxis * localZ) * 0.5f);
+			*/
+			currentVPosition = (xAxis * localX + yAxis + zAxis * localZ) * 0.5f;
+			currentVTextureUV = uv;
+			AddVertex();
+		}
+
+		for (int i = 0; i < segments; i++) {
+			float t = (float)i / (float)(segments - 1);
+			Vector2 localPos = new Vector2(t*2f - 1f, 1f).Normalized();
+
+			PushVertex(localPos.X, localPos.Y);
+			PushVertex(localPos.Y, -localPos.X);
+			PushVertex(-localPos.X, -localPos.Y);
+			PushVertex(-localPos.Y, localPos.X);
+		}
+
+		void PushTriIndices(int i) {
+			indices.Add(latestVertIndex);
+			indices.Add(latestVertIndex + ((i + 0) * 4) + 1);
+			indices.Add(latestVertIndex + ((i + 1) * 4) + 1);
+
+			indices.Add(latestVertIndex);
+			indices.Add(latestVertIndex + ((i + 0) * 4) + 2);
+			indices.Add(latestVertIndex + ((i + 1) * 4) + 2);
+
+			indices.Add(latestVertIndex);
+			indices.Add(latestVertIndex + ((i + 0) * 4) + 3);
+			indices.Add(latestVertIndex + ((i + 1) * 4) + 3);
+
+			indices.Add(latestVertIndex);
+			indices.Add(latestVertIndex + ((i + 0) * 4) + 4);
+			indices.Add(latestVertIndex + ((i + 1) * 4) + 4);
+		}
+
+		for (int i = 0; i < segments - 1; i++) {
+			PushTriIndices(i);
+		}
+
+		latestVertIndex += segments * 4 + 1;
+	}
+
+	public Godot.Collections.Array Commit() {
+		Godot.Collections.Array result = new();
+		result.Resize((int)ArrayType.Max);
+		
+		// ARRAY_VERTEX
+		result[(int)ArrayType.Vertex] = bufferVPositions.ToArray();
+		GD.Print(result[(int)ArrayType.Vertex]);
+
+		// ARRAY_NORMAL
+		result[(int)ArrayType.Normal] = bufferVNormals.ToArray();
+
+		// ARRAY_TANGENT
+		result[(int)ArrayType.Tangent] = bufferVTangents.ToArray();
+
+		// ARRAY_COLOR
+		// (null)
+
+		// ARRAY_TEX_UV
+		result[(int)ArrayType.TexUV] = bufferVTextureUVs.ToArray();
+
+		// ARRAY_TEX_UV2
+		// (null)
+
+		// ARRAY_CUSTOM0
+		result[(int)ArrayType.Custom0] = bufferVNormals.ToArray();
+
+
+		// ARRAY_INDEX
+		result[(int)ArrayType.Index] = indices.ToArray();
+
+		return result;
+	}
+
+	/*
+	public AIHMeshGenerator() {
+		st = new SurfaceTool();
+		st.Begin(Mesh.PrimitiveType.Triangles);
+		st.SetCustomFormat(0, SurfaceTool.CustomFormat.RgbaFloat);
+	}
+	*/
+}

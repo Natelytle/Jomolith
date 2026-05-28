@@ -76,6 +76,44 @@
 
   <ItemGroup>
     <Content Include="Properties\launchSettings.json"/>
+    <Content Include="Src\Textures\PlasticAlbedo.png" />
+    <Content Include="Src\Textures\PlasticAlbedo.png.import" />
+    <Content Include="Src\Textures\PlasticNormal.png" />
+    <Content Include="Src\Textures\PlasticNormal.png.import" />
+    <Content Include="Src\Textures\Ring1Panorama.png" />
+    <Content Include="Src\Textures\Ring1Panorama.png.import" />
+    <Content Include="Src\Textures\StolenGranite.dds" />
+    <Content Include="Src\Textures\StolenGranite.dds.uid" />
+    <Content Include="Src\Textures\StolenGranite.png" />
+    <Content Include="Src\Textures\StolenGranite.png.import" />
+    <Content Include="Src\Textures\StudAlbedo.png" />
+    <Content Include="Src\Textures\StudAlbedo.png.import" />
+    <Content Include="Src\Textures\StudNormal.png" />
+    <Content Include="Src\Textures\StudNormal.png.import" />
+    <Content Include="Src\Textures\StudNormalInlet.png" />
+    <Content Include="Src\Textures\StudNormalInlet.png.import" />
+    <Content Include="Src\Textures\StudNormalWeld.png" />
+    <Content Include="Src\Textures\StudNormalWeld.png.import" />
+    <Content Include="Src\Textures\Studs.pdn" />
+    <Content Include="Src\Textures\StudsDiffuse2.png" />
+    <Content Include="Src\Textures\StudsDiffuse2.png.import" />
+    <Content Include="Src\Textures\StudSingleWeldAlbedo.png" />
+    <Content Include="Src\Textures\StudSingleWeldAlbedo.png.import" />
+    <Content Include="Src\Textures\StudSingleWeldHeight.png" />
+    <Content Include="Src\Textures\StudSingleWeldHeight.png.import" />
+    <Content Include="Src\Textures\StudsNormal2.png" />
+    <Content Include="Src\Textures\StudsNormal2.png.import" />
+    <Content Include="Src\Textures\StudWeldAlbedo.png" />
+    <Content Include="Src\Textures\StudWeldAlbedo.png.import" />
+    <Content Include="Src\Utils\Rendering\Meshes\PartBlockMesh.cs.uid" />
+    <Content Include="Src\Utils\Rendering\Meshes\PartMesh.cs.uid" />
+    <Content Include="Src\Utils\Rendering\Meshes\MeshGenerator.cs.uid" />
+    <Content Include="Src\Utils\Rendering\Meshes\AIHMeshGenerator.cs__" />
+    <Content Include="Src\Utils\Rendering\Meshes\PartWedgeMesh.cs.uid" />
+    <Content Include="Src\Utils\Rendering\MeshHeapSystem\IHeapDiscriminator.cs.uid" />
+    <Content Include="Src\Utils\Rendering\MeshHeapSystem\MeshHeap.cs.uid" />
+    <Content Include="Src\Utils\Rendering\MeshHeapSystem\MeshHeapBlock.cs.uid" />
+    <Content Include="Src\Utils\Rendering\MeshHeapSystem\MeshHeapUser.cs.uid" />
     <Content Include="Tests\AppTest.cs.uid" />
   </ItemGroup>
 </Project>
