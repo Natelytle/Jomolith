@@ -34,7 +34,7 @@ public partial class PlayerLogic
 
         public readonly record struct FloorVelocityChanged(Vector2 Velocity);
 
-        public readonly record struct VerticalVelocityChanged(Vector2 Velocity);
+        public readonly record struct VerticalVelocityChanged(float Velocity);
 
         public readonly record struct SetFrozen(bool Frozen);
 

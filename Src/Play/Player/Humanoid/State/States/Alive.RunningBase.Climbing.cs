@@ -61,6 +61,10 @@ public partial class PlayerLogic
 
                 Output(new Output.ApplyForce(desiredForce, Vector3.Up * desiredTorque));
 
+                float verticalVelocity = player.LinearVelocity.Y;
+
+                Output(new Output.VerticalVelocityChanged(verticalVelocity));
+
                 return ToSelf();
             }
 

@@ -42,6 +42,9 @@ public abstract partial class Part : RigidBody3D
             CollisionShape3D collider = GetPartCollisionShape(partModel);
 
             AddChild(collider);
+
+            SetCollisionLayerValue(1, true);
+            SetCollisionLayerValue(2, true);
         }
     }
 

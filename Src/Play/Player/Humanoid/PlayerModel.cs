@@ -106,7 +106,7 @@ public partial class PlayerModel : Node3D, IPlayerModel
                 AnimationTree.Set("parameters/StateMachine/Walk/Speed/scale", (float)(output.Velocity.Length() / 16.0))
             )
             .Handle((in PlayerLogic.Output.VerticalVelocityChanged output) =>
-                AnimationTree.Set("parameters/StateMachine/Climb/Speed/scale", (float)(output.Velocity.Length() / 12.0))
+                AnimationTree.Set("parameters/StateMachine/Climb/Speed/scale", (float)(output.Velocity / 12.0))
             )
             .Handle((in PlayerLogic.Output.Visual.SetTransparency output) =>
                 Materials.SetOpacity(output.Alpha)

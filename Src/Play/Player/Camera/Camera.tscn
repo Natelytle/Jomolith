@@ -10,6 +10,8 @@ unique_name_in_owner = true
 
 [node name="SpringArm3D" type="SpringArm3D" parent="OffsetNode" unique_id=1939305059]
 unique_name_in_owner = true
+collision_mask = 2
 
 [node name="Camera3D" type="Camera3D" parent="OffsetNode/SpringArm3D" unique_id=549436908]
 unique_name_in_owner = true
+fov = 70.0
