@@ -36,8 +36,6 @@ public partial class Humanoid : RigidBody3D, IHumanoid
 
     [Dependency] public IPlayerRepo PlayerRepo => this.DependOn<IPlayerRepo>();
 
-    [Dependency] public IAppRepo GameRepo => this.DependOn<IAppRepo>();
-
     #endregion
 
     #region Provisions
@@ -92,7 +90,6 @@ public partial class Humanoid : RigidBody3D, IHumanoid
         PlayerLogic.Set(this as IHumanoid);
         PlayerLogic.Set(Settings);
         PlayerLogic.Set(PlayerRepo);
-        PlayerLogic.Set(GameRepo);
         PlayerLogic.Set(PlayerData);
 
         PlayerModel.HeadMoved += updateHeadTransform;

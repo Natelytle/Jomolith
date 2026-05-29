@@ -1,0 +1,11 @@
+@startuml
+
+class TowerLogic  {
+    [[../../../Src/Tower/State/TowerLogic.cs ScriptFile]]
+    [Methods]
+    [[../../../Src/Tower/State/TowerLogic.cs:19 GetInitialState()]]
+    [[../../../Src/Tower/State/TowerLogic.cs:21 OnStart()]]
+    [[../../../Src/Tower/State/TowerLogic.cs:34 OnStop()]]
+}
+
+@enduml

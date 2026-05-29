@@ -3,21 +3,18 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 using Jomolith.App.Domain;
-using Jomolith.Core;
 using Jomolith.Play.Gameplay.Domain;
 using Jomolith.Play.Gameplay.State;
 using Jomolith.Play.Player;
-using Jomolith.Utils.Towers;
+using Jomolith.Tower;
+using Jomolith.Tower.Domain;
 
 namespace Jomolith.Play.Gameplay;
 
-public interface IGameplay : INode3D, IProvide<IGameplayRepo>
+// ReSharper disable once PossibleInterfaceMemberAmbiguity
+public interface IGameplay : INode3D, IProvide<IGameplayRepo>, IProvide<ITowerRepo>
 {
     IGameplayLogic GameplayLogic { get; }
-
-    public void LoadTower(ITowerModel towerModel);
-
-    event Gameplay.TowerLoadedEventHandler? TowerLoaded;
 }
 
 [Meta(typeof(IAutoNode))]
@@ -25,22 +22,16 @@ public partial class Gameplay : Node3D, IGameplay
 {
     public override void _Notification(int what) => this.Notify(what);
 
-    #region Loading
-
-    [Signal]
-    public delegate void TowerLoadedEventHandler();
-
-    #endregion
-
     #region Dependencies
 
-    [Dependency] public IAppRepo GameRepo => this.DependOn<IAppRepo>();
+    [Dependency] public IAppRepo AppRepo => this.DependOn<IAppRepo>();
 
     #endregion
 
     #region Provisions
 
     IGameplayRepo IProvide<IGameplayRepo>.Value() => GameplayRepo;
+    ITowerRepo IProvide<ITowerRepo>.Value() => TowerRepo;
 
     #endregion
 
@@ -52,11 +43,13 @@ public partial class Gameplay : Node3D, IGameplay
 
     public GameplayLogic.IBinding GameplayBinding { get; set; } = null!;
 
+    public ITowerRepo TowerRepo { get; set; } = null!;
+
     #endregion
 
     #region Nodes
 
-    [Node] public IWorkingTower Tower { get; set; } = null!;
+    [Node] public ITower Tower { get; set; } = null!;
 
     [Node] public IPlayer Player { get; set; } = null!;
 
@@ -66,6 +59,8 @@ public partial class Gameplay : Node3D, IGameplay
     {
         GameplayRepo = new GameplayRepo();
         GameplayLogic = new GameplayLogic();
+
+        TowerRepo = new TowerRepo();
 
         GameplayLogic.Set(GameplayRepo);
     }
@@ -88,16 +83,6 @@ public partial class Gameplay : Node3D, IGameplay
 
         GameplayLogic.Start();
     }
-
-    // TODO: Make async
-    public void LoadTower(ITowerModel towerModel)
-    {
-        Tower.Load(towerModel);
-
-        finishedLoadingTower();
-    }
-
-    private void finishedLoadingTower() => EmitSignal(SignalName.TowerLoaded);
 
     private void setPauseMode(bool pause) => GetTree().Paused = pause;
 }

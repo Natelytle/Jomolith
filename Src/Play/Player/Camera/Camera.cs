@@ -41,8 +41,6 @@ public partial class Camera : Node3D, ICamera
 
     [Dependency] public IGameplayRepo GameplayRepo => this.DependOn<IGameplayRepo>();
 
-    [Dependency] public IAppRepo AppRepo => this.DependOn<IAppRepo>();
-
     #endregion
 
     #region State
@@ -99,7 +97,6 @@ public partial class Camera : Node3D, ICamera
 
         CameraLogic.Set(this as ICamera);
         CameraLogic.Set(PlayerRepo);
-        CameraLogic.Set(AppRepo);
         CameraLogic.Set(CameraData);
         CameraLogic.Set(Settings);
     }
