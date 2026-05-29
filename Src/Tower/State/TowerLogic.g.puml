@@ -1,11 +1,8 @@
-@startuml
-
-class TowerLogic  {
-    [[../../../Src/Tower/State/TowerLogic.cs ScriptFile]]
-    [Methods]
-    [[../../../Src/Tower/State/TowerLogic.cs:19 GetInitialState()]]
-    [[../../../Src/Tower/State/TowerLogic.cs:21 OnStart()]]
-    [[../../../Src/Tower/State/TowerLogic.cs:34 OnStop()]]
+@startuml TowerLogic
+state "TowerLogic State" as Jomolith_Tower_State_TowerLogic_TowerState {
+  state "Default" as Jomolith_Tower_State_TowerLogic_TowerState_Default
 }
 
+Jomolith_Tower_State_TowerLogic_TowerState_Default --> Jomolith_Tower_State_TowerLogic_TowerState_Default : Default
+[*] --> Jomolith_Tower_State_TowerLogic_TowerState_Default
 @enduml

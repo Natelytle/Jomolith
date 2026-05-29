@@ -8,20 +8,18 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
         --
         [Nodes]
         Gameplay - [[../../Src/Play/Gameplay/Gameplay.cs Script]]
-        MainMenu - [[../../Src/Menu/MainMenu.tscn Script]]
+        MenuScene - [[../../Src/Menu/MenuScene.cs Script]]
         [Properties]
         [[../../Src/App/JomolithApp.cs:31 AppBinding]]
-        [[../../Src/App/JomolithApp.cs:29 AppLogic]] - [[../../Src/App/State/AppLogic.cs Script]]
+        [[../../Src/App/JomolithApp.cs:29 AppLogic]] - [[../../Src/App/State/AppLogic.AppState.cs Script]]
         [[../../Src/App/JomolithApp.cs:28 AppRepo]] - [[../../Src/App/Domain/AppRepo.cs Script]]
         [[../../Src/App/JomolithApp.cs:39 Gameplay]] - [[../../Src/Play/Gameplay/Gameplay.cs Script]]
         [[../../Src/App/JomolithApp.cs:38 GameplayPreview]]
-        [[../../Src/App/JomolithApp.cs:37 MainMenu]] - [[../../Src/Menu/MainMenu.cs Script]]
+        [[../../Src/App/JomolithApp.cs:37 MenuScene]] - [[../../Src/Menu/MenuScene.cs Script]]
         --
         [Methods]
         [[../../Src/App/JomolithApp.cs:18 _Notification()]]
-        [[../../Src/App/JomolithApp.cs:82 OnEditTower()]]
-        [[../../Src/App/JomolithApp.cs:81 OnPlayTower()]]
-        [[../../Src/App/JomolithApp.cs:77 OnReady()]]
+        [[../../Src/App/JomolithApp.cs:60 OnReady()]]
         [[../../Src/App/JomolithApp.cs:51 OnResolved()]]
         [[../../Src/App/JomolithApp.cs:43 Setup()]]
     }
@@ -35,7 +33,7 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
             [[../../Src/Play/Gameplay/Gameplay.cs:34 ITowerRepo]] - [[../../Src/Tower/Domain/TowerRepo.cs Script]]
             --
             [Interface Properties]
-            [[../../Src/Play/Gameplay/Gameplay.cs:42 GameplayLogic]] - [[../../Src/Play/Gameplay/State/GameplayLogic.cs Script]]
+            [[../../Src/Play/Gameplay/Gameplay.cs:42 GameplayLogic]] - [[../../Src/Play/Gameplay/State/GameplayLogic.Output.cs Script]]
             [Nodes]
             Player - [[../../Src/Play/Player/Player.cs Script]]
             [Properties]
@@ -50,13 +48,6 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
             [[../../Src/Play/Gameplay/Gameplay.cs:68 OnResolved()]]
             [[../../Src/Play/Gameplay/Gameplay.cs:87 setPauseMode()]]
             [[../../Src/Play/Gameplay/Gameplay.cs:58 Setup()]]
-        }
-        class GameplayLogic  {
-            [[../../Src/Play/Gameplay/State/GameplayLogic.cs ScriptFile]]
-            [Methods]
-            [[../../Src/Play/Gameplay/State/GameplayLogic.cs:17 GetInitialState()]]
-            [[../../Src/Play/Gameplay/State/GameplayLogic.cs:22 OnStart()]]
-            [[../../Src/Play/Gameplay/State/GameplayLogic.cs:33 OnStop()]]
         }
         package Player-Scene [[../../Src/Play/Player/Player.tscn]] {
             class Player  {
@@ -163,7 +154,7 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
                 --
                 [Interface Properties]
                 [[../../Src/Play/Player/Camera/Camera.cs:78 CameraDistance]]
-                [[../../Src/Play/Player/Camera/Camera.cs:48 CameraLogic]] - [[../../Src/Play/Player/Camera/State/States/Locked.cs Script]]
+                [[../../Src/Play/Player/Camera/Camera.cs:48 CameraLogic]] - [[../../Src/Play/Player/Camera/State/CameraLogic.Input.cs Script]]
                 [[../../Src/Play/Player/Camera/Camera.cs:74 HorizontalRotation]]
                 [[../../Src/Play/Player/Camera/Camera.cs:70 OffsetPosition]]
                 [[../../Src/Play/Player/Camera/Camera.cs:76 SpringArmLength]]
@@ -226,54 +217,94 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
             [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs:68 Dispose()]]
             [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs:83 Dispose()]]
         }
-        package Tower-Type [[../../Src/Tower/Tower.cs]] {
-            class Tower  {
-                [[../../Src/Tower/Tower.cs ScriptFile]]
-                [Dependencies]
-                [[../../Src/Tower/Tower.cs:27 TowerRepo]] - [[../../Src/Tower/Domain/TowerRepo.cs Script]]
-                --
-                [Properties]
-                [[../../Src/Tower/Tower.cs:35 TowerBinding]]
-                [[../../Src/Tower/Tower.cs:33 TowerLogic]] - [[../../Src/Tower/State/TowerLogic.cs Script]]
-                --
-                [Methods]
-                [[../../Src/Tower/Tower.cs:21 _Notification()]]
-                [[../../Src/Tower/Tower.cs:48 OnResolved()]]
-                [[../../Src/Tower/Tower.cs:41 Setup()]]
-            }
-            class TowerLogic  {
-                [[../../Src/Tower/State/TowerLogic.cs ScriptFile]]
-                [Methods]
-                [[../../Src/Tower/State/TowerLogic.cs:19 GetInitialState()]]
-                [[../../Src/Tower/State/TowerLogic.cs:21 OnStart()]]
-                [[../../Src/Tower/State/TowerLogic.cs:34 OnStop()]]
-            }
-            Tower::TowerLogic ---> TowerLogic
+        class Tower  {
+            [[../../Src/Tower/Tower.cs ScriptFile]]
+            [Dependencies]
+            [[../../Src/Tower/Tower.cs:27 TowerRepo]] - [[../../Src/Tower/Domain/TowerRepo.cs Script]]
+            --
+            [Properties]
+            [[../../Src/Tower/Tower.cs:35 TowerBinding]]
+            [[../../Src/Tower/Tower.cs:33 TowerLogic]] - [[../../Src/Tower/State/TowerLogic.Output.cs Script]]
+            --
+            [Methods]
+            [[../../Src/Tower/Tower.cs:21 _Notification()]]
+            [[../../Src/Tower/Tower.cs:48 OnResolved()]]
+            [[../../Src/Tower/Tower.cs:41 Setup()]]
         }
         class TowerRepo  {
             [[../../Src/Tower/Domain/TowerRepo.cs ScriptFile]]
             [Constructors]
-            [[../../Src/Tower/Domain/TowerRepo.cs:23 TowerRepo]]()
+            [[../../Src/Tower/Domain/TowerRepo.cs:42 TowerRepo]]()
             [Interface Properties]
-            [[../../Src/Tower/Domain/TowerRepo.cs:18 CurrentTower]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:32 CurrentTower]]
             --
-            [Interface Methods]
-            [[../../Src/Tower/Domain/TowerRepo.cs:28 LoadTower()]]
-            [[../../Src/Tower/Domain/TowerRepo.cs:30 UnloadTower()]]
             [Methods]
-            [[../../Src/Tower/Domain/TowerRepo.cs:34 Dispose()]]
-            [[../../Src/Tower/Domain/TowerRepo.cs:48 Dispose()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:51 AddObject()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:99 Dispose()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:113 Dispose()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:47 LoadTower()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:62 RemoveObject()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:86 ReparentObject()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:49 UnloadTower()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:73 UpdateObject()]]
         }
-        Gameplay::GameplayLogic ---> GameplayLogic
         Gameplay::Player ---> Player
         Gameplay::GameplayRepo ---> GameplayRepo
         Gameplay::Tower ---> Tower
         Gameplay::TowerRepo ---> TowerRepo
     }
-    class AppLogic  {
-        [[../../Src/App/State/AppLogic.cs ScriptFile]]
-        [Methods]
-        [[../../Src/App/State/AppLogic.cs:12 GetInitialState()]]
+    package MenuScene-Scene [[../../Src/Menu/MenuScene.tscn]] {
+        class MenuScene  {
+            [[../../Src/Menu/MenuScene.cs ScriptFile]]
+            [Dependencies]
+            [[../../Src/Menu/MenuScene.cs:31 AppRepo]] - [[../../Src/App/Domain/AppRepo.cs Script]]
+            [Provisions]
+            [[../../Src/Menu/MenuScene.cs:25 IMenuRepo]] - [[../../Src/Menu/Domain/MenuRepo.cs Script]]
+            --
+            [Nodes]
+            MainMenu - [[../../Src/Menu/Screens/MainMenu/MainMenu.tscn Script]]
+            TowerSelect - [[../../Src/Menu/Screens/TowerSelect/TowerSelect.cs Script]]
+            SettingsMenu - [[../../Src/Menu/Screens/SettingsMenu/SettingsMenu.cs Script]]
+            [Properties]
+            [[../../Src/Menu/MenuScene.cs:45 MainMenu]] - [[../../Src/Menu/Screens/MainMenu/MainMenu.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:38 MenuBinding]]
+            [[../../Src/Menu/MenuScene.cs:37 MenuLogic]] - [[../../Src/Menu/State/MenuLogic.Input.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:39 MenuRepo]] - [[../../Src/Menu/Domain/MenuRepo.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:47 SettingsMenu]] - [[../../Src/Menu/Screens/SettingsMenu/SettingsMenu.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:46 TowerSelect]] - [[../../Src/Menu/Screens/TowerSelect/TowerSelect.cs Script]]
+            --
+            [Methods]
+            [[../../Src/Menu/MenuScene.cs:21 _Notification()]]
+            [[../../Src/Menu/MenuScene.cs:90 hideAllMenus()]]
+            [[../../Src/Menu/MenuScene.cs:60 OnResolved()]]
+            [[../../Src/Menu/MenuScene.cs:51 Setup()]]
+        }
+        class MainMenu  {
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs ScriptFile]]
+            [Properties]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:15 EditButton]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:14 PlayButton]]
+            --
+            [Methods]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:23 _Ready()]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:30 OnEditButtonPressed()]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:29 OnPlayButtonPressed()]]
+        }
+        class MenuRepo  {
+            [[../../Src/Menu/Domain/MenuRepo.cs ScriptFile]]
+            [Constructors]
+            [[../../Src/Menu/Domain/MenuRepo.cs:22 MenuRepo]]()
+            [Interface Properties]
+            [[../../Src/Menu/Domain/MenuRepo.cs:16 CurrentScreen]]
+            --
+            [Interface Methods]
+            [[../../Src/Menu/Domain/MenuRepo.cs:27 SetCurrentScreen()]]
+            [Methods]
+            [[../../Src/Menu/Domain/MenuRepo.cs:31 Dispose()]]
+            [[../../Src/Menu/Domain/MenuRepo.cs:44 Dispose()]]
+        }
+        MenuScene::MainMenu ---> MainMenu
+        MenuScene::MenuRepo ---> MenuRepo
     }
     class AppRepo  {
         [[../../Src/App/Domain/AppRepo.cs ScriptFile]]
@@ -284,21 +315,9 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
         [[../../Src/App/Domain/AppRepo.cs:41 Dispose()]]
         [[../../Src/App/Domain/AppRepo.cs:56 Dispose()]]
     }
-    class MainMenu  {
-        [[../../Src/Menu/MainMenu.cs ScriptFile]]
-        [Properties]
-        [[../../Src/Menu/MainMenu.cs:15 EditButton]]
-        [[../../Src/Menu/MainMenu.cs:14 PlayButton]]
-        --
-        [Methods]
-        [[../../Src/Menu/MainMenu.cs:23 _Ready()]]
-        [[../../Src/Menu/MainMenu.cs:30 OnEditButtonPressed()]]
-        [[../../Src/Menu/MainMenu.cs:29 OnPlayButtonPressed()]]
-    }
     JomolithApp::Gameplay ---> Gameplay
-    JomolithApp::AppLogic ---> AppLogic
+    JomolithApp::MenuScene ---> MenuScene
     JomolithApp::AppRepo ---> AppRepo
-    JomolithApp::MainMenu ---> MainMenu
 }
 
 @enduml

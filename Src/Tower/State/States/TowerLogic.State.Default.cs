@@ -5,10 +5,10 @@ using Chickensoft.LogicBlocks;
 
 public partial class TowerLogic
 {
-    public partial record State
+    public partial record TowerState
     {
         [Meta, Id("tower_logic_state_default")]
-        public partial record Default : State,
+        public partial record Default : TowerState,
         IGet<Input.Default>
         {
             public Default()

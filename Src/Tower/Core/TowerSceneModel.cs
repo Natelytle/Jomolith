@@ -59,7 +59,7 @@ public class TowerSceneModel
         SetParent(towerObjectModel.Id, parentId ?? RootId);
     }
 
-    public void RemovePart(Guid id)
+    public void RemoveTowerObject(Guid id)
     {
         if (id == RootId)
             throw new InvalidOperationException("Cannot remove root");

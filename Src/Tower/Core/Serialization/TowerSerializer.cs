@@ -87,4 +87,10 @@ public static class TowerSerializer
 
         return CreateTowerFromDto(towerDto);
     }
+
+    public static TowerMetadata? MetadataFromJson(string json)
+    {
+        TowerDto? towerDto = JsonSerializer.Deserialize<TowerDto>(json);
+        return towerDto?.Metadata;
+    }
 }

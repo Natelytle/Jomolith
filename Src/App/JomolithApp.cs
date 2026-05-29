@@ -34,7 +34,7 @@ public partial class JomolithApp : Control, IJomolithApp
 
     #region Nodes
 
-    [Node] public IMainMenu MainMenu { get; set; } = null!;
+    [Node] public IMenuScene MenuScene { get; set; } = null!;
     [Node] public ISubViewport GameplayPreview { get; set; } = null!;
     [Node] public IGameplay Gameplay { get; set; } = null!;
 
@@ -50,24 +50,7 @@ public partial class JomolithApp : Control, IJomolithApp
 
     public void OnResolved()
     {
-        MainMenu.PlayTower += OnPlayTower;
-        MainMenu.EditTower += OnEditTower;
-
         AppBinding = AppLogic.Bind();
-
-        AppBinding.Handle((in AppLogic.Output.ShowMainMenu _) =>
-        {
-            MainMenu.Show();
-        }).Handle((in AppLogic.Output.StartLoadingTower _) =>
-        {
-            AppLogic.Input(new AppLogic.Input.TowerLoaded());
-        }).Handle((in AppLogic.Output.EnterTower _) =>
-        {
-            MainMenu.Hide();
-            AppRepo.OnEnterTower();
-        }).Handle((in AppLogic.Output.UnloadCurrentTower _) =>
-        {
-        });
 
         this.Provide();
 
@@ -77,7 +60,4 @@ public partial class JomolithApp : Control, IJomolithApp
     public void OnReady()
     {
     }
-
-    public void OnPlayTower() => AppLogic.Input(new AppLogic.Input.PlayTower());
-    public void OnEditTower() { }
 }

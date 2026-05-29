@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Godot;
 using Jomolith.Tower.Core;
@@ -27,5 +28,28 @@ public static class TowerFileService
         string json = reader.ReadToEnd();
 
         return TowerSerializer.FromJson(json);
+    }
+
+    public static IEnumerable<TowerMetadata> ListAvailableTowers()
+    {
+        string towersPath = ProjectSettings.GlobalizePath("user://Towers/");
+
+        if (!Directory.Exists(towersPath))
+            yield break;
+
+        foreach (string file in Directory.EnumerateFiles(towersPath, "*.json"))
+        {
+            TowerMetadata? metadata = readMetadata(file);
+
+            if (metadata is not null)
+                yield return metadata.Value;
+        }
+    }
+
+    private static TowerMetadata? readMetadata(string physicalPath)
+    {
+        using StreamReader reader = new StreamReader(physicalPath);
+        string json = reader.ReadToEnd();
+        return TowerSerializer.MetadataFromJson(json);
     }
 }

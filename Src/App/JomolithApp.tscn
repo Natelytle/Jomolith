@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://gk2d2gqhahqn"]
 
 [ext_resource type="Script" uid="uid://ckihjk4nst56e" path="res://Src/App/JomolithApp.cs" id="1_17mmo"]
-[ext_resource type="PackedScene" uid="uid://b0rmucuy7pjux" path="res://Src/Menu/MainMenu.tscn" id="2_b8gc2"]
+[ext_resource type="PackedScene" uid="uid://dj4msmem5ll55" path="res://Src/Menu/MenuScene.tscn" id="3_h48k1"]
 [ext_resource type="PackedScene" uid="uid://byjdu7p1a5ffk" path="res://Src/Play/Gameplay/Gameplay.tscn" id="3_nfa63"]
 
 [node name="Control" type="Control" unique_id=236038828]
@@ -31,6 +31,6 @@ render_target_update_mode = 4
 [node name="Gameplay" parent="SubViewportContainer/GameplayPreview" unique_id=237947399 instance=ExtResource("3_nfa63")]
 unique_name_in_owner = true
 
-[node name="MainMenu" parent="." unique_id=933423278 instance=ExtResource("2_b8gc2")]
+[node name="MenuScene" parent="." unique_id=1357988896 instance=ExtResource("3_h48k1")]
 unique_name_in_owner = true
 layout_mode = 1

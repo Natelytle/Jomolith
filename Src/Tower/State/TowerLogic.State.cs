@@ -6,5 +6,5 @@ using Chickensoft.LogicBlocks;
 public partial class TowerLogic
 {
     [Meta]
-    public abstract partial record State : StateLogic<State>;
+    public abstract partial record TowerState : StateLogic<TowerState>;
 }
