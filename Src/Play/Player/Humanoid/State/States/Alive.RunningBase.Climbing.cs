@@ -17,6 +17,8 @@ public partial class PlayerLogic
             private bool onGround;
             private const float move_speed_multiplier = 0.7f;
 
+            protected override float MaxForce => onGround ? 741.6f : 143.0f;
+
             public Climbing()
             {
                 this.OnEnter(() =>
@@ -53,8 +55,13 @@ public partial class PlayerLogic
                 // Scale by movespeed
                 targetMovementVector *= settings.MoveSpeed * move_speed_multiplier * input.DesiredMovement.Length();
 
-                Vector3 correctionVector = targetMovementVector - new Vector3(player.LinearVelocity.X, player.LinearVelocity.Y, player.LinearVelocity.Z);
+                // Horizontal correction gets clamped by MaxForce
+                Vector3 correctionVector = -new Vector3(player.LinearVelocity.X, 0, player.LinearVelocity.Z);
                 correctionVector = correctionVector.Normalized() * Math.Min(MaxForce, Gain * correctionVector.Length());
+
+                // Vertical correction doesn't get clamped by MaxForce
+                correctionVector += Vector3.Up * Gain * (targetMovementVector.Y - player.LinearVelocity.Y);
+
                 Vector3 desiredForce = correctionVector * player.Mass;
 
                 float desiredTorque = ComputeTorque(targetMovementVector, playerData, player, playerRepo.IsPlayerRotationLocked.Value);
