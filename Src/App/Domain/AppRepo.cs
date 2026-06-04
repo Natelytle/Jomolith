@@ -1,5 +1,4 @@
 using System;
-using Jomolith.Utils.Towers;
 
 namespace Jomolith.App.Domain;
 
@@ -24,8 +23,6 @@ public class AppRepo : IAppRepo
     public event Action? MainMenuEntered;
     public event Action? TowerEntered;
     public event Action? TowerExited;
-
-    public WorkingTower Tower { get; private set; } = null!;
 
     private bool disposedValue;
 

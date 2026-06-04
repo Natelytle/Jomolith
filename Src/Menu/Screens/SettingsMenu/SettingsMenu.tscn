@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://c0slx4vqpnlfr"]
+
+[ext_resource type="Script" uid="uid://dn5fpbv1uy1sk" path="res://Src/Menu/Screens/SettingsMenu/SettingsMenu.cs" id="1_1nd18"]
+
+[node name="SettingsMenu" type="Control" unique_id=1197912976]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1nd18")

@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://dj4msmem5ll55"]
+
+[ext_resource type="Script" uid="uid://bp8nk3t3xs4x5" path="res://Src/Menu/MenuScene.cs" id="1_n73ek"]
+[ext_resource type="PackedScene" uid="uid://b0rmucuy7pjux" path="res://Src/Menu/Screens/MainMenu/MainMenu.tscn" id="2_kgg6g"]
+[ext_resource type="PackedScene" uid="uid://cuytnx1y7hjei" path="res://Src/Menu/Screens/TowerSelect/TowerSelect.tscn" id="3_koxgj"]
+[ext_resource type="PackedScene" uid="uid://c0slx4vqpnlfr" path="res://Src/Menu/Screens/SettingsMenu/SettingsMenu.tscn" id="4_q1q5f"]
+
+[node name="MenuScene" type="Control" unique_id=1357988896]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_n73ek")
+
+[node name="MainMenu" parent="." unique_id=933423278 instance=ExtResource("2_kgg6g")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="TowerSelect" parent="." unique_id=1821749758 instance=ExtResource("3_koxgj")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="SettingsMenu" parent="." unique_id=1197912976 instance=ExtResource("4_q1q5f")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1

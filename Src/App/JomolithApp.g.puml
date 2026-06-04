@@ -1,0 +1,323 @@
+@startuml
+
+package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
+    class JomolithApp  {
+        [[../../Src/App/JomolithApp.cs ScriptFile]]
+        [Provisions]
+        [[../../Src/App/JomolithApp.cs:22 IAppRepo]] - [[../../Src/App/Domain/AppRepo.cs Script]]
+        --
+        [Nodes]
+        Gameplay - [[../../Src/Play/Gameplay/Gameplay.cs Script]]
+        MenuScene - [[../../Src/Menu/MenuScene.cs Script]]
+        [Properties]
+        [[../../Src/App/JomolithApp.cs:31 AppBinding]]
+        [[../../Src/App/JomolithApp.cs:29 AppLogic]] - [[../../Src/App/State/AppLogic.AppState.cs Script]]
+        [[../../Src/App/JomolithApp.cs:28 AppRepo]] - [[../../Src/App/Domain/AppRepo.cs Script]]
+        [[../../Src/App/JomolithApp.cs:39 Gameplay]] - [[../../Src/Play/Gameplay/Gameplay.cs Script]]
+        [[../../Src/App/JomolithApp.cs:38 GameplayPreview]]
+        [[../../Src/App/JomolithApp.cs:37 MenuScene]] - [[../../Src/Menu/MenuScene.cs Script]]
+        --
+        [Methods]
+        [[../../Src/App/JomolithApp.cs:18 _Notification()]]
+        [[../../Src/App/JomolithApp.cs:60 OnReady()]]
+        [[../../Src/App/JomolithApp.cs:51 OnResolved()]]
+        [[../../Src/App/JomolithApp.cs:43 Setup()]]
+    }
+    package Gameplay-Scene [[../../Src/Play/Gameplay/Gameplay.tscn]] {
+        class Gameplay  {
+            [[../../Src/Play/Gameplay/Gameplay.cs ScriptFile]]
+            [Dependencies]
+            [[../../Src/Play/Gameplay/Gameplay.cs:27 AppRepo]] - [[../../Src/App/Domain/AppRepo.cs Script]]
+            [Provisions]
+            [[../../Src/Play/Gameplay/Gameplay.cs:33 IGameplayRepo]] - [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs Script]]
+            [[../../Src/Play/Gameplay/Gameplay.cs:34 ITowerRepo]] - [[../../Src/Tower/Domain/TowerRepo.cs Script]]
+            --
+            [Interface Properties]
+            [[../../Src/Play/Gameplay/Gameplay.cs:42 GameplayLogic]] - [[../../Src/Play/Gameplay/State/GameplayLogic.Output.cs Script]]
+            [Nodes]
+            Player - [[../../Src/Play/Player/Player.cs Script]]
+            [Properties]
+            [[../../Src/Play/Gameplay/Gameplay.cs:44 GameplayBinding]]
+            [[../../Src/Play/Gameplay/Gameplay.cs:40 GameplayRepo]] - [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs Script]]
+            [[../../Src/Play/Gameplay/Gameplay.cs:54 Player]] - [[../../Src/Play/Player/Player.cs Script]]
+            [[../../Src/Play/Gameplay/Gameplay.cs:52 Tower]] - [[../../Src/Tower/Tower.cs Script]]
+            [[../../Src/Play/Gameplay/Gameplay.cs:46 TowerRepo]] - [[../../Src/Tower/Domain/TowerRepo.cs Script]]
+            --
+            [Methods]
+            [[../../Src/Play/Gameplay/Gameplay.cs:23 _Notification()]]
+            [[../../Src/Play/Gameplay/Gameplay.cs:68 OnResolved()]]
+            [[../../Src/Play/Gameplay/Gameplay.cs:87 setPauseMode()]]
+            [[../../Src/Play/Gameplay/Gameplay.cs:58 Setup()]]
+        }
+        package Player-Scene [[../../Src/Play/Player/Player.tscn]] {
+            class Player  {
+                [[../../Src/Play/Player/Player.cs ScriptFile]]
+                [Provisions]
+                [[../../Src/Play/Player/Player.cs:20 IPlayerRepo]] - [[../../Src/Play/Player/Domain/PlayerRepo.cs Script]]
+                --
+                [Nodes]
+                Humanoid - [[../../Src/Play/Player/Humanoid/Humanoid.cs Script]]
+                PlayerCamera - [[../../Src/Play/Player/Camera/Camera.cs Script]]
+                [Properties]
+                [[../../Src/Play/Player/Player.cs:32 Humanoid]] - [[../../Src/Play/Player/Humanoid/Humanoid.cs Script]]
+                [[../../Src/Play/Player/Player.cs:34 PlayerCamera]] - [[../../Src/Play/Player/Camera/Camera.cs Script]]
+                [[../../Src/Play/Player/Player.cs:26 PlayerRepo]] - [[../../Src/Play/Player/Domain/PlayerRepo.cs Script]]
+                --
+                [Methods]
+                [[../../Src/Play/Player/Player.cs:16 _Notification()]]
+                [[../../Src/Play/Player/Player.cs:50 OnPhysicsProcess()]]
+                [[../../Src/Play/Player/Player.cs:48 OnReady()]]
+                [[../../Src/Play/Player/Player.cs:43 OnResolved()]]
+                [[../../Src/Play/Player/Player.cs:38 Setup()]]
+            }
+            package Humanoid-Scene [[../../Src/Play/Player/Humanoid/Humanoid.tscn]] {
+                class Humanoid  {
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs ScriptFile]]
+                    [Dependencies]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:37 PlayerRepo]] - [[../../Src/Play/Player/Domain/PlayerRepo.cs Script]]
+                    [Provisions]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:43 IPlayerLogic]] - [[../../Src/Play/Player/Humanoid/State/States/Alive.RunningBase.Running.cs Script]]
+                    --
+                    [Interface Properties]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:79 GlobalRootPosition]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:49 PlayerLogic]] - [[../../Src/Play/Player/Humanoid/State/States/Alive.RunningBase.Running.cs Script]]
+                    [Nodes]
+                    PlayerModel - [[../../Src/Play/Player/Humanoid/PlayerModel.cs Script]]
+                    [Properties]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:67 ClimbRaycast]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:71 HeadCollisionShape]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:69 HeadRaycast]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:65 LegRaycast]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:80 LocalRootPosition]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:55 PlayerBinding]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:51 PlayerData]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:61 PlayerModel]] - [[../../Src/Play/Player/Humanoid/PlayerModel.cs Script]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:63 RootPart]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:53 Settings]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:73 TorsoCollisionShape]]
+                    --
+                    [Interface Methods]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:166 GetFloorData()]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:142 GetGlobalInputVector()]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:155 GetNoclipInputVector()]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:249 IsClimbing()]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:127 PhysicsTick()]]
+                    [Methods]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:33 _Notification()]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:100 OnResolved()]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:84 Setup()]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:301 updateHeadTransform()]]
+                    [[../../Src/Play/Player/Humanoid/Humanoid.cs:306 updateTorsoTransform()]]
+                }
+                package PlayerModel-Scene [[../../Src/Play/Player/Humanoid/PlayerModel.tscn]] {
+                    class PlayerModel  {
+                        [[../../Src/Play/Player/Humanoid/PlayerModel.cs ScriptFile]]
+                        
+                        --
+                        [Dependencies]
+                        [[../../Src/Play/Player/Humanoid/PlayerModel.cs:32 PlayerLogic]] - [[../../Src/Play/Player/Humanoid/State/States/Alive.RunningBase.Running.cs Script]]
+                        --
+                        [Nodes]
+                        Avatar - [[../../Src/Play/Player/Humanoid/Visuals/Avatar/Avatar.tscn Script]]
+                        [Properties]
+                        [[../../Src/Play/Player/Humanoid/PlayerModel.cs:57 AnimationStateMachine]]
+                        [[../../Src/Play/Player/Humanoid/PlayerModel.cs:56 AnimationTree]]
+                        [[../../Src/Play/Player/Humanoid/PlayerModel.cs:59 Head]]
+                        [[../../Src/Play/Player/Humanoid/PlayerModel.cs:50 Materials]] - [[../../Src/Play/Player/Humanoid/Utils/PlayerModelMaterials.cs Script]]
+                        [[../../Src/Play/Player/Humanoid/PlayerModel.cs:48 PlayerBinding]]
+                        [[../../Src/Play/Player/Humanoid/PlayerModel.cs:60 Torso]]
+                        --
+                        [Methods]
+                        [[../../Src/Play/Player/Humanoid/PlayerModel.cs:26 _Notification()]]
+                        [[../../Src/Play/Player/Humanoid/PlayerModel.cs:116 OnPhysicsProcess()]]
+                        [[../../Src/Play/Player/Humanoid/PlayerModel.cs:65 OnReady()]]
+                        [[../../Src/Play/Player/Humanoid/PlayerModel.cs:79 OnResolved()]]
+                    }
+                    class PlayerModelMaterials  {
+                        [[../../Src/Play/Player/Humanoid/Utils/PlayerModelMaterials.cs ScriptFile]]
+                        [Constructors]
+                        [[../../Src/Play/Player/Humanoid/Utils/PlayerModelMaterials.cs:10 PlayerModelMaterials]]([[../../Src/Play/Player/Humanoid/PlayerModel.cs IPlayerModel]] model)
+                        --
+                        [Methods]
+                        [[../../Src/Play/Player/Humanoid/Utils/PlayerModelMaterials.cs:21 duplicateMaterials()]]
+                        [[../../Src/Play/Player/Humanoid/Utils/PlayerModelMaterials.cs:15 SetOpacity()]]
+                    }
+                    PlayerModel::PlayerModelMaterials ---> PlayerModelMaterials
+                }
+                Humanoid::PlayerModel ---> PlayerModel
+            }
+            class Camera  {
+                [[../../Src/Play/Player/Camera/Camera.cs ScriptFile]]
+                [Dependencies]
+                [[../../Src/Play/Player/Camera/Camera.cs:40 PlayerRepo]] - [[../../Src/Play/Player/Domain/PlayerRepo.cs Script]]
+                [[../../Src/Play/Player/Camera/Camera.cs:42 GameplayRepo]] - [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs Script]]
+                --
+                [Interface Properties]
+                [[../../Src/Play/Player/Camera/Camera.cs:78 CameraDistance]]
+                [[../../Src/Play/Player/Camera/Camera.cs:48 CameraLogic]] - [[../../Src/Play/Player/Camera/State/CameraLogic.Input.cs Script]]
+                [[../../Src/Play/Player/Camera/Camera.cs:74 HorizontalRotation]]
+                [[../../Src/Play/Player/Camera/Camera.cs:70 OffsetPosition]]
+                [[../../Src/Play/Player/Camera/Camera.cs:76 SpringArmLength]]
+                [[../../Src/Play/Player/Camera/Camera.cs:72 VerticalRotation]]
+                [Properties]
+                [[../../Src/Play/Player/Camera/Camera.cs:64 Camera3D]]
+                [[../../Src/Play/Player/Camera/Camera.cs:54 CameraBinding]]
+                [[../../Src/Play/Player/Camera/Camera.cs:50 CameraData]]
+                [[../../Src/Play/Player/Camera/Camera.cs:60 OffsetNode]]
+                [[../../Src/Play/Player/Camera/Camera.cs:52 Settings]]
+                [[../../Src/Play/Player/Camera/Camera.cs:62 SpringArm3D]]
+                --
+                [Interface Methods]
+                [[../../Src/Play/Player/Camera/Camera.cs:145 PhysicsTick()]]
+                [[../../Src/Play/Player/Camera/Camera.cs:150 PostPhysicsTick()]]
+                [Methods]
+                [[../../Src/Play/Player/Camera/Camera.cs:36 _Notification()]]
+                [[../../Src/Play/Player/Camera/Camera.cs:155 _UnhandledInput()]]
+                [[../../Src/Play/Player/Camera/Camera.cs:104 OnResolved()]]
+                [[../../Src/Play/Player/Camera/Camera.cs:82 Setup()]]
+            }
+            class PlayerRepo  {
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs ScriptFile]]
+                [Constructors]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:53 PlayerRepo]]()
+                [Interface Properties]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:48 AvatarOpacity]]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:45 CameraBasis]]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:36 IsPlayerRotationLocked]]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:42 PlayerBasis]]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:39 PlayerGlobalPosition]]
+                --
+                [Interface Methods]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:82 SetAvatarOpacity()]]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:77 SetCameraBasis()]]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:62 SetIsPlayerRotationLocked()]]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:72 SetPlayerBasis()]]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:67 SetPlayerGlobalPosition()]]
+                [Methods]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:89 Dispose()]]
+                [[../../Src/Play/Player/Domain/PlayerRepo.cs:107 Dispose()]]
+            }
+            Player::Humanoid ---> Humanoid
+            Player::PlayerCamera ---> Camera
+            Player::PlayerRepo ---> PlayerRepo
+        }
+        class GameplayRepo  {
+            [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs ScriptFile]]
+            [Constructors]
+            [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs:45 GameplayRepo]]()
+            [Interface Properties]
+            [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs:37 IsMouseCaptured]]
+            [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs:40 IsPaused]]
+            --
+            [Interface Methods]
+            [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs:56 Pause()]]
+            [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs:61 Resume()]]
+            [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs:51 SetIsMouseCaptured()]]
+            [Methods]
+            [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs:68 Dispose()]]
+            [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs:83 Dispose()]]
+        }
+        class Tower  {
+            [[../../Src/Tower/Tower.cs ScriptFile]]
+            [Dependencies]
+            [[../../Src/Tower/Tower.cs:27 TowerRepo]] - [[../../Src/Tower/Domain/TowerRepo.cs Script]]
+            --
+            [Properties]
+            [[../../Src/Tower/Tower.cs:35 TowerBinding]]
+            [[../../Src/Tower/Tower.cs:33 TowerLogic]] - [[../../Src/Tower/State/TowerLogic.Output.cs Script]]
+            --
+            [Methods]
+            [[../../Src/Tower/Tower.cs:21 _Notification()]]
+            [[../../Src/Tower/Tower.cs:48 OnResolved()]]
+            [[../../Src/Tower/Tower.cs:41 Setup()]]
+        }
+        class TowerRepo  {
+            [[../../Src/Tower/Domain/TowerRepo.cs ScriptFile]]
+            [Constructors]
+            [[../../Src/Tower/Domain/TowerRepo.cs:42 TowerRepo]]()
+            [Interface Properties]
+            [[../../Src/Tower/Domain/TowerRepo.cs:32 CurrentTower]]
+            --
+            [Methods]
+            [[../../Src/Tower/Domain/TowerRepo.cs:51 AddObject()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:99 Dispose()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:113 Dispose()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:47 LoadTower()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:62 RemoveObject()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:86 ReparentObject()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:49 UnloadTower()]]
+            [[../../Src/Tower/Domain/TowerRepo.cs:73 UpdateObject()]]
+        }
+        Gameplay::Player ---> Player
+        Gameplay::GameplayRepo ---> GameplayRepo
+        Gameplay::Tower ---> Tower
+        Gameplay::TowerRepo ---> TowerRepo
+    }
+    package MenuScene-Scene [[../../Src/Menu/MenuScene.tscn]] {
+        class MenuScene  {
+            [[../../Src/Menu/MenuScene.cs ScriptFile]]
+            [Dependencies]
+            [[../../Src/Menu/MenuScene.cs:31 AppRepo]] - [[../../Src/App/Domain/AppRepo.cs Script]]
+            [Provisions]
+            [[../../Src/Menu/MenuScene.cs:25 IMenuRepo]] - [[../../Src/Menu/Domain/MenuRepo.cs Script]]
+            --
+            [Nodes]
+            MainMenu - [[../../Src/Menu/Screens/MainMenu/MainMenu.tscn Script]]
+            TowerSelect - [[../../Src/Menu/Screens/TowerSelect/TowerSelect.cs Script]]
+            SettingsMenu - [[../../Src/Menu/Screens/SettingsMenu/SettingsMenu.cs Script]]
+            [Properties]
+            [[../../Src/Menu/MenuScene.cs:45 MainMenu]] - [[../../Src/Menu/Screens/MainMenu/MainMenu.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:38 MenuBinding]]
+            [[../../Src/Menu/MenuScene.cs:37 MenuLogic]] - [[../../Src/Menu/State/MenuLogic.Input.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:39 MenuRepo]] - [[../../Src/Menu/Domain/MenuRepo.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:47 SettingsMenu]] - [[../../Src/Menu/Screens/SettingsMenu/SettingsMenu.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:46 TowerSelect]] - [[../../Src/Menu/Screens/TowerSelect/TowerSelect.cs Script]]
+            --
+            [Methods]
+            [[../../Src/Menu/MenuScene.cs:21 _Notification()]]
+            [[../../Src/Menu/MenuScene.cs:90 hideAllMenus()]]
+            [[../../Src/Menu/MenuScene.cs:60 OnResolved()]]
+            [[../../Src/Menu/MenuScene.cs:51 Setup()]]
+        }
+        class MainMenu  {
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs ScriptFile]]
+            [Properties]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:15 EditButton]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:14 PlayButton]]
+            --
+            [Methods]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:23 _Ready()]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:30 OnEditButtonPressed()]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:29 OnPlayButtonPressed()]]
+        }
+        class MenuRepo  {
+            [[../../Src/Menu/Domain/MenuRepo.cs ScriptFile]]
+            [Constructors]
+            [[../../Src/Menu/Domain/MenuRepo.cs:22 MenuRepo]]()
+            [Interface Properties]
+            [[../../Src/Menu/Domain/MenuRepo.cs:16 CurrentScreen]]
+            --
+            [Interface Methods]
+            [[../../Src/Menu/Domain/MenuRepo.cs:27 SetCurrentScreen()]]
+            [Methods]
+            [[../../Src/Menu/Domain/MenuRepo.cs:31 Dispose()]]
+            [[../../Src/Menu/Domain/MenuRepo.cs:44 Dispose()]]
+        }
+        MenuScene::MainMenu ---> MainMenu
+        MenuScene::MenuRepo ---> MenuRepo
+    }
+    class AppRepo  {
+        [[../../Src/App/Domain/AppRepo.cs ScriptFile]]
+        [Interface Methods]
+        [[../../Src/App/Domain/AppRepo.cs:34 OnEnterTower()]]
+        [[../../Src/App/Domain/AppRepo.cs:29 OnMainMenuEntered()]]
+        [Methods]
+        [[../../Src/App/Domain/AppRepo.cs:41 Dispose()]]
+        [[../../Src/App/Domain/AppRepo.cs:56 Dispose()]]
+    }
+    JomolithApp::Gameplay ---> Gameplay
+    JomolithApp::MenuScene ---> MenuScene
+    JomolithApp::AppRepo ---> AppRepo
+}
+
+@enduml

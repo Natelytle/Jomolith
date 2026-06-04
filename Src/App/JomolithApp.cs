@@ -1,10 +1,10 @@
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
+using Chickensoft.UMLGenerator;
 using Godot;
 using Jomolith.App.Domain;
 using Jomolith.App.State;
-using Jomolith.Core;
 using Jomolith.Menu;
 using Jomolith.Play.Gameplay;
 
@@ -12,7 +12,7 @@ namespace Jomolith.App;
 
 public interface IJomolithApp : IControl, IProvide<IAppRepo>;
 
-[Meta(typeof(IAutoNode))]
+[Meta(typeof(IAutoNode)), ClassDiagram]
 public partial class JomolithApp : Control, IJomolithApp
 {
     public override void _Notification(int what) => this.Notify(what);
@@ -34,7 +34,7 @@ public partial class JomolithApp : Control, IJomolithApp
 
     #region Nodes
 
-    [Node] public IMainMenu MainMenu { get; set; } = null!;
+    [Node] public IMenuScene MenuScene { get; set; } = null!;
     [Node] public ISubViewport GameplayPreview { get; set; } = null!;
     [Node] public IGameplay Gameplay { get; set; } = null!;
 
@@ -50,27 +50,7 @@ public partial class JomolithApp : Control, IJomolithApp
 
     public void OnResolved()
     {
-        MainMenu.PlayTower += OnPlayTower;
-        MainMenu.EditTower += OnEditTower;
-
         AppBinding = AppLogic.Bind();
-
-        AppBinding.Handle((in AppLogic.Output.ShowMainMenu _) =>
-        {
-            MainMenu.Show();
-        }).Handle((in AppLogic.Output.StartLoadingTower _) =>
-        {
-            ITowerModel model = TowerDeserializer.LoadFromFile("ToBF.json")!;
-
-            Gameplay.TowerLoaded += OnTowerLoaded;
-            Gameplay.LoadTower(model);
-        }).Handle((in AppLogic.Output.EnterTower _) =>
-        {
-            MainMenu.Hide();
-            AppRepo.OnEnterTower();
-        }).Handle((in AppLogic.Output.UnloadCurrentTower _) =>
-        {
-        });
 
         this.Provide();
 
@@ -79,14 +59,5 @@ public partial class JomolithApp : Control, IJomolithApp
 
     public void OnReady()
     {
-    }
-
-    public void OnPlayTower() => AppLogic.Input(new AppLogic.Input.PlayTower());
-    public void OnEditTower() { }
-
-    public void OnTowerLoaded()
-    {
-        Gameplay.TowerLoaded -= OnTowerLoaded;
-        AppLogic.Input(new AppLogic.Input.TowerLoaded());
     }
 }
