@@ -19,10 +19,6 @@ public partial record AppState
                 Output(new Outputs.EnterTower());
             });
             this.OnExit(() => Output(new Outputs.UnloadCurrentTower()));
-
-            // TODO: Fix
-            // OnAttach(() => Get<IAppRepo>().TowerExited += OnTowerExited);
-            // OnDetach(() => Get<IAppRepo>().TowerExited -= OnTowerExited);
         }
 
         public void OnTowerExited()

@@ -3,15 +3,12 @@
 package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
     class JomolithApp  {
         [[../../Src/App/JomolithApp.cs ScriptFile]]
-        [Provisions]
-        [[../../Src/App/JomolithApp.cs:23 IAppRepo]] - [[../../Src/App/Domain/AppRepo.cs Script]]
-        --
         [Nodes]
         Gameplay - [[../../Src/Play/Gameplay/Gameplay.cs Script]]
         MenuScene - [[../../Src/Menu/MenuScene.cs Script]]
         [Properties]
         [[../../Src/App/JomolithApp.cs:30 AppLogic]] - [[../../Src/App/State/AppLogic.Outputs.cs Script]]
-        [[../../Src/App/JomolithApp.cs:29 AppRepo]] - [[../../Src/App/Domain/AppRepo.cs Script]]
+        [[../../Src/App/JomolithApp.cs:29 AppRepo]]
         [[../../Src/App/JomolithApp.cs:38 Gameplay]] - [[../../Src/Play/Gameplay/Gameplay.cs Script]]
         [[../../Src/App/JomolithApp.cs:37 GameplayPreview]]
         [[../../Src/App/JomolithApp.cs:36 MenuScene]] - [[../../Src/Menu/MenuScene.cs Script]]
@@ -25,11 +22,8 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
     package Gameplay-Scene [[../../Src/Play/Gameplay/Gameplay.tscn]] {
         class Gameplay  {
             [[../../Src/Play/Gameplay/Gameplay.cs ScriptFile]]
-            [Dependencies]
-            [[../../Src/Play/Gameplay/Gameplay.cs:28 AppRepo]] - [[../../Src/App/Domain/AppRepo.cs Script]]
             [Provisions]
             [[../../Src/Play/Gameplay/Gameplay.cs:34 IGameplayRepo]] - [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs Script]]
-            [[../../Src/Play/Gameplay/Gameplay.cs:35 ITowerRepo]] - [[../../Src/Tower/Domain/TowerRepo.cs Script]]
             --
             [Interface Properties]
             [[../../Src/Play/Gameplay/Gameplay.cs:43 GameplayLogic]] - [[../../Src/Play/Gameplay/State/GameplayLogic.Outputs.cs Script]]
@@ -39,7 +33,7 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
             [[../../Src/Play/Gameplay/Gameplay.cs:41 GameplayRepo]] - [[../../Src/Play/Gameplay/Domain/GameplayRepo.cs Script]]
             [[../../Src/Play/Gameplay/Gameplay.cs:53 Player]] - [[../../Src/Play/Player/Player.cs Script]]
             [[../../Src/Play/Gameplay/Gameplay.cs:51 Tower]] - [[../../Src/Tower/Tower.cs Script]]
-            [[../../Src/Play/Gameplay/Gameplay.cs:45 TowerRepo]] - [[../../Src/Tower/Domain/TowerRepo.cs Script]]
+            [[../../Src/Play/Gameplay/Gameplay.cs:45 TowerRepo]]
             --
             [Methods]
             [[../../Src/Play/Gameplay/Gameplay.cs:24 _Notification()]]
@@ -214,9 +208,6 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
         }
         class Tower  {
             [[../../Src/Tower/Tower.cs ScriptFile]]
-            [Dependencies]
-            [[../../Src/Tower/Tower.cs:29 TowerRepo]] - [[../../Src/Tower/Domain/TowerRepo.cs Script]]
-            --
             [Properties]
             [[../../Src/Tower/Tower.cs:35 TowerLogic]] - [[../../Src/Tower/State/TowerLogic.Outputs.cs Script]]
             --
@@ -225,33 +216,13 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
             [[../../Src/Tower/Tower.cs:48 OnResolved()]]
             [[../../Src/Tower/Tower.cs:41 Setup()]]
         }
-        class TowerRepo  {
-            [[../../Src/Tower/Domain/TowerRepo.cs ScriptFile]]
-            [Constructors]
-            [[../../Src/Tower/Domain/TowerRepo.cs:42 TowerRepo]]()
-            [Interface Properties]
-            [[../../Src/Tower/Domain/TowerRepo.cs:32 CurrentTower]]
-            --
-            [Methods]
-            [[../../Src/Tower/Domain/TowerRepo.cs:51 AddObject()]]
-            [[../../Src/Tower/Domain/TowerRepo.cs:99 Dispose()]]
-            [[../../Src/Tower/Domain/TowerRepo.cs:113 Dispose()]]
-            [[../../Src/Tower/Domain/TowerRepo.cs:47 LoadTower()]]
-            [[../../Src/Tower/Domain/TowerRepo.cs:62 RemoveObject()]]
-            [[../../Src/Tower/Domain/TowerRepo.cs:86 ReparentObject()]]
-            [[../../Src/Tower/Domain/TowerRepo.cs:49 UnloadTower()]]
-            [[../../Src/Tower/Domain/TowerRepo.cs:73 UpdateObject()]]
-        }
         Gameplay::Player ---> Player
         Gameplay::GameplayRepo ---> GameplayRepo
         Gameplay::Tower ---> Tower
-        Gameplay::TowerRepo ---> TowerRepo
     }
     package MenuScene-Scene [[../../Src/Menu/MenuScene.tscn]] {
         class MenuScene  {
             [[../../Src/Menu/MenuScene.cs ScriptFile]]
-            [Dependencies]
-            [[../../Src/Menu/MenuScene.cs:32 AppRepo]] - [[../../Src/App/Domain/AppRepo.cs Script]]
             [Provisions]
             [[../../Src/Menu/MenuScene.cs:26 IMenuRepo]] - [[../../Src/Menu/Domain/MenuRepo.cs Script]]
             --
@@ -299,18 +270,8 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
         MenuScene::MainMenu ---> MainMenu
         MenuScene::MenuRepo ---> MenuRepo
     }
-    class AppRepo  {
-        [[../../Src/App/Domain/AppRepo.cs ScriptFile]]
-        [Interface Methods]
-        [[../../Src/App/Domain/AppRepo.cs:34 OnEnterTower()]]
-        [[../../Src/App/Domain/AppRepo.cs:29 OnMainMenuEntered()]]
-        [Methods]
-        [[../../Src/App/Domain/AppRepo.cs:41 Dispose()]]
-        [[../../Src/App/Domain/AppRepo.cs:56 Dispose()]]
-    }
     JomolithApp::Gameplay ---> Gameplay
     JomolithApp::MenuScene ---> MenuScene
-    JomolithApp::AppRepo ---> AppRepo
 }
 
 @enduml

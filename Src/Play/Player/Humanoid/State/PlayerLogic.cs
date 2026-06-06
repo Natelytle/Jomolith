@@ -1,7 +1,9 @@
+using System;
+using System.Collections.Generic;
 using Chickensoft.Introspection;
-using Chickensoft.LogicBlocks;
 using Chickensoft.LogicBlocks.Auto;
 using Chickensoft.Sync.Primitives;
+using Jomolith.App.Domain;
 using Jomolith.Play.Player.Domain;
 using Jomolith.Play.Player.Humanoid.State.States;
 
@@ -30,5 +32,11 @@ public partial class PlayerLogic : AutoBlock, IPlayerLogic
     public override void OnStop()
     {
         opacityBinding?.Dispose();
+    }
+
+    public override IEnumerable<IDisposable> OnStartSubscriptions()
+    {
+        yield return Get<IAppRepo>().AutoChannel.Bind()
+            .On((in IAppRepo.TowerEntered _) => (State as PlayerState.Disabled)?.OnTowerEntered());
     }
 }

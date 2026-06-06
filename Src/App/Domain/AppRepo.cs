@@ -1,4 +1,5 @@
 using System;
+using Chickensoft.Sync.Primitives;
 
 namespace Jomolith.App.Domain;
 
@@ -7,9 +8,11 @@ namespace Jomolith.App.Domain;
 /// </summary>
 public interface IAppRepo : IDisposable
 {
-    public event Action? MainMenuEntered;
-    public event Action? TowerEntered;
-    public event Action? TowerExited;
+    IAutoChannel AutoChannel { get; }
+
+    readonly record struct MainMenuEntered;
+    readonly record struct TowerEntered;
+    readonly record struct TowerExited;
 
     public void OnMainMenuEntered();
     public void OnEnterTower();
@@ -20,21 +23,14 @@ public interface IAppRepo : IDisposable
 /// </summary>
 public class AppRepo : IAppRepo
 {
-    public event Action? MainMenuEntered;
-    public event Action? TowerEntered;
-    public event Action? TowerExited;
+    public IAutoChannel AutoChannel => autoChannel;
+    private readonly AutoChannel autoChannel = new AutoChannel();
 
     private bool disposedValue;
 
-    public void OnMainMenuEntered()
-    {
-        MainMenuEntered?.Invoke();
-    }
+    public void OnMainMenuEntered() => autoChannel.Send(new IAppRepo.MainMenuEntered());
 
-    public void OnEnterTower()
-    {
-        TowerEntered?.Invoke();
-    }
+    public void OnEnterTower() => autoChannel.Send(new IAppRepo.TowerEntered());
 
     #region Internals
 
@@ -45,8 +41,7 @@ public class AppRepo : IAppRepo
             if (disposing)
             {
                 // Dispose managed objects.
-                MainMenuEntered = null;
-                TowerEntered = null;
+                AutoChannel.Dispose();
             }
 
             disposedValue = true;

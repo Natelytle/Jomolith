@@ -8,12 +8,13 @@ namespace Jomolith.Tower.Domain;
 
 public interface ITowerRepo
 {
+    IAutoChannel AutoChannel { get; }
     IAutoValue<ITowerModel?> CurrentTower { get; }
 
-    event Action<TowerObjectModel>? ObjectAdded;
-    event Action<Guid>? ObjectRemoved;
-    event Action<TowerObjectModel>? ObjectChanged;
-    event Action<Guid, Guid> ObjectReparented;
+    readonly record struct ObjectAdded(TowerObjectModel Model);
+    readonly record struct ObjectRemoved(Guid Id);
+    readonly record struct ObjectChanged(TowerObjectModel Model);
+    readonly record struct ObjectReparented(Guid Id, Guid NewParent);
 }
 
 public interface IEditableTowerRepo : ITowerRepo
@@ -29,20 +30,13 @@ public interface IEditableTowerRepo : ITowerRepo
 
 public class TowerRepo : IEditableTowerRepo
 {
-    public IAutoValue<ITowerModel?> CurrentTower => currentTower;
-    private readonly AutoValue<ITowerModel?> currentTower;
+    public IAutoChannel AutoChannel => autoChannel;
+    private readonly AutoChannel autoChannel = new AutoChannel();
 
-    public event Action<TowerObjectModel>? ObjectAdded;
-    public event Action<Guid>? ObjectRemoved;
-    public event Action<TowerObjectModel>? ObjectChanged;
-    public event Action<Guid, Guid>? ObjectReparented;
+    public IAutoValue<ITowerModel?> CurrentTower => currentTower;
+    private readonly AutoValue<ITowerModel?> currentTower = new AutoValue<ITowerModel?>(null);
 
     private bool disposedValue;
-
-    public TowerRepo()
-    {
-        currentTower = new AutoValue<ITowerModel?>(null);
-    }
 
     public void LoadTower(ITowerModel towerModel) => currentTower.Value = towerModel;
 
@@ -56,7 +50,7 @@ public class TowerRepo : IEditableTowerRepo
 
         scene.AddTowerObject(model, parentId);
 
-        ObjectAdded?.Invoke(model);
+        autoChannel.Send(new ITowerRepo.ObjectAdded(model));
     }
 
     public void RemoveObject(Guid id)
@@ -67,7 +61,7 @@ public class TowerRepo : IEditableTowerRepo
 
         scene.RemoveTowerObject(id);
 
-        ObjectRemoved?.Invoke(id);
+        autoChannel.Send(new ITowerRepo.ObjectRemoved(id));
     }
 
     public void UpdateObject(TowerObjectModel model)
@@ -80,7 +74,7 @@ public class TowerRepo : IEditableTowerRepo
         scene.RemoveTowerObject(model.Id);
         scene.AddTowerObject(model, parentId);
 
-        ObjectChanged?.Invoke(model);
+        autoChannel.Send(new ITowerRepo.ObjectChanged(model));
     }
 
     public void ReparentObject(Guid id, Guid newParentId)
@@ -91,7 +85,7 @@ public class TowerRepo : IEditableTowerRepo
 
         scene.SetParent(id, newParentId);
 
-        ObjectReparented?.Invoke(id, newParentId);
+        autoChannel.Send(new ITowerRepo.ObjectReparented(id, newParentId));
     }
 
     #region Internals
@@ -103,6 +97,7 @@ public class TowerRepo : IEditableTowerRepo
             if (disposing)
             {
                 // Dispose managed objects.
+                autoChannel.Dispose();
                 currentTower.Dispose();
             }
 

@@ -17,10 +17,6 @@ public partial record PlayerState
                 Output(new Outputs.SetFrozen(true));
                 Output(new Outputs.Animations.Disabled());
             });
-
-            // TODO: Fix these eventually
-            // OnAttach(() => Get<IAppRepo>().TowerEntered += OnTowerEntered);
-            // OnDetach(() => Get<IAppRepo>().TowerEntered -= OnTowerEntered);
         }
 
         public Type On(in Inputs.Enable input) => To<Idle>();
