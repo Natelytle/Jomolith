@@ -150,7 +150,7 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
                 --
                 [Interface Properties]
                 [[../../Src/Play/Player/Camera/Camera.cs:77 CameraDistance]]
-                [[../../Src/Play/Player/Camera/Camera.cs:49 CameraLogic]] - [[../../Src/Play/Player/Camera/State/CameraLogic.Outputs.cs Script]]
+                [[../../Src/Play/Player/Camera/Camera.cs:49 CameraLogic]] - [[../../Src/Play/Player/Camera/State/CameraLogic.CameraSettings.cs Script]]
                 [[../../Src/Play/Player/Camera/Camera.cs:73 HorizontalRotation]]
                 [[../../Src/Play/Player/Camera/Camera.cs:69 OffsetPosition]]
                 [[../../Src/Play/Player/Camera/Camera.cs:75 SpringArmLength]]
@@ -218,7 +218,7 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
             [[../../Src/Tower/Tower.cs:29 TowerRepo]] - [[../../Src/Tower/Domain/TowerRepo.cs Script]]
             --
             [Properties]
-            [[../../Src/Tower/Tower.cs:35 TowerLogic]] - [[../../Src/Tower/State/TowerLogic.Settings.cs Script]]
+            [[../../Src/Tower/Tower.cs:35 TowerLogic]] - [[../../Src/Tower/State/TowerLogic.Outputs.cs Script]]
             --
             [Methods]
             [[../../Src/Tower/Tower.cs:23 _Notification()]]
