@@ -1,34 +1,32 @@
+using System;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
-using Jomolith.Play.Player.Domain;
+using static Jomolith.Play.Player.Camera.State.CameraLogic;
 
-namespace Jomolith.Play.Player.Camera.State;
+namespace Jomolith.Play.Player.Camera.State.States;
 
-public partial class CameraLogic
+public abstract partial record CameraState
 {
-    public abstract partial record CameraState
+    [Meta]
+    public partial record Unlocked : CameraState, IGet<Inputs.ToggleShiftLock>, IGet<Inputs.FirstPersonEntered>
     {
-        [Meta]
-        public partial record Unlocked : CameraState, IGet<Input.ToggleShiftLock>, IGet<Input.FirstPersonEntered>
+        public Unlocked()
         {
-            public Unlocked()
+            this.OnEnter(() =>
             {
-                this.OnEnter(() =>
-                {
-                    Output(new Output.SetCameraLocked(false));
-                    Output(new Output.SetPlayerLocked(false));
-                });
-            }
+                Output(new Outputs.SetCameraLocked(false));
+                Output(new Outputs.SetPlayerLocked(false));
+            });
+        }
 
-            public Transition On(in Input.ToggleShiftLock input)
-            {
-                return To<ShiftLock>();
-            }
+        public Type On(in Inputs.ToggleShiftLock input)
+        {
+            return To<ShiftLock>();
+        }
 
-            public Transition On(in Input.FirstPersonEntered input)
-            {
-                return To<FirstPerson>();
-            }
+        public Type On(in Inputs.FirstPersonEntered input)
+        {
+            return To<FirstPerson>();
         }
     }
 }

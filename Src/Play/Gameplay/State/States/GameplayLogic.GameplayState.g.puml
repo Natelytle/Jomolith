@@ -1,0 +1,3 @@
+@startuml GameplayState
+state "GameplayState" as Jomolith_Play_Gameplay_State_States_GameplayState
+@enduml

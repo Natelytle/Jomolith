@@ -5,6 +5,7 @@ using Chickensoft.UMLGenerator;
 using Godot;
 using Jomolith.App.Domain;
 using Jomolith.App.State;
+using Jomolith.App.State.States;
 using Jomolith.Menu;
 using Jomolith.Play.Gameplay;
 
@@ -28,8 +29,6 @@ public partial class JomolithApp : Control, IJomolithApp
     public IAppRepo AppRepo { get; set; } = null!;
     public IAppLogic AppLogic { get; set; } = null!;
 
-    public AppLogic.IBinding AppBinding { get; set; } = null!;
-
     #endregion
 
     #region Nodes
@@ -50,11 +49,11 @@ public partial class JomolithApp : Control, IJomolithApp
 
     public void OnResolved()
     {
-        AppBinding = AppLogic.Bind();
+        using var binding = AppLogic.Bind();
 
         this.Provide();
 
-        AppLogic.Start();
+        AppLogic.Start<AppState.InMainMenu>();
     }
 
     public void OnReady()

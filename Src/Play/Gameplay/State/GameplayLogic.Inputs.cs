@@ -5,7 +5,7 @@ namespace Jomolith.Play.Gameplay.State;
 
 public partial class GameplayLogic
 {
-    public static class Input
+    public static class Inputs
     {
     }
 }

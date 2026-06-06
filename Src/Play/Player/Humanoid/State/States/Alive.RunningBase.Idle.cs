@@ -1,34 +1,28 @@
+using System;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
+using static Jomolith.Play.Player.Humanoid.State.PlayerLogic;
 
-namespace Jomolith.Play.Player.Humanoid.State;
+namespace Jomolith.Play.Player.Humanoid.State.States;
 
-public partial class PlayerLogic
+public partial record PlayerState
 {
-    public partial record PlayerState
+    [Meta]
+    public partial record Idle : RunningBase, IGet<Inputs.IsMoving>, IGet<Inputs.OffFloor>
     {
-        [Meta]
-        public partial record Idle : RunningBase, IGet<Input.FacingLadder>, IGet<Input.IsMoving>, IGet<Input.OffFloor>
+        public Idle()
         {
-            public Idle()
-            {
-                this.OnEnter(() => Output(new Output.Animations.Idle()));
-            }
+            this.OnEnter(() => Output(new Outputs.Animations.Idle()));
+        }
 
-            public Transition On(in Input.FacingLadder input)
-            {
-                return To<Climbing>();
-            }
+        public Type On(in Inputs.IsMoving input)
+        {
+            return To<Running>();
+        }
 
-            public Transition On(in Input.IsMoving input)
-            {
-                return To<Running>();
-            }
-
-            public Transition On(in Input.OffFloor input)
-            {
-                return To<Coyote>();
-            }
+        public Type On(in Inputs.OffFloor input)
+        {
+            return To<Coyote>();
         }
     }
 }

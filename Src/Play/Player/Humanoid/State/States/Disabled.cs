@@ -1,31 +1,30 @@
+using System;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
-using Jomolith.App.Domain;
+using static Jomolith.Play.Player.Humanoid.State.PlayerLogic;
 
-namespace Jomolith.Play.Player.Humanoid.State;
+namespace Jomolith.Play.Player.Humanoid.State.States;
 
-public partial class PlayerLogic
+public partial record PlayerState
 {
-    public partial record PlayerState
+    [Meta]
+    public partial record Disabled : PlayerState, IGet<Inputs.Enable>
     {
-        [Meta]
-        public partial record Disabled : PlayerState, IGet<Input.Enable>
+        public Disabled()
         {
-            public Disabled()
+            this.OnEnter(() =>
             {
-                this.OnEnter(() =>
-                {
-                    Output(new Output.SetFrozen(true));
-                    Output(new Output.Animations.Disabled());
-                });
+                Output(new Outputs.SetFrozen(true));
+                Output(new Outputs.Animations.Disabled());
+            });
 
-                OnAttach(() => Get<IAppRepo>().TowerEntered += OnTowerEntered);
-                OnDetach(() => Get<IAppRepo>().TowerEntered -= OnTowerEntered);
-            }
-
-            public Transition On(in Input.Enable input) => To<Idle>();
+            // TODO: Fix these eventually
+            // OnAttach(() => Get<IAppRepo>().TowerEntered += OnTowerEntered);
+            // OnDetach(() => Get<IAppRepo>().TowerEntered -= OnTowerEntered);
         }
 
-        public void OnTowerEntered() => Input(new Input.Enable());
+        public Type On(in Inputs.Enable input) => To<Idle>();
     }
+
+    public void OnTowerEntered() => Input(new Inputs.Enable());
 }

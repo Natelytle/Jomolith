@@ -4,7 +4,7 @@ namespace Jomolith.Play.Player.Camera.State;
 
 public partial class CameraLogic
 {
-    public static class Output
+    public static class Outputs
     {
         public readonly record struct SetRightClickPressed(bool Value);
 

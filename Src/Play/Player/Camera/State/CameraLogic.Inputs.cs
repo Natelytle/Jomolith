@@ -4,7 +4,7 @@ namespace Jomolith.Play.Player.Camera.State;
 
 public partial class CameraLogic
 {
-    public static class Input
+    public static class Inputs
     {
         public readonly record struct PhysicsTick(double Delta);
 

@@ -1,0 +1,5 @@
+@startuml MenuState
+state "MenuState" as Jomolith_Menu_State_States_MenuState {
+  state "Default" as Jomolith_Menu_State_States_MenuState_Default
+}
+@enduml

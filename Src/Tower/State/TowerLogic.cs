@@ -1,21 +1,24 @@
-﻿using Chickensoft.Sync.Primitives;
+﻿using Chickensoft.LogicBlocks.Auto;
+using Chickensoft.Sync.Primitives;
 using Jomolith.Tower.Core;
 using Jomolith.Tower.Domain;
+using Chickensoft.Introspection;
+using Chickensoft.LogicBlocks;
+using Jomolith.Tower.State.States;
 
 namespace Jomolith.Tower.State;
 
-using Chickensoft.Introspection;
-using Chickensoft.LogicBlocks;
+public interface ITowerLogic : ILogicBlock;
 
-public interface ITowerLogic : ILogicBlock<TowerLogic.TowerState>;
-
-[Meta, Id("tower_logic")]
-[LogicBlock(typeof(TowerState), Diagram = true)]
-public partial class TowerLogic : LogicBlock<TowerLogic.TowerState>, ITowerLogic
+[Meta]
+public partial class TowerLogic : AutoBlock, ITowerLogic
 {
     private AutoValue<ITowerModel?>.Binding? currentTowerBinding;
 
-    public override Transition GetInitialState() => To<TowerState.Default>();
+    public TowerLogic()
+    {
+        Preallocate<TowerState>();
+    }
 
     public override void OnStart()
     {
@@ -24,9 +27,9 @@ public partial class TowerLogic : LogicBlock<TowerLogic.TowerState>, ITowerLogic
         currentTowerBinding = towerRepo.CurrentTower.Bind().OnValue((tower) =>
         {
             if (tower is not null)
-                Context.Input(new Input.LoadTower(tower));
+                State?.Input(new Inputs.LoadTower(tower));
             else
-                Context.Input(new Input.UnloadTower());
+                State?.Input(new Inputs.UnloadTower());
         });
     }
 

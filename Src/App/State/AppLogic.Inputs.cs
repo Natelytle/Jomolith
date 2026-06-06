@@ -2,7 +2,7 @@ namespace Jomolith.App.State;
 
 public partial class AppLogic
 {
-    public static class Input
+    public static class Inputs
     {
         public readonly record struct MainMenuRequested;
 

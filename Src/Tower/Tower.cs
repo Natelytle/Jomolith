@@ -7,7 +7,9 @@ using Godot;
 using Jomolith.Tower.Core.Objects.Enums;
 using Jomolith.Tower.Domain;
 using Jomolith.Tower.State;
+using Jomolith.Tower.State.States;
 using Jomolith.Utils.Towers.Objects;
+using TowerLogic = Jomolith.Tower.State.TowerLogic;
 
 namespace Jomolith.Tower;
 
@@ -32,8 +34,6 @@ public partial class Tower : Node3D, ITower
 
     public ITowerLogic TowerLogic { get; set; } = null!;
 
-    public TowerLogic.IBinding TowerBinding { get; set; } = null!;
-
     private readonly Dictionary<Guid, Part> spawnedParts = new Dictionary<Guid, Part>();
 
     #endregion
@@ -47,10 +47,10 @@ public partial class Tower : Node3D, ITower
 
     public void OnResolved()
     {
-        TowerBinding = TowerLogic.Bind();
+        using var binding = TowerLogic.Bind();
 
-        TowerBinding
-            .Handle((in TowerLogic.Output.SpawnPart output) =>
+        binding
+            .OnOutput((in TowerLogic.Outputs.SpawnPart output) =>
             {
                 Part part = output.Model.Shape switch
                 {
@@ -66,7 +66,7 @@ public partial class Tower : Node3D, ITower
                 spawnedParts[output.Model.Id] = part;
                 AddChild(part);
             })
-            .Handle((in TowerLogic.Output.DespawnPart output) =>
+            .OnOutput((in TowerLogic.Outputs.DespawnPart output) =>
             {
                 if (spawnedParts.TryGetValue(output.Id, out var part))
                 {
@@ -75,6 +75,6 @@ public partial class Tower : Node3D, ITower
                 }
             });
 
-        TowerLogic.Start();
+        TowerLogic.Start<TowerState.Default>();
     }
 }

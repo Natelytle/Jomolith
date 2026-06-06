@@ -1,0 +1,17 @@
+@startuml AppState
+state "AppState" as Jomolith_App_State_States_AppState {
+  state "ExitingTower" as Jomolith_App_State_States_AppState_ExitingTower
+  state "InMainMenu" as Jomolith_App_State_States_AppState_InMainMenu
+  state "InTower" as Jomolith_App_State_States_AppState_InTower
+  state "LoadingTower" as Jomolith_App_State_States_AppState_LoadingTower
+}
+
+Jomolith_App_State_States_AppState_ExitingTower --> Jomolith_App_State_States_AppState_InMainMenu : MainMenuRequested
+Jomolith_App_State_States_AppState_InMainMenu --> Jomolith_App_State_States_AppState_LoadingTower : PlayTower
+Jomolith_App_State_States_AppState_InTower --> Jomolith_App_State_States_AppState_ExitingTower : ExitTower
+Jomolith_App_State_States_AppState_LoadingTower --> Jomolith_App_State_States_AppState_InTower : TowerLoaded
+
+Jomolith_App_State_States_AppState_InTower : OnEnter → EnterTower
+Jomolith_App_State_States_AppState_InTower : OnExit → UnloadCurrentTower
+Jomolith_App_State_States_AppState_LoadingTower : OnEnter → StartLoadingTower
+@enduml

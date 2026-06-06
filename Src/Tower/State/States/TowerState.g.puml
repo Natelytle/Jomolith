@@ -1,0 +1,7 @@
+@startuml TowerState
+state "TowerState" as Jomolith_Tower_State_States_TowerState {
+  state "Default" as Jomolith_Tower_State_States_TowerState_Default
+}
+
+Jomolith_Tower_State_States_TowerState_Default --> Jomolith_Tower_State_States_TowerState_Default : Default
+@enduml

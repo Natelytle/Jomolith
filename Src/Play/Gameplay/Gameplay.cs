@@ -5,6 +5,7 @@ using Godot;
 using Jomolith.App.Domain;
 using Jomolith.Play.Gameplay.Domain;
 using Jomolith.Play.Gameplay.State;
+using Jomolith.Play.Gameplay.State.States;
 using Jomolith.Play.Player;
 using Jomolith.Tower;
 using Jomolith.Tower.Domain;
@@ -41,8 +42,6 @@ public partial class Gameplay : Node3D, IGameplay
 
     public IGameplayLogic GameplayLogic { get; set; } = null!;
 
-    public GameplayLogic.IBinding GameplayBinding { get; set; } = null!;
-
     public ITowerRepo TowerRepo { get; set; } = null!;
 
     #endregion
@@ -67,21 +66,21 @@ public partial class Gameplay : Node3D, IGameplay
 
     public void OnResolved()
     {
-        GameplayBinding = GameplayLogic.Bind();
+        using var binding = GameplayLogic.Bind();
 
-        GameplayBinding
-            .Handle((in GameplayLogic.Output.SetMouseCaptureMode output) =>
+        binding
+            .OnOutput((in GameplayLogic.Outputs.SetMouseCaptureMode output) =>
             {
                 Input.SetMouseMode(output.IsMouseCaptured ? Input.MouseModeEnum.Captured : Input.MouseModeEnum.Visible);
             })
-            .Handle((in GameplayLogic.Output.SetPaused output) =>
+            .OnOutput((in GameplayLogic.Outputs.SetPaused output) =>
             {
                 CallDeferred(nameof(setPauseMode), output.IsPaused);
             });
 
         this.Provide();
 
-        GameplayLogic.Start();
+        GameplayLogic.Start<GameplayState>();
     }
 
     private void setPauseMode(bool pause) => GetTree().Paused = pause;

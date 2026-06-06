@@ -1,15 +1,12 @@
 using Chickensoft.Introspection;
 
-namespace Jomolith.Menu.State;
+namespace Jomolith.Menu.State.States;
 
-public partial class MenuLogic
+public partial record MenuState
 {
-    public partial record MenuState
+    [Meta]
+    public partial record Default : MenuState
     {
-        [Meta, Id("menu_logic_state_default")]
-        public partial record Default : MenuState
-        {
 
-        }
     }
 }

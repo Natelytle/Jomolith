@@ -1,13 +1,17 @@
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
+using Chickensoft.LogicBlocks.Auto;
+using Jomolith.Menu.State.States;
 
 namespace Jomolith.Menu.State;
 
-public interface IMenuLogic : ILogicBlock<MenuLogic.MenuState>;
+public interface IMenuLogic : ILogicBlock;
 
-[Meta, Id("menu_logic")]
-[LogicBlock(typeof(MenuState), Diagram = true)]
-public partial class MenuLogic : LogicBlock<MenuLogic.MenuState>, IMenuLogic
+[Meta]
+public partial class MenuLogic : AutoBlock, IMenuLogic
 {
-    public override Transition GetInitialState() => To<MenuState.Default>();
+    public MenuLogic()
+    {
+        Preallocate<MenuState>();
+    }
 }

@@ -1,27 +1,26 @@
+using System;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
+using static Jomolith.App.State.AppLogic;
 
-namespace Jomolith.App.State;
+namespace Jomolith.App.State.States;
 
-public partial class AppLogic
+public partial record AppState
 {
-    public partial record AppState
+    [Meta]
+    public partial record LoadingTower : AppState, IGet<Inputs.TowerLoaded>
     {
-        [Meta]
-        public partial record LoadingTower : AppState, IGet<Input.TowerLoaded>
+        public LoadingTower()
         {
-            public LoadingTower()
+            this.OnEnter(() =>
             {
-                this.OnEnter(() =>
-                {
-                    Output(new Output.StartLoadingTower());
-                });
-            }
+                Output(new Outputs.StartLoadingTower());
+            });
+        }
 
-            public Transition On(in Input.TowerLoaded input)
-            {
-                return To<InTower>();
-            }
+        public Type On(in Inputs.TowerLoaded input)
+        {
+            return To<InTower>();
         }
     }
 }

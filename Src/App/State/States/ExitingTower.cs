@@ -1,18 +1,18 @@
+using System;
 using Chickensoft.Introspection;
+using Chickensoft.LogicBlocks;
+using static Jomolith.App.State.AppLogic;
 
-namespace Jomolith.App.State;
+namespace Jomolith.App.State.States;
 
-public partial class AppLogic
+public partial record AppState
 {
-    public partial record AppState
+    [Meta]
+    public partial record ExitingTower : AppState, IGet<Inputs.MainMenuRequested>
     {
-        [Meta]
-        public partial record ExitingTower : AppState, IGet<Input.MainMenuRequested>
+        public Type On(in Inputs.MainMenuRequested input)
         {
-            public Transition On(in Input.MainMenuRequested input)
-            {
-                return To<InMainMenu>();
-            }
+            return To<InMainMenu>();
         }
     }
 }

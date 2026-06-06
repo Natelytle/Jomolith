@@ -4,7 +4,7 @@ namespace Jomolith.Tower.State;
 
 public partial class TowerLogic
 {
-    public static class Input
+    public static class Inputs
     {
         public readonly record struct Default;
 

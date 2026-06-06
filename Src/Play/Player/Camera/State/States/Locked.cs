@@ -1,75 +1,73 @@
+using System;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
 using Godot;
-using Jomolith.Play.Player.Domain;
+using static Jomolith.Play.Player.Camera.State.CameraLogic;
 
-namespace Jomolith.Play.Player.Camera.State;
+namespace Jomolith.Play.Player.Camera.State.States;
 
-public partial class CameraLogic
+public abstract partial record CameraState
 {
-    public abstract partial record CameraState
+    [Meta]
+    public abstract partial record Locked : CameraState
     {
-        [Meta]
-        public abstract partial record Locked : CameraState
+        protected Locked()
         {
-            public Locked()
+            this.OnEnter(() =>
             {
-                this.OnEnter(() =>
-                {
-                    Output(new Output.SetCameraLocked(true));
-                    Output(new Output.SetPlayerLocked(true));
-                });
-            }
+                Output(new Outputs.SetCameraLocked(true));
+                Output(new Outputs.SetPlayerLocked(true));
+            });
+        }
+    }
+
+    [Meta]
+    public partial record ShiftLock : Locked, IGet<Inputs.ToggleShiftLock>, IGet<Inputs.FirstPersonEntered>
+    {
+        private static readonly Vector3 ShiftLockOffset = new Vector3(1.75f, 0, 0);
+
+        public ShiftLock()
+        {
+            this.OnEnter(() => Output(new Outputs.OffsetChanged(ShiftLockOffset)));
+            this.OnExit(() => Output(new Outputs.OffsetChanged(Vector3.Zero)));
         }
 
-        [Meta]
-        public partial record ShiftLock : Locked, IGet<Input.ToggleShiftLock>, IGet<Input.FirstPersonEntered>
+        public Type On(in Inputs.ToggleShiftLock input)
         {
-            private static readonly Vector3 shift_lock_offset = new(1.75f, 0, 0);
-
-            public ShiftLock()
-            {
-                this.OnEnter(() => Output(new Output.OffsetChanged(shift_lock_offset)));
-                this.OnExit(() => Output(new Output.OffsetChanged(Vector3.Zero)));
-            }
-
-            public Transition On(in Input.ToggleShiftLock input)
-            {
-                return To<Unlocked>();
-            }
-
-            public Transition On(in Input.FirstPersonEntered input)
-            {
-                return To<ShiftLockFirstPerson>();
-            }
+            return To<Unlocked>();
         }
 
-        [Meta]
-        public partial record FirstPerson : Locked, IGet<Input.ToggleShiftLock>, IGet<Input.FirstPersonExited>
+        public Type On(in Inputs.FirstPersonEntered input)
         {
-            public virtual Transition On(in Input.ToggleShiftLock input)
-            {
-                return To<ShiftLockFirstPerson>();
-            }
+            return To<ShiftLockFirstPerson>();
+        }
+    }
 
-            public virtual Transition On(in Input.FirstPersonExited input)
-            {
-                return To<Unlocked>();
-            }
+    [Meta]
+    public partial record FirstPerson : Locked, IGet<Inputs.ToggleShiftLock>, IGet<Inputs.FirstPersonExited>
+    {
+        public virtual Type On(in Inputs.ToggleShiftLock input)
+        {
+            return To<ShiftLockFirstPerson>();
         }
 
-        [Meta]
-        public partial record ShiftLockFirstPerson : FirstPerson
+        public virtual Type On(in Inputs.FirstPersonExited input)
         {
-            public override Transition On(in Input.ToggleShiftLock input)
-            {
-                return To<FirstPerson>();
-            }
+            return To<Unlocked>();
+        }
+    }
 
-            public override Transition On(in Input.FirstPersonExited input)
-            {
-                return To<ShiftLock>();
-            }
+    [Meta]
+    public partial record ShiftLockFirstPerson : FirstPerson
+    {
+        public override Type On(in Inputs.ToggleShiftLock input)
+        {
+            return To<FirstPerson>();
+        }
+
+        public override Type On(in Inputs.FirstPersonExited input)
+        {
+            return To<ShiftLock>();
         }
     }
 }

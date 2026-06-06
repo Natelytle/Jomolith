@@ -8,6 +8,7 @@ using Jomolith.Menu.Screens.MainMenu;
 using Jomolith.Menu.Screens.SettingsMenu;
 using Jomolith.Menu.Screens.TowerSelect;
 using Jomolith.Menu.State;
+using Jomolith.Menu.State.States;
 
 namespace Jomolith.Menu;
 
@@ -35,7 +36,6 @@ public partial class MenuScene : Control, IMenuScene
     #region State
 
     public IMenuLogic MenuLogic { get; set; } = null!;
-    public MenuLogic.IBinding MenuBinding { get; set; } = null!;
     public IMenuRepo MenuRepo { get; set; } = null!;
 
     #endregion
@@ -59,22 +59,22 @@ public partial class MenuScene : Control, IMenuScene
 
     public void OnResolved()
     {
-        MenuBinding = MenuLogic.Bind();
+        using var binding = MenuLogic.Bind();
 
-        MenuBinding
-            .Handle((in MenuLogic.Output.ShowMainMenu _) =>
+        binding
+            .OnOutput((in MenuLogic.Outputs.ShowMainMenu _) =>
             {
                 hideAllMenus();
                 MainMenu.Show();
 
                 MenuRepo.SetCurrentScreen(MainMenu);
-            }).Handle((in MenuLogic.Output.ShowTowerSelect _) =>
+            }).OnOutput((in MenuLogic.Outputs.ShowTowerSelect _) =>
             {
                 hideAllMenus();
                 TowerSelect.Show();
 
                 MenuRepo.SetCurrentScreen(TowerSelect);
-            }).Handle((in MenuLogic.Output.ShowSettingsMenu _) =>
+            }).OnOutput((in MenuLogic.Outputs.ShowSettingsMenu _) =>
             {
                 hideAllMenus();
                 SettingsMenu.Show();
@@ -84,7 +84,7 @@ public partial class MenuScene : Control, IMenuScene
 
         this.Provide();
 
-        MenuLogic.Start();
+        MenuLogic.Start<MenuState.Default>();
     }
 
     private void hideAllMenus()

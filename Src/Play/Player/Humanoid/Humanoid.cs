@@ -7,6 +7,7 @@ using Jomolith.App.Domain;
 using Jomolith.Play.Player.Domain;
 using Jomolith.Play.Player.Humanoid.Domain;
 using Jomolith.Play.Player.Humanoid.State;
+using Jomolith.Play.Player.Humanoid.State.States;
 
 namespace Jomolith.Play.Player.Humanoid;
 
@@ -51,8 +52,6 @@ public partial class Humanoid : RigidBody3D, IHumanoid
     public PlayerLogic.PlayerData PlayerData { get; set; } = null!;
 
     public PlayerLogic.PlayerSettings Settings { get; set; } = null!;
-
-    public PlayerLogic.IBinding PlayerBinding { get; set; } = null!;
 
     #endregion
 
@@ -99,43 +98,48 @@ public partial class Humanoid : RigidBody3D, IHumanoid
     // Called when the node enters the scene tree for the first time.
     public void OnResolved()
     {
-        PlayerBinding = PlayerLogic.Bind();
+        using var binding = PlayerLogic.Bind();
 
-        PlayerBinding.Handle((in PlayerLogic.Output.ApplyForce output) =>
-        {
-            ApplyCentralForce(output.Force);
-            ApplyTorque(output.Torque);
-        }).Handle((in PlayerLogic.Output.SetRotation output) =>
-        {
-            Rotation = output.Rotation;
-        }).Handle((in PlayerLogic.Output.SetFrozen output) =>
-        {
-            Freeze = output.Frozen;
-        }).Handle((in PlayerLogic.Output.SetTransform output) =>
-        {
-            GlobalTransform = output.NewTransform;
-        }).Handle((in PlayerLogic.Output.SetFriction output) =>
-        {
-            PhysicsMaterialOverride.Friction = output.Friction;
-        });
+        binding
+            .OnOutput((in PlayerLogic.Outputs.ApplyForce output) =>
+            {
+                ApplyCentralForce(output.Force);
+                ApplyTorque(output.Torque);
+            })
+            .OnOutput((in PlayerLogic.Outputs.SetRotation output) =>
+            {
+                Rotation = output.Rotation;
+            })
+            .OnOutput((in PlayerLogic.Outputs.SetFrozen output) =>
+            {
+                Freeze = output.Frozen;
+            })
+            .OnOutput((in PlayerLogic.Outputs.SetTransform output) =>
+            {
+                GlobalTransform = output.NewTransform;
+            })
+            .OnOutput((in PlayerLogic.Outputs.SetFriction output) =>
+            {
+                PhysicsMaterialOverride.Friction = output.Friction;
+            });
 
         this.Provide();
 
-        PlayerLogic.Start();
+        PlayerLogic.Start<PlayerState.Disabled>();
     }
 
     public void PhysicsTick(double delta)
     {
-        PlayerLogic.Input(new PlayerLogic.Input.PhysicsTick(delta));
+        PlayerLogic.Input(new PlayerLogic.Inputs.PhysicsTick(delta));
 
         if (Input.IsActionPressed("Jump"))
         {
-            PlayerLogic.Input(new PlayerLogic.Input.Jump());
+            PlayerLogic.Input(new PlayerLogic.Inputs.Jump());
         }
 
         if (Input.IsActionJustPressed("ToggleNoclip"))
         {
-            PlayerLogic.Input(new PlayerLogic.Input.ToggleNoclip());
+            PlayerLogic.Input(new PlayerLogic.Inputs.ToggleNoclip());
         }
     }
 

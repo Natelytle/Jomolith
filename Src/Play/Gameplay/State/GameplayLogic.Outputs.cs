@@ -4,7 +4,7 @@ namespace Jomolith.Play.Gameplay.State;
 
 public partial class GameplayLogic
 {
-    public static class Output
+    public static class Outputs
     {
         public readonly record struct SetMouseCaptureMode(bool IsMouseCaptured);
 

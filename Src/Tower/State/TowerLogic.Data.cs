@@ -1,6 +1,6 @@
-﻿namespace Jomolith.Tower.State;
+﻿using Chickensoft.Introspection;
 
-using Chickensoft.Introspection;
+namespace Jomolith.Tower.State;
 
 public partial class TowerLogic
 {

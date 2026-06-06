@@ -4,7 +4,7 @@ namespace Jomolith.Play.Player.Humanoid.State;
 
 public partial class PlayerLogic
 {
-    public static class Output
+    public static class Outputs
     {
         public static class Animations
         {

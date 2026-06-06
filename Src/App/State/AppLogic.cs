@@ -1,16 +1,15 @@
-using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
-using Chickensoft.UMLGenerator;
+using Chickensoft.LogicBlocks.Auto;
+using Jomolith.App.State.States;
 
 namespace Jomolith.App.State;
 
-public interface IAppLogic : ILogicBlock<AppLogic.AppState>;
+public interface IAppLogic : ILogicBlock;
 
-[Meta, LogicBlock(typeof(AppState), Diagram = true), ClassDiagram]
-public partial class AppLogic : LogicBlock<AppLogic.AppState>, IAppLogic
+public partial class AppLogic : AutoBlock, IAppLogic
 {
-    public override Transition GetInitialState()
+    public AppLogic()
     {
-        return To<AppState.InMainMenu>();
+        Preallocate<AppState>();
     }
 }

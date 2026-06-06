@@ -5,7 +5,7 @@ namespace Jomolith.Tower.State;
 
 public partial class TowerLogic
 {
-    public static class Output
+    public static class Outputs
     {
         public readonly record struct SpawnPart(PartModel Model);
 

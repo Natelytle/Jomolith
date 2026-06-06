@@ -1,15 +1,17 @@
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
+using Chickensoft.LogicBlocks.Auto;
+using Jomolith.Play.Player.Camera.State.States;
 
 namespace Jomolith.Play.Player.Camera.State;
 
-public interface ICameraLogic : ILogicBlock<CameraLogic.CameraState>;
+public interface ICameraLogic : ILogicBlock;
 
-[Meta, LogicBlock(typeof(CameraState), Diagram = true)]
-public partial class CameraLogic : LogicBlock<CameraLogic.CameraState>, ICameraLogic
+[Meta]
+public partial class CameraLogic : AutoBlock, ICameraLogic
 {
-    public override Transition GetInitialState()
+    public CameraLogic()
     {
-        return To<CameraState.Unlocked>();
+        Preallocate<CameraState>();
     }
 }

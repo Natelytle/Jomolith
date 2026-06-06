@@ -5,7 +5,7 @@ namespace Jomolith.Play.Player.Humanoid.State;
 
 public partial class PlayerLogic
 {
-    public static class Input
+    public static class Inputs
     {
         public readonly record struct PhysicsTick(double Delta);
 

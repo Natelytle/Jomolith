@@ -1,32 +1,31 @@
+using System;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
 using Godot;
+using static Jomolith.Play.Player.Humanoid.State.PlayerLogic;
 
-namespace Jomolith.Play.Player.Humanoid.State;
+namespace Jomolith.Play.Player.Humanoid.State.States;
 
-public partial class PlayerLogic
+public partial record PlayerState
 {
-    public partial record PlayerState
+    [Meta]
+    public partial record Landed : RunningBase, IGet<Inputs.TimerUp>
     {
-        [Meta]
-        public partial record Landed : RunningBase, IGet<Input.TimerUp>
+        private const double jump_cooldown = 0.05;
+
+        public Landed()
         {
-            private const double jump_cooldown = 0.05;
+            this.OnEnter(() => setTimer(jump_cooldown));
+        }
 
-            public Landed()
-            {
-                this.OnEnter(() => setTimer(jump_cooldown));
-            }
+        public override Type On(in Inputs.Jump input)
+        {
+            return ToSelf();
+        }
 
-            public override Transition On(in Input.Jump input)
-            {
-                return ToSelf();
-            }
-
-            public Transition On(in Input.TimerUp input)
-            {
-                return To<Running>();
-            }
+        public Type On(in Inputs.TimerUp input)
+        {
+            return To<Running>();
         }
     }
 }

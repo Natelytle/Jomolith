@@ -4,107 +4,105 @@ using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
 using Godot;
 using Jomolith.Play.Player.Domain;
+using static Jomolith.Play.Player.Humanoid.State.PlayerLogic;
 
-namespace Jomolith.Play.Player.Humanoid.State;
+namespace Jomolith.Play.Player.Humanoid.State.States;
 
-public partial class PlayerLogic
+public partial record PlayerState
 {
-    public partial record PlayerState
+    [Meta]
+    public partial record Climbing : RunningBase, IGet<Inputs.OffFloor>, IGet<Inputs.AwayLadder>
     {
-        [Meta]
-        public partial record Climbing : RunningBase, IGet<Input.OffFloor>, IGet<Input.AwayLadder>
+        private bool onGround;
+        private const float move_speed_multiplier = 0.7f;
+
+        protected override float MaxForce => onGround ? 741.6f : 143.0f;
+
+        public Climbing()
         {
-            private bool onGround;
-            private const float move_speed_multiplier = 0.7f;
-
-            protected override float MaxForce => onGround ? 741.6f : 143.0f;
-
-            public Climbing()
+            this.OnEnter(() =>
             {
-                this.OnEnter(() =>
-                {
-                    IHumanoid player = Get<IHumanoid>();
+                IHumanoid player = Get<IHumanoid>();
 
-                    Output(new Output.Animations.Climb());
+                Output(new Outputs.Animations.Climb());
 
-                    player.GravityScale = 0;
-                });
+                player.GravityScale = 0;
+            });
 
-                this.OnExit(() =>
-                {
-                    IHumanoid player = Get<IHumanoid>();
-                    PlayerSettings settings = Get<PlayerSettings>();
-
-                    player.GravityScale = settings.GravityScale;
-                });
-            }
-
-            public override Transition On(in Input.DesiredMovementVector input)
+            this.OnExit(() =>
             {
                 IHumanoid player = Get<IHumanoid>();
                 PlayerSettings settings = Get<PlayerSettings>();
-                PlayerData playerData = Get<PlayerData>();
-                IPlayerRepo playerRepo = Get<IPlayerRepo>();
 
-                Vector3 moveDirection = new Vector3(input.DesiredMovement.X, 0, input.DesiredMovement.Y) * 16.0f;
+                player.GravityScale = settings.GravityScale;
+            });
+        }
 
-                Vector3 targetMovementVector = moveDirection.AngleTo(playerData.PlayerHeading) > float.DegreesToRadians(100f)
-                                              ? Vector3.Down
-                                              : Vector3.Up;
+        public override Type On(in Inputs.DesiredMovementVector input)
+        {
+            IHumanoid player = Get<IHumanoid>();
+            PlayerSettings settings = Get<PlayerSettings>();
+            PlayerData playerData = Get<PlayerData>();
+            IPlayerRepo playerRepo = Get<IPlayerRepo>();
 
-                // Scale by movespeed
-                targetMovementVector *= settings.MoveSpeed * move_speed_multiplier * input.DesiredMovement.Length();
+            Vector3 moveDirection = new Vector3(input.DesiredMovement.X, 0, input.DesiredMovement.Y) * 16.0f;
 
-                // Horizontal correction gets clamped by MaxForce
-                Vector3 correctionVector = -new Vector3(player.LinearVelocity.X, 0, player.LinearVelocity.Z);
-                correctionVector = correctionVector.Normalized() * Math.Min(MaxForce, Gain * correctionVector.Length());
+            Vector3 targetMovementVector = moveDirection.AngleTo(playerData.PlayerHeading) > float.DegreesToRadians(100f)
+                                          ? Vector3.Down
+                                          : Vector3.Up;
 
-                // Vertical correction doesn't get clamped by MaxForce
-                correctionVector += Vector3.Up * Gain * (targetMovementVector.Y - player.LinearVelocity.Y);
+            // Scale by movespeed
+            targetMovementVector *= settings.MoveSpeed * move_speed_multiplier * input.DesiredMovement.Length();
 
-                Vector3 desiredForce = correctionVector * player.Mass;
+            // Horizontal correction gets clamped by MaxForce
+            Vector3 correctionVector = -new Vector3(player.LinearVelocity.X, 0, player.LinearVelocity.Z);
+            correctionVector = correctionVector.Normalized() * Math.Min(MaxForce, Gain * correctionVector.Length());
 
-                float desiredTorque = ComputeTorque(targetMovementVector, playerData, player, playerRepo.IsPlayerRotationLocked.Value);
+            // Vertical correction doesn't get clamped by MaxForce
+            correctionVector += Vector3.Up * Gain * (targetMovementVector.Y - player.LinearVelocity.Y);
 
-                Output(new Output.ApplyForce(desiredForce, Vector3.Up * desiredTorque));
+            Vector3 desiredForce = correctionVector * player.Mass;
 
-                float verticalVelocity = player.LinearVelocity.Y;
+            float desiredTorque = ComputeTorque(targetMovementVector, playerData, player, playerRepo.IsPlayerRotationLocked.Value);
 
-                Output(new Output.VerticalVelocityChanged(verticalVelocity));
+            Output(new Outputs.ApplyForce(desiredForce, Vector3.Up * desiredTorque));
 
-                return ToSelf();
-            }
+            float verticalVelocity = player.LinearVelocity.Y;
 
-            public override Transition On(in Input.OnFloor input)
-            {
-                onGround = true;
+            Output(new Outputs.VerticalVelocityChanged(verticalVelocity));
 
-                return ToSelf();
-            }
+            return ToSelf();
+        }
 
-            public Transition On(in Input.OffFloor input)
-            {
-                onGround = false;
+        public override Type On(in Inputs.OnFloor input)
+        {
+            onGround = true;
 
-                return ToSelf();
-            }
+            return ToSelf();
+        }
 
-            public override Transition On(in Input.Jump input)
-            {
-                Get<PlayerData>().WasClimbingBeforeJump = true;
+        public Type On(in Inputs.OffFloor input)
+        {
+            onGround = false;
 
-                return To<Jumping>();
-            }
+            return ToSelf();
+        }
 
-            protected override float ComputeTorque(Vector3 movementVector, PlayerData playerData, IHumanoid player, bool isRotationLocked)
-            {
-                return -100.0f * player.GetInertia().Y * player.AngularVelocity.Y;
-            }
+        public override Type On(in Inputs.Jump input)
+        {
+            Get<PlayerData>().WasClimbingBeforeJump = true;
 
-            public Transition On(in Input.AwayLadder input)
-            {
-                return onGround ? To<Running>() : To<Falling>();
-            }
+            return To<Jumping>();
+        }
+
+        protected override float ComputeTorque(Vector3 movementVector, PlayerData playerData, IHumanoid player, bool isRotationLocked)
+        {
+            return -100.0f * player.GetInertia().Y * player.AngularVelocity.Y;
+        }
+
+        public Type On(in Inputs.AwayLadder input)
+        {
+            return onGround ? To<Running>() : To<Falling>();
         }
     }
 }

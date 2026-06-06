@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
-using Chickensoft.Sync.Primitives;
 using Godot;
 using Jomolith.Play.Player.Humanoid.State;
 using Jomolith.Play.Player.Humanoid.Utils;
@@ -45,8 +42,6 @@ public partial class PlayerModel : Node3D, IPlayerModel
 
     #region State
 
-    public PlayerLogic.IBinding PlayerBinding { get; set; } = null!;
-
     private PlayerModelMaterials Materials { get; set; } = null!;
 
     #endregion
@@ -78,37 +73,37 @@ public partial class PlayerModel : Node3D, IPlayerModel
 
     public void OnResolved()
     {
-        PlayerBinding = PlayerLogic.Bind();
+        using var binding = PlayerLogic.Bind();
 
-        PlayerBinding
-            .Handle((in PlayerLogic.Output.Animations.Idle _) =>
+        binding
+            .OnOutput((in PlayerLogic.Outputs.Animations.Idle _) =>
                 AnimationStateMachine.Travel("Idle")
             )
-            .Handle((in PlayerLogic.Output.Animations.Walk _) =>
+            .OnOutput((in PlayerLogic.Outputs.Animations.Walk _) =>
                 AnimationStateMachine.Travel("Walk")
             )
-            .Handle((in PlayerLogic.Output.Animations.Jump _) =>
+            .OnOutput((in PlayerLogic.Outputs.Animations.Jump _) =>
                 AnimationStateMachine.Travel("Jump")
             )
-            .Handle((in PlayerLogic.Output.Animations.Fall _) =>
+            .OnOutput((in PlayerLogic.Outputs.Animations.Fall _) =>
                 AnimationStateMachine.Travel("Fall")
             )
-            .Handle((in PlayerLogic.Output.Animations.Climb _) =>
+            .OnOutput((in PlayerLogic.Outputs.Animations.Climb _) =>
                 AnimationStateMachine.Travel("Climb")
             )
-            .Handle((in PlayerLogic.Output.Animations.Enabled _) =>
+            .OnOutput((in PlayerLogic.Outputs.Animations.Enabled _) =>
                 AnimationTree.Set("parameters/Transitions/transition_request", "Enabled")
             )
-            .Handle((in PlayerLogic.Output.Animations.Disabled _) =>
+            .OnOutput((in PlayerLogic.Outputs.Animations.Disabled _) =>
                 AnimationTree.Set("parameters/Transitions/transition_request", "Disabled")
             )
-            .Handle((in PlayerLogic.Output.FloorVelocityChanged output) =>
+            .OnOutput((in PlayerLogic.Outputs.FloorVelocityChanged output) =>
                 AnimationTree.Set("parameters/StateMachine/Walk/Speed/scale", (float)(output.Velocity.Length() / 16.0))
             )
-            .Handle((in PlayerLogic.Output.VerticalVelocityChanged output) =>
+            .OnOutput((in PlayerLogic.Outputs.VerticalVelocityChanged output) =>
                 AnimationTree.Set("parameters/StateMachine/Climb/Speed/scale", (float)(output.Velocity / 12.0))
             )
-            .Handle((in PlayerLogic.Output.Visual.SetTransparency output) =>
+            .OnOutput((in PlayerLogic.Outputs.Visual.SetTransparency output) =>
                 Materials.SetOpacity(output.Alpha)
             );
     }

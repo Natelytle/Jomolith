@@ -8,6 +8,7 @@ using Jomolith.App.Domain;
 using Jomolith.Play.Gameplay.Domain;
 using Jomolith.Play.Player.Domain;
 using Jomolith.Play.Player.Camera.State;
+using Jomolith.Play.Player.Camera.State.States;
 
 namespace Jomolith.Play.Player.Camera;
 
@@ -50,8 +51,6 @@ public partial class Camera : Node3D, ICamera
     public CameraLogic.CameraData CameraData { get; set; } = null!;
 
     public CameraLogic.CameraSettings Settings { get; set; } = null!;
-
-    public LogicBlock<CameraLogic.CameraState>.IBinding CameraBinding { get; set; } = null!;
 
     #endregion
 
@@ -103,53 +102,55 @@ public partial class Camera : Node3D, ICamera
 
     public void OnResolved()
     {
-        CameraBinding = CameraLogic.Bind();
+        using var binding = CameraLogic.Bind();
 
-        CameraBinding
-            .Handle((in CameraLogic.Output.GlobalPositionChanged output) =>
+        binding
+            .OnOutput((in CameraLogic.Outputs.GlobalPositionChanged output) =>
             {
                 GlobalPosition = output.GlobalPosition;
             })
-            .Handle((in CameraLogic.Output.RotationChanged output) =>
+            .OnOutput((in CameraLogic.Outputs.RotationChanged output) =>
             {
                 SetRotation(new Vector3(output.VerticalRotation, output.HorizontalRotation, 0f));
             })
-            .Handle((in CameraLogic.Output.OffsetChanged output) =>
+            .OnOutput((in CameraLogic.Outputs.OffsetChanged output) =>
             {
                 OffsetNode.Position = output.Position;
             })
-            .Handle((in CameraLogic.Output.SpringLengthChanged output) =>
+            .OnOutput((in CameraLogic.Outputs.SpringLengthChanged output) =>
             {
                 SpringArm3D.SpringLength = output.Length;
 
                 PlayerRepo.SetAvatarOpacity(MathF.Pow(Math.Clamp(output.Length / 2, 0, 1), 2));
             })
-            .Handle((in CameraLogic.Output.SetCameraLocked output) =>
+            .OnOutput((in CameraLogic.Outputs.SetCameraLocked output) =>
             {
                 CameraData.CameraLockedState = output.Value;
 
                 GameplayRepo.SetIsMouseCaptured(CameraData.CameraLocked);
             })
-            .Handle((in CameraLogic.Output.SetRightClickPressed output) =>
+            .OnOutput((in CameraLogic.Outputs.SetRightClickPressed output) =>
             {
                 CameraData.CameraLockedRightClick = output.Value;
 
                 GameplayRepo.SetIsMouseCaptured(CameraData.CameraLocked);
             })
-            .Handle((in CameraLogic.Output.SetPlayerLocked output) =>
+            .OnOutput((in CameraLogic.Outputs.SetPlayerLocked output) =>
             {
                 PlayerRepo.SetIsPlayerRotationLocked(output.Value);
             });
+
+        CameraLogic.Start<CameraState.Unlocked>();
     }
 
     public void PhysicsTick(double delta)
     {
-        CameraLogic.Input(new CameraLogic.Input.PhysicsTick(delta));
+        CameraLogic.Input(new CameraLogic.Inputs.PhysicsTick(delta));
     }
 
     public void PostPhysicsTick()
     {
-        CameraLogic.Input(new CameraLogic.Input.PostPhysicsTick());
+        CameraLogic.Input(new CameraLogic.Inputs.PostPhysicsTick());
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -158,33 +159,33 @@ public partial class Camera : Node3D, ICamera
         {
             float zoomStrength = Input.GetActionStrength("ZoomIn");
 
-            CameraLogic.Input(new CameraLogic.Input.ZoomedIn(zoomStrength));
+            CameraLogic.Input(new CameraLogic.Inputs.ZoomedIn(zoomStrength));
         }
 
         if (@event.IsAction("ZoomOut") && @event.IsPressed())
         {
             float zoomStrength = Input.GetActionStrength("ZoomOut");
 
-            CameraLogic.Input(new CameraLogic.Input.ZoomedOut(zoomStrength));
+            CameraLogic.Input(new CameraLogic.Inputs.ZoomedOut(zoomStrength));
         }
 
         if (@event is InputEventMouseMotion motion)
         {
-            CameraLogic.Input(new CameraLogic.Input.MouseInputOccurred(motion));
+            CameraLogic.Input(new CameraLogic.Inputs.MouseInputOccurred(motion));
         }
 
         if (@event.IsAction("ToggleShiftLock") && @event.IsPressed())
         {
-            CameraLogic.Input(new CameraLogic.Input.ToggleShiftLock());
+            CameraLogic.Input(new CameraLogic.Inputs.ToggleShiftLock());
         }
 
         if (@event is InputEventMouseButton button
             && button.ButtonIndex is MouseButton.Right)
         {
             if (button.IsPressed() && !CameraData.CameraLockedRightClick)
-                CameraLogic.Input(new CameraLogic.Input.RightClickPressed());
+                CameraLogic.Input(new CameraLogic.Inputs.RightClickPressed());
             if (button.IsReleased() && CameraData.CameraLockedRightClick)
-                CameraLogic.Input(new CameraLogic.Input.RightClickReleased());
+                CameraLogic.Input(new CameraLogic.Inputs.RightClickReleased());
         }
     }
 }
