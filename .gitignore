@@ -3,6 +3,10 @@
 /android/
 .nomedia
 
+# Test coverage
+coverage/*
+!coverage/.gdignore
+
 # Godot-specific ignores
 .import/
 export.cfg

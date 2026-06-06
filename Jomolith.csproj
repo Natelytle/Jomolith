@@ -78,6 +78,5 @@
 
   <ItemGroup>
     <Content Include="Properties\launchSettings.json" />
-    <Content Include="Tests\AppTest.cs.uid" />
   </ItemGroup>
 </Project>

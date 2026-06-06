@@ -1,5 +1,8 @@
 # Jomolith
 
+![line coverage][line-coverage] ![branch coverage][branch-coverage]
+
+
 The best open-source tower climbing game in existence (probably)
 
 <p align="center">
@@ -35,3 +38,7 @@ Please Bully Me, Miss Villainess! Chapter 87
 ## 🙏 Will the icon stay?
 
 Until I come up with a logo for my game, but be warned the Yuri will live on culturally
+
+<!-- Header -->
+[line-coverage]: badges/line_coverage.svg
+[branch-coverage]: badges/branch_coverage.svg

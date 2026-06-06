@@ -33,7 +33,7 @@ coverlet \
   --exclude-by-file "**/test/**/*.cs" \
   --exclude-by-file "**/*Microsoft.NET.Test.Sdk.Program.cs" \
   --exclude-by-file "**/Godot.SourceGenerators/**/*.cs" \
-  --exclude-assemblies-without-sources "missingall"
+  --exclude-assemblies-without-sources "MissingAll"
 
 # Projects included via <ProjectReference> will be collected in code coverage.
 # If you want to exclude them, replace the string below with the names of
