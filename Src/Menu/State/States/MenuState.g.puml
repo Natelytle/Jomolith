@@ -1,0 +1,18 @@
+@startuml MenuState
+state "MenuState" as Jomolith_Menu_State_States_MenuState {
+  state "InEditor" as Jomolith_Menu_State_States_MenuState_InEditor
+  state "InMainMenu" as Jomolith_Menu_State_States_MenuState_InMainMenu
+  state "InSettings" as Jomolith_Menu_State_States_MenuState_InSettings
+  state "InTowerSelect" as Jomolith_Menu_State_States_MenuState_InTowerSelect
+}
+
+Jomolith_Menu_State_States_MenuState --> Jomolith_Menu_State_States_MenuState : BackButtonPressed
+Jomolith_Menu_State_States_MenuState_InMainMenu --> Jomolith_Menu_State_States_MenuState_InEditor : EditButtonPressed
+Jomolith_Menu_State_States_MenuState_InMainMenu --> Jomolith_Menu_State_States_MenuState_InSettings : SettingsButtonPressed
+Jomolith_Menu_State_States_MenuState_InMainMenu --> Jomolith_Menu_State_States_MenuState_InTowerSelect : PlayButtonPressed
+
+Jomolith_Menu_State_States_MenuState_InEditor : OnEnter → ShowEditor
+Jomolith_Menu_State_States_MenuState_InMainMenu : OnEnter → ShowMainMenu
+Jomolith_Menu_State_States_MenuState_InSettings : OnEnter → ShowSettingsMenu
+Jomolith_Menu_State_States_MenuState_InTowerSelect : OnEnter → ShowTowerSelect
+@enduml

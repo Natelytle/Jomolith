@@ -8,6 +8,8 @@ public partial class MenuLogic
 
         public readonly record struct ShowTowerSelect;
 
+        public readonly record struct ShowEditor;
+
         public readonly record struct ShowSettingsMenu;
 
         public readonly record struct TowerSelected;

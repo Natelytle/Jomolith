@@ -10,3 +10,58 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1nd18")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1878736485]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer" unique_id=624275065]
+layout_mode = 2
+current_tab = 0
+
+[node name="Controls" type="MarginContainer" parent="MarginContainer/TabContainer" unique_id=131700849]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/Controls" unique_id=47422035]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/TabContainer/Controls/VBoxContainer" unique_id=1500220764]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/TabContainer/Controls/VBoxContainer/HBoxContainer" unique_id=19220666]
+layout_mode = 2
+text = "Sensitivity"
+
+[node name="HSlider" type="HSlider" parent="MarginContainer/TabContainer/Controls/VBoxContainer/HBoxContainer" unique_id=1552548688]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 5.0
+step = 0.01
+value = 1.0
+
+[node name="SpinBox" type="SpinBox" parent="MarginContainer/TabContainer/Controls/VBoxContainer/HBoxContainer" unique_id=1340123476]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Visuals" type="VBoxContainer" parent="MarginContainer/TabContainer" unique_id=714749793]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Miscellaneous" type="VBoxContainer" parent="MarginContainer/TabContainer" unique_id=1007907047]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2

@@ -36,7 +36,10 @@ public partial class PlayerLogic : AutoBlock, IPlayerLogic
 
     public override IEnumerable<IDisposable> OnStartSubscriptions()
     {
-        yield return Get<IAppRepo>().AutoChannel.Bind()
-            .On((in IAppRepo.TowerEntered _) => (State as PlayerState.Disabled)?.OnTowerEntered());
+        // TODO: Add enable logic once I get tower loading working again.
+        // yield return Get<IAppRepo>().AutoChannel.Bind()
+        //     .On((in IAppRepo.TowerEntered _) => (State as PlayerState.Disabled)?.OnTowerEntered());
+
+        yield break;
     }
 }

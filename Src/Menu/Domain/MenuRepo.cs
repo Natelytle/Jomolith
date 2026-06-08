@@ -6,9 +6,9 @@ namespace Jomolith.Menu.Domain;
 
 public interface IMenuRepo
 {
-    public IAutoValue<IScreen?> CurrentScreen { get; }
+    IAutoValue<IScreen?> CurrentScreen { get; }
 
-    public void SetCurrentScreen(IScreen screen);
+    void SetCurrentScreen(IScreen screen);
 }
 
 public class MenuRepo : IMenuRepo

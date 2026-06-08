@@ -224,35 +224,56 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
         class MenuScene  {
             [[../../Src/Menu/MenuScene.cs ScriptFile]]
             [Provisions]
-            [[../../Src/Menu/MenuScene.cs:26 IMenuRepo]] - [[../../Src/Menu/Domain/MenuRepo.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:28 IMenuRepo]] - [[../../Src/Menu/Domain/MenuRepo.cs Script]]
             --
             [Nodes]
-            MainMenu - [[../../Src/Menu/Screens/MainMenu/MainMenu.tscn Script]]
             TowerSelect - [[../../Src/Menu/Screens/TowerSelect/TowerSelect.cs Script]]
             SettingsMenu - [[../../Src/Menu/Screens/SettingsMenu/SettingsMenu.cs Script]]
+            Footer - [[../../Src/Menu/Screens/Components/Footer/Footer.cs Script]]
+            MainMenu - [[../../Src/Menu/Screens/MainMenu/MainMenu.cs Script]]
             [Properties]
-            [[../../Src/Menu/MenuScene.cs:45 MainMenu]] - [[../../Src/Menu/Screens/MainMenu/MainMenu.cs Script]]
-            [[../../Src/Menu/MenuScene.cs:38 MenuLogic]] - [[../../Src/Menu/State/MenuLogic.Outputs.cs Script]]
-            [[../../Src/Menu/MenuScene.cs:39 MenuRepo]] - [[../../Src/Menu/Domain/MenuRepo.cs Script]]
-            [[../../Src/Menu/MenuScene.cs:47 SettingsMenu]] - [[../../Src/Menu/Screens/SettingsMenu/SettingsMenu.cs Script]]
-            [[../../Src/Menu/MenuScene.cs:46 TowerSelect]] - [[../../Src/Menu/Screens/TowerSelect/TowerSelect.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:51 Footer]] - [[../../Src/Menu/Screens/Components/Footer/Footer.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:48 MainMenu]] - [[../../Src/Menu/Screens/MainMenu/MainMenu.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:41 MenuBinding]]
+            [[../../Src/Menu/MenuScene.cs:40 MenuLogic]] - [[../../Src/Menu/State/MenuLogic.Outputs.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:42 MenuRepo]] - [[../../Src/Menu/Domain/MenuRepo.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:50 SettingsMenu]] - [[../../Src/Menu/Screens/SettingsMenu/SettingsMenu.cs Script]]
+            [[../../Src/Menu/MenuScene.cs:49 TowerSelect]] - [[../../Src/Menu/Screens/TowerSelect/TowerSelect.cs Script]]
             --
             [Methods]
-            [[../../Src/Menu/MenuScene.cs:22 _Notification()]]
-            [[../../Src/Menu/MenuScene.cs:90 hideAllMenus()]]
-            [[../../Src/Menu/MenuScene.cs:60 OnResolved()]]
-            [[../../Src/Menu/MenuScene.cs:51 Setup()]]
+            [[../../Src/Menu/MenuScene.cs:24 _Notification()]]
+            [[../../Src/Menu/MenuScene.cs:127 BackButtonPressed()]]
+            [[../../Src/Menu/MenuScene.cs:123 EditButtonPressed()]]
+            [[../../Src/Menu/MenuScene.cs:97 hideAllMenus()]]
+            [[../../Src/Menu/MenuScene.cs:113 OnExitTree()]]
+            [[../../Src/Menu/MenuScene.cs:64 OnResolved()]]
+            [[../../Src/Menu/MenuScene.cs:121 PlayButtonPressed()]]
+            [[../../Src/Menu/MenuScene.cs:125 SettingsButtonPressed()]]
+            [[../../Src/Menu/MenuScene.cs:55 Setup()]]
+            [[../../Src/Menu/MenuScene.cs:105 wireButtons()]]
+        }
+        class Footer  {
+            [[../../Src/Menu/Screens/Components/Footer/Footer.cs ScriptFile]]
+            [Properties]
+            [[../../Src/Menu/Screens/Components/Footer/Footer.cs:15 BackButton]]
+            --
+            [Methods]
+            [[../../Src/Menu/Screens/Components/Footer/Footer.cs:30 _ExitTree()]]
+            [[../../Src/Menu/Screens/Components/Footer/Footer.cs:25 _Ready()]]
+            [[../../Src/Menu/Screens/Components/Footer/Footer.cs:35 OnBackButtonPressed()]]
         }
         class MainMenu  {
             [[../../Src/Menu/Screens/MainMenu/MainMenu.cs ScriptFile]]
             [Properties]
-            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:15 EditButton]]
-            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:14 PlayButton]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:17 EditButton]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:16 PlayButton]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:18 SettingsButton]]
             --
             [Methods]
-            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:23 _Ready()]]
-            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:30 OnEditButtonPressed()]]
-            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:29 OnPlayButtonPressed()]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:30 _Ready()]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:38 OnEditButtonPressed()]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:37 OnPlayButtonPressed()]]
+            [[../../Src/Menu/Screens/MainMenu/MainMenu.cs:39 OnSettingsButtonPressed()]]
         }
         class MenuRepo  {
             [[../../Src/Menu/Domain/MenuRepo.cs ScriptFile]]
@@ -267,6 +288,7 @@ package JomolithApp-Scene [[../../Src/App/JomolithApp.tscn]] {
             [[../../Src/Menu/Domain/MenuRepo.cs:31 Dispose()]]
             [[../../Src/Menu/Domain/MenuRepo.cs:44 Dispose()]]
         }
+        MenuScene::Footer ---> Footer
         MenuScene::MainMenu ---> MainMenu
         MenuScene::MenuRepo ---> MenuRepo
     }

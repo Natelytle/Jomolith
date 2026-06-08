@@ -10,7 +10,7 @@ public interface IMenuLogic : ILogicBlock;
 [Meta]
 public partial class MenuLogic : AutoBlock, IMenuLogic
 {
-    public MenuLogic()
+    public MenuLogic() : base(maxHistory: 16)
     {
         Preallocate<MenuState>();
     }

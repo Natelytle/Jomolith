@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://c6bwmbsnxl6v4"]
+
+[ext_resource type="Script" uid="uid://ne11mkuvlu11" path="res://Src/Menu/Screens/Components/Footer/Footer.cs" id="1_it4fw"]
+
+[node name="Footer" type="Control" unique_id=2144598614 node_paths=PackedStringArray("BackButton")]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 3
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("1_it4fw")
+BackButton = NodePath("PanelContainer/HBoxContainer/HBoxContainer/BackButton")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=692004553]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer" unique_id=537000583]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/HBoxContainer" unique_id=580745957]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BackButton" type="Button" parent="PanelContainer/HBoxContainer/HBoxContainer" unique_id=1582551975]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "Back"
+
+[node name="ModsButton" type="Button" parent="PanelContainer/HBoxContainer/HBoxContainer" unique_id=193438613]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Mods"
+
+[node name="OptionsButton" type="Button" parent="PanelContainer/HBoxContainer/HBoxContainer" unique_id=246298894]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Options"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/HBoxContainer" unique_id=541641764]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="PlayButton" type="Button" parent="PanelContainer/HBoxContainer/HBoxContainer2" unique_id=155422604]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+text = "Play"
