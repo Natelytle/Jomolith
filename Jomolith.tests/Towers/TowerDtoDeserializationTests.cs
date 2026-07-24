@@ -1,15 +1,11 @@
 using System.Text.Json;
 using Jomolith.Towers.Models;
+using Jomolith.Towers.Services;
 
 namespace Jomolith.Tests.Towers;
 
 public class TowerDtoDeserializationTests
 {
-    private static readonly JsonSerializerOptions json_options = new()
-    {
-        PropertyNameCaseInsensitive = true
-    };
-
     [Fact]
     public void Deserialize_ValidTowerJson_ParsesMetadataAndPartsCorrectly()
     {
@@ -53,7 +49,7 @@ public class TowerDtoDeserializationTests
         """;
 
         // Act
-        var tower = JsonSerializer.Deserialize<TowerDto>(json, json_options);
+        var tower = JsonSerializer.Deserialize(json, TowerJsonContext.Default.TowerDto);
 
         // Assert: Metadata
         Assert.NotNull(tower);
