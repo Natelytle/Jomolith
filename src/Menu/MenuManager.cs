@@ -9,7 +9,7 @@ using Jomolith.Menu.State;
 
 namespace Jomolith.Menu;
 
-public interface IMenuManager : IControl
+public interface IMenuManager : IControl, IProvide<IMenuLogic>
 {
     event MenuManager.QuitRequestedEventHandler QuitRequested;
 }
@@ -27,7 +27,9 @@ public partial class MenuManager : Control, IMenuManager
     [Signal]
     public delegate void QuitRequestedEventHandler();
 
-    private MenuLogic logic = null!;
+    IMenuLogic IProvide<IMenuLogic>.Value() => menuLogic;
+
+    private MenuLogic menuLogic = null!;
     private IScreen? currentScreen;
 
     private Dictionary<Type, string> screenScenePaths = null!;
@@ -45,7 +47,7 @@ public partial class MenuManager : Control, IMenuManager
 
     public void Setup()
     {
-        logic = new MenuLogic();
+        menuLogic = new MenuLogic();
     }
 
     public void OnResolved()
@@ -58,7 +60,7 @@ public partial class MenuManager : Control, IMenuManager
             [typeof(MenuState.Settings)] = settings_screen_path,
         };
 
-        logic.Bind()
+        menuLogic.Bind()
             .OnOutput<MenuState.Output.ScreenChanged>((in o) =>
             {
                 SwapScreen(o.NewScreen);
@@ -67,9 +69,11 @@ public partial class MenuManager : Control, IMenuManager
             .OnOutput<MenuState.Output.ExitPromptVisible>((in o) => exitPrompt.Visible = o.Visible)
             .OnOutput<MenuState.Output.QuitGame>((in _) => EmitSignal(SignalName.QuitRequested));
 
-        footer.BackPressed += () => logic.Input(new MenuState.Input.Back());
+        footer.BackPressed += () => menuLogic.Input(new MenuState.Input.Back());
 
-        logic.Start<MenuState.MainMenu>();
+        this.Provide();
+
+        menuLogic.Start<MenuState.MainMenu>();
     }
 
     public void SwapScreen(Type screenType)
@@ -83,18 +87,18 @@ public partial class MenuManager : Control, IMenuManager
         currentScreen = (IScreen)GD.Load<PackedScene>(screenScenePaths[screenType]).Instantiate();
 
         screenContainer.AddChildEx(currentScreen!);
-        currentScreen.OnEnter(logic);
+        currentScreen.OnEnter();
     }
 
     public override void _UnhandledInput(InputEvent @event) {
         if (!@event.IsActionPressed("ui_cancel")) return; // Escape, by default
 
         if (exitPrompt.Visible)
-            logic.Input(new MenuState.Input.ExitCancelled());
+            menuLogic.Input(new MenuState.Input.ExitCancelled());
         else if (canGoBack)
-            logic.Input(new MenuState.Input.Back());
+            menuLogic.Input(new MenuState.Input.Back());
         else
-            logic.Input(new MenuState.Input.RequestExit());
+            menuLogic.Input(new MenuState.Input.RequestExit());
 
         GetViewport().SetInputAsHandled();
     }

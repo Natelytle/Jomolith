@@ -5,7 +5,7 @@ namespace Jomolith.Menu.Screens.Play;
 
 public partial class Player : Control, IScreen
 {
-    public void OnEnter(MenuLogic logic)
+    public void OnEnter()
     {
     }
 
