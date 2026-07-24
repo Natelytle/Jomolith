@@ -1,0 +1,26 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Editor" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Project Path="Jomolith.2dog/Jomolith.2dog.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+  </Project>
+  <Project Path="Jomolith.csproj" />
+#if (tests)
+  
+#endif
+#if (web)
+  
+#endif
+
+  
+
+  <Project Path="Jomolith.tests/Jomolith.tests.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+  </Project>
+  <Project Path="Jomolith.web/Jomolith.web.csproj">
+    <BuildType Solution="Editor|*" Project="Debug" />
+  </Project>
+</Solution>

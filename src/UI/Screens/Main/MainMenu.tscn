@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://dshj5vw1tim7f"]
+
+[ext_resource type="Script" uid="uid://d2277vqipd66p" path="res://src/UI/Screens/Main/MainMenu.cs" id="1_iriyq"]
+
+[node name="MainMenu" type="Control" unique_id=480073684 node_paths=PackedStringArray("playButton", "settingsButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_iriyq")
+playButton = NodePath("CenterContainer/VBoxContainer/PlayButton")
+settingsButton = NodePath("CenterContainer/VBoxContainer/SettingsButton")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1499890824]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1618914731]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=572895818]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Main Menu"
+
+[node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=2097998673]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Play"
+
+[node name="SettingsButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1813363521]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Settings"
