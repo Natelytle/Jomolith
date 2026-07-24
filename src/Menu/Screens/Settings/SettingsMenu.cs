@@ -1,11 +1,11 @@
 using Godot;
-using Jomolith.UI.State;
+using Jomolith.Menu.State;
 
-namespace Jomolith.UI.Screens.Settings;
+namespace Jomolith.Menu.Screens.Settings;
 
 public partial class SettingsMenu : Control, IScreen
 {
-    public void OnEnter(UILogic logic)
+    public void OnEnter(MenuLogic logic)
     {
     }
 

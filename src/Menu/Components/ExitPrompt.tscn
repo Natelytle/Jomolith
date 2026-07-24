@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bddgjecey2oyy"]
 
-[ext_resource type="Script" uid="uid://cwed5vauv528u" path="res://src/UI/Components/ExitPrompt.cs" id="1_v5rns"]
+[ext_resource type="Script" uid="uid://cwed5vauv528u" path="res://src/Menu/Components/ExitPrompt.cs" id="1_v5rns"]
 
 [node name="ExitPrompt" type="Control" unique_id=1669703089 node_paths=PackedStringArray("confirmButton", "backButton")]
 layout_mode = 3

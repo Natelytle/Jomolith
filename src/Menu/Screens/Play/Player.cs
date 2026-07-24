@@ -1,11 +1,11 @@
 using Godot;
-using Jomolith.UI.State;
+using Jomolith.Menu.State;
 
-namespace Jomolith.UI.Screens.Play;
+namespace Jomolith.Menu.Screens.Play;
 
 public partial class Player : Control, IScreen
 {
-    public void OnEnter(UILogic logic)
+    public void OnEnter(MenuLogic logic)
     {
     }
 

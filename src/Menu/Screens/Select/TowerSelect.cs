@@ -1,11 +1,11 @@
 using Godot;
-using Jomolith.UI.State;
+using Jomolith.Menu.State;
 
-namespace Jomolith.UI.Screens.Select;
+namespace Jomolith.Menu.Screens.Select;
 
 public partial class TowerSelect : Control, IScreen
 {
-    public void OnEnter(UILogic logic)
+    public void OnEnter(MenuLogic logic)
     {
     }
 

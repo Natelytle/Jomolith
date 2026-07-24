@@ -1,18 +1,18 @@
 using Godot;
-using Jomolith.UI.State;
+using Jomolith.Menu.State;
 
-namespace Jomolith.UI.Screens.Main;
+namespace Jomolith.Menu.Screens.Main;
 
 public partial class MainMenu : Control, IScreen
 {
-    private UILogic uiLogic = null!;
+    private MenuLogic menuLogic = null!;
 
     [Export] private Button playButton { get; set; } = null!;
     [Export] private Button settingsButton { get; set; } = null!;
 
-    public void OnEnter(UILogic logic)
+    public void OnEnter(MenuLogic logic)
     {
-        uiLogic = logic;
+        menuLogic = logic;
 
         playButton.Pressed += OnPlayPressed;
         settingsButton.Pressed += OnSettingsPressed;
@@ -24,6 +24,6 @@ public partial class MainMenu : Control, IScreen
         settingsButton.Pressed -= OnSettingsPressed;
     }
 
-    private void OnPlayPressed() => uiLogic.Input(new UIState.Input.ToTowerSelect());
-    private void OnSettingsPressed() => uiLogic.Input(new UIState.Input.ToSettings());
+    private void OnPlayPressed() => menuLogic.Input(new MenuState.Input.ToTowerSelect());
+    private void OnSettingsPressed() => menuLogic.Input(new MenuState.Input.ToSettings());
 }

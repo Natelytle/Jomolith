@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://s1mk8jrrg8fn"]
 
-[ext_resource type="Script" uid="uid://ceqtthusdeags" path="res://src/UI/Components/Footer.cs" id="1_4awsb"]
+[ext_resource type="Script" uid="uid://ceqtthusdeags" path="res://src/Menu/Components/Footer.cs" id="1_4awsb"]
 
 [node name="Footer" type="Control" unique_id=217426201 node_paths=PackedStringArray("backButton")]
 custom_minimum_size = Vector2(0, 40)
