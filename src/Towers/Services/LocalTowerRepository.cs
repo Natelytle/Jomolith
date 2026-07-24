@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using Godot;
-using Jomolith.Towers.Models;
+using Jomolith.Towers.Domain.Mappers;
+using Jomolith.Towers.Domain.Models;
 
 namespace Jomolith.Towers.Services;
 
@@ -20,9 +21,9 @@ public class LocalTowerRepository : ITowerRepository
         targetPath = ProjectSettings.GlobalizePath(relativePath);
     }
 
-    public IReadOnlyList<TowerDto> LoadAllTowers()
+    public IReadOnlyList<TowerModel> LoadAllTowers()
     {
-        var towers = new List<TowerDto>();
+        var towers = new List<TowerModel>();
 
         if (!Directory.Exists(targetPath))
         {
@@ -35,10 +36,10 @@ public class LocalTowerRepository : ITowerRepository
             try
             {
                 string json = File.ReadAllText(filePath);
-                var tower = JsonSerializer.Deserialize(json, TowerJsonContext.Default.TowerDto);
+                var towerDto = JsonSerializer.Deserialize(json, TowerJsonContext.Default.TowerDto);
 
-                if (tower != null)
-                    towers.Add(tower);
+                if (towerDto != null)
+                    towers.Add(TowerMapper.ToDomain(towerDto));
             }
             catch (System.Exception ex)
             {
