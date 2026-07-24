@@ -19,9 +19,7 @@
       <PackageReference Include="Chickensoft.AutoInject" Version="2.13.30" />
       <PackageReference Include="Chickensoft.GodotNodeInterfaces" Version="3.0.30" />
       <PackageReference Include="Chickensoft.Introspection" Version="3.0.3" />
+      <PackageReference Include="Chickensoft.Introspection.Generator" Version="3.0.3" />
       <PackageReference Include="Chickensoft.LogicBlocks" Version="6.2.0" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="src\UI\Screens\" />
     </ItemGroup>
 </Project>

@@ -1,26 +1,20 @@
-using System.Linq;
+using Chickensoft.AutoInject;
+using Chickensoft.Introspection;
 using Godot;
-using Jomolith.Towers.Factory;
-using Jomolith.Towers.Services;
-using Jomolith.UI;
+using Jomolith.Menu;
 
 namespace Jomolith;
 
+[Meta(typeof(IAutoNode))]
 public partial class Main : Node
 {
-    [Export] private UIManager uiManager = null!;
+    public override void _Notification(int what) => this.Notify(what);
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
+    [Node("%MenuManager")]
+    private IMenuManager menuManager { get; set; } = null!;
+
+    public void OnResolved()
     {
-        var localTowerRepo = new LocalTowerRepository();
-        var tower = localTowerRepo.LoadAllTowers().First();
-
-        TowerBuilder towerBuilder = new TowerBuilder();
-        var towerNode = towerBuilder.BuildTower(tower);
-
-        AddChild(towerNode);
-
-        uiManager.QuitRequested += () => GetTree().Quit();
+        menuManager.QuitRequested += () => GetTree().Quit();
     }
 }

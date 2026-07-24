@@ -1,8 +1,15 @@
+using Chickensoft.GodotNodeInterfaces;
 using Godot;
 
-namespace Jomolith.UI.Components;
+namespace Jomolith.Menu.Components;
 
-public partial class ExitPrompt : Control
+public interface IExitPrompt : IControl
+{
+    event ExitPrompt.ExitConfirmedEventHandler ExitConfirmed;
+    event ExitPrompt.ExitCancelledEventHandler ExitCancelled;
+};
+
+public partial class ExitPrompt : Control, IExitPrompt
 {
     [Signal] public delegate void ExitConfirmedEventHandler();
     [Signal] public delegate void ExitCancelledEventHandler();

@@ -1,8 +1,14 @@
+using Chickensoft.GodotNodeInterfaces;
 using Godot;
 
-namespace Jomolith.UI.Components;
+namespace Jomolith.Menu.Components;
 
-public partial class Footer : Control
+public interface IFooter : IControl
+{
+    event Footer.BackPressedEventHandler BackPressed;
+}
+
+public partial class Footer : Control, IFooter
 {
     [Signal] public delegate void BackPressedEventHandler();
 

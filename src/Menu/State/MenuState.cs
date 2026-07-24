@@ -1,9 +1,11 @@
 using System;
+using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
 
-namespace Jomolith.UI.State;
+namespace Jomolith.Menu.State;
 
-public abstract record UIState : LogicBlockState
+[Meta]
+public abstract partial record MenuState : LogicBlockState
 {
     public static class Input {
         public readonly record struct ToPlay;
@@ -21,14 +23,16 @@ public abstract record UIState : LogicBlockState
         public readonly record struct QuitGame;
     }
 
-    public record Screen : UIState, IGet<Input.RequestExit> {
+    [Meta]
+    public partial record Screen : MenuState, IGet<Input.RequestExit> {
         public Type On(in Input.RequestExit input) {
             Push();
             return To<ExitPromptOpen>();
         }
     }
 
-    public record MainMenu : Screen, IGet<Input.ToTowerSelect>, IGet<Input.ToSettings> {
+    [Meta]
+    public partial record MainMenu : Screen, IGet<Input.ToTowerSelect>, IGet<Input.ToSettings> {
         public MainMenu() {
             this.OnEnter(() => Output(new Output.ScreenChanged(typeof(MainMenu), CanGoBack: false)));
         }
@@ -36,14 +40,16 @@ public abstract record UIState : LogicBlockState
         public Type On(in Input.ToSettings input) { Push(); return To<Settings>(); }
     }
 
-    public record Play : Screen, IGet<Input.Back> {
+    [Meta]
+    public partial record Play : Screen, IGet<Input.Back> {
         public Play() {
             this.OnEnter(() => Output(new Output.ScreenChanged(typeof(Play), CanGoBack: true)));
         }
         public Type On(in Input.Back input) => Pop() ?? To<MainMenu>();
     }
 
-    public record TowerSelect : Screen, IGet<Input.ToPlay>, IGet<Input.Back> {
+    [Meta]
+    public partial record TowerSelect : Screen, IGet<Input.ToPlay>, IGet<Input.Back> {
         public TowerSelect() {
             this.OnEnter(() => Output(new Output.ScreenChanged(typeof(TowerSelect), CanGoBack: true)));
         }
@@ -51,14 +57,16 @@ public abstract record UIState : LogicBlockState
         public Type On(in Input.Back input) => Pop() ?? To<MainMenu>();
     }
 
-    public record Settings : Screen, IGet<Input.Back> {
+    [Meta]
+    public partial record Settings : Screen, IGet<Input.Back> {
         public Settings() {
             this.OnEnter(() => Output(new Output.ScreenChanged(typeof(Settings), CanGoBack: true)));
         }
         public Type On(in Input.Back input) => Pop() ?? To<MainMenu>();
     }
 
-    public record ExitPromptOpen : UIState,
+    [Meta]
+    public partial record ExitPromptOpen : MenuState,
         IGet<Input.ExitCancelled>,
         IGet<Input.ExitConfirmed>
     {
