@@ -21,5 +21,9 @@
       <PackageReference Include="Chickensoft.Introspection" Version="3.0.3" />
       <PackageReference Include="Chickensoft.Introspection.Generator" Version="3.0.3" />
       <PackageReference Include="Chickensoft.LogicBlocks" Version="6.2.0" />
+      <PackageReference Include="RobloxFileFormat" Version="1.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="src\Towers\Factory\ClientObjects\" />
     </ItemGroup>
 </Project>
