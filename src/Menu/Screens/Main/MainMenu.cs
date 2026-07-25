@@ -8,6 +8,8 @@ namespace Jomolith.Menu.Screens.Main;
 [Meta(typeof(IAutoNode))]
 public partial class MainMenu : Control, IScreen
 {
+    public bool ShowFooter => false;
+
     public override void _Notification(int what) => this.Notify(what);
 
     [Dependency]
