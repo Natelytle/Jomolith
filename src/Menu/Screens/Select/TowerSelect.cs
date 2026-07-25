@@ -32,8 +32,8 @@ public partial class TowerSelect : Control, IScreen
     [Node("%DifficultyLabel")]
     private ILabel difficultyLabel { get; set; } = null!;
 
-    [Node("%PreviewViewport")]
-    private ISubViewport previewViewport { get; set; } = null!;
+    [Node("%PreviewNode")]
+    private INode3D previewNode { get; set; } = null!;
     //
     // [Node("%PlayButton")]
     // private IButton playButton { get; set; } = null!;
@@ -80,7 +80,7 @@ public partial class TowerSelect : Control, IScreen
     {
         currentPreview?.QueueFree();
         currentPreview = towerBuilder.BuildTower(tower, isPreview: true);
-        previewViewport.AddChildEx(currentPreview);
+        previewNode.AddChildEx(currentPreview);
 
         titleLabel.Text = tower.Name;
         creatorLabel.Text = $"By: {tower.Creator}";

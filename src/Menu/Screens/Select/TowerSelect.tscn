@@ -11,10 +11,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gm6kj")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=610944126]
-transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
-shadow_enabled = true
-
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=843048840]
 layout_mode = 1
 anchors_preset = 15
@@ -59,16 +55,21 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="PreviewViewport" type="SubViewport" parent="HBoxContainer/MarginContainer/VBoxContainer/SubViewportContainer" unique_id=1128489440]
-unique_name_in_owner = true
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 4
 
-[node name="Node3D" type="Node3D" parent="HBoxContainer/MarginContainer/VBoxContainer/SubViewportContainer/PreviewViewport" unique_id=1090819869]
+[node name="PreviewNode" type="Node3D" parent="HBoxContainer/MarginContainer/VBoxContainer/SubViewportContainer/PreviewViewport" unique_id=1090819869]
+unique_name_in_owner = true
 
-[node name="Camera3D" type="Camera3D" parent="HBoxContainer/MarginContainer/VBoxContainer/SubViewportContainer/PreviewViewport/Node3D" unique_id=493699803]
-transform = Transform3D(1, 0, 0, 0, 0.76604444, 0.6427876, 0, -0.6427876, 0.76604444, 0, 10000, 10000)
+[node name="Camera3D" type="Camera3D" parent="HBoxContainer/MarginContainer/VBoxContainer/SubViewportContainer/PreviewViewport/PreviewNode" unique_id=493699803]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 500, 1000)
+projection = 1
+size = 1000.0
 far = 40000.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="HBoxContainer/MarginContainer/VBoxContainer/SubViewportContainer/PreviewViewport/PreviewNode/Camera3D" unique_id=610944126]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, -123.256775, -1408.832)
 
 [node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer" unique_id=2086474514]
 layout_mode = 2
