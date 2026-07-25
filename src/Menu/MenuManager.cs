@@ -88,6 +88,7 @@ public partial class MenuManager : Control, IMenuManager
 
         screenContainer.AddChildEx(currentScreen!);
         currentScreen.OnEnter();
+        footer.Visible = currentScreen.ShowFooter;
     }
 
     public override void _UnhandledInput(InputEvent @event) {
