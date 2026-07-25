@@ -12,7 +12,8 @@ public class RbxmToTowerDtoConverter
 {
     private readonly List<IClientObjectDetector> detectors =
     [
-        new SpinningPlatformDetector()
+        new SpinningPlatformDetector(),
+        new MovingPlatformDetector()
     ];
 
     public TowerDto ConvertFilePath(string rbxmPath)

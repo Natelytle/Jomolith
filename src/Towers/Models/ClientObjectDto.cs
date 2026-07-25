@@ -1,12 +1,12 @@
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Jomolith.Towers.Models;
 
 public record ClientObjectDto(
-    [property: JsonPropertyName("id")] string Id,
+    [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("client_object_type")] string Type,
-    [property: JsonPropertyName("kit_version")] string KitVersion,
-    [property: JsonPropertyName("properties")] IReadOnlyDictionary<string, object> Properties,
+    [property: JsonPropertyName("properties")] IReadOnlyDictionary<string, JsonElement> Properties,
     [property: JsonPropertyName("parts")] IReadOnlyList<PartDto> Parts
 );
