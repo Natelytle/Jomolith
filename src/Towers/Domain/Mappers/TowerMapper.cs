@@ -47,12 +47,12 @@ public class TowerMapper
             VisualProperties = new VisualProperties(
                 dto.VisualProperties.Opacity,
                 dto.VisualProperties.ColourHex,
-                dto.VisualProperties.SurfaceXp,
-                dto.VisualProperties.SurfaceXn,
-                dto.VisualProperties.SurfaceYp,
-                dto.VisualProperties.SurfaceYn,
-                dto.VisualProperties.SurfaceZp,
-                dto.VisualProperties.SurfaceZn
+                parseSurfaceType(dto.VisualProperties.SurfaceXp),
+                parseSurfaceType(dto.VisualProperties.SurfaceXn),
+                parseSurfaceType(dto.VisualProperties.SurfaceYp),
+                parseSurfaceType(dto.VisualProperties.SurfaceYn),
+                parseSurfaceType(dto.VisualProperties.SurfaceZp),
+                parseSurfaceType(dto.VisualProperties.SurfaceZn)
             )
         };
 
@@ -70,7 +70,22 @@ public class TowerMapper
         "cylinder" => PartType.Cylinder,
         "ball" => PartType.Ball,
         "wedge" => PartType.Wedge,
-        "cornerwedge" => PartType.CornerWedge,
+        "corner_wedge" => PartType.CornerWedge,
         _ => PartType.Block
+    };
+
+    private static SurfaceType parseSurfaceType(string surface) => surface.ToLowerInvariant() switch
+    {
+        "smooth" => SurfaceType.Smooth,
+        "glue" => SurfaceType.Glue,
+        "weld" => SurfaceType.Weld,
+        "studs" => SurfaceType.Studs,
+        "inlet" => SurfaceType.Inlet,
+        "universal" => SurfaceType.Universal,
+        "hinge" => SurfaceType.Hinge,
+        "motor" => SurfaceType.Motor,
+        "stepping_motor" => SurfaceType.SteppingMotor,
+        "smooth_no_outlines" => SurfaceType.SmoothNoOutlines,
+        _ => SurfaceType.Smooth
     };
 }

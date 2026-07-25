@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c1lmlhmgxrcfs" path="res://src/Menu/MenuManager.tscn" id="1_4gxt3"]
 [ext_resource type="Script" uid="uid://i451hv7h0oa7" path="res://src/Main.cs" id="1_hk4rc"]
+[ext_resource type="Script" uid="uid://cq2kkkkwrbqkc" path="res://src/Towers/Import/TowerImportService.cs" id="3_chrbn"]
 
 [node name="Main" type="Control" unique_id=1906007764]
 layout_mode = 3
@@ -15,3 +16,6 @@ script = ExtResource("1_hk4rc")
 [node name="MenuManager" parent="." unique_id=1818137966 instance=ExtResource("1_4gxt3")]
 unique_name_in_owner = true
 layout_mode = 1
+
+[node name="TowerImportService" type="Node" parent="." unique_id=99426891]
+script = ExtResource("3_chrbn")
