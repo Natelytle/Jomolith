@@ -68,7 +68,6 @@ public class TowerBuilder
 
         partRoot.Position = new Vector3(part.Position.X, part.Position.Y, part.Position.Z);
         partRoot.Quaternion = new Quaternion(part.Rotation.X, part.Rotation.Y, part.Rotation.Z, part.Rotation.W);
-        partRoot.Scale = new Vector3(part.Scale.X, part.Scale.Y, part.Scale.Z);
 
         var shapeBuilder = shape_builders.GetValueOrDefault(part.Shape, fallback_builder);
 
