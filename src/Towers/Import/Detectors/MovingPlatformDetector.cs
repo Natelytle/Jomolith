@@ -14,17 +14,16 @@ public class MovingPlatformDetector : IClientObjectDetector
     {
         dto = null;
 
-        // Default delay value for a moving platform is 5.
-        // TODO: Shoving platforms can have specific delays/tweens for each movement.
-        double delaySecs = 5;
-        List<Vector3Dto>? positions;
-        PartDto? platform = null;
-
-        var children = instance.Children;
-
         if (instance.Name is "Moving Platform" or "MovingPlatform")
         {
-            positions = new List<Vector3Dto>();
+            // Default delay value for a moving platform is 5.
+            // TODO: Shoving platforms can have specific delays/tweens for each movement.
+            double delaySecs = 5;
+
+            var positions = new List<Vector3Dto>();
+            var platformParts = new List<PartDto>();
+
+            var children = instance.Children;
 
             foreach (var child in children)
             {
@@ -49,15 +48,15 @@ public class MovingPlatformDetector : IClientObjectDetector
 
                         break;
                     }
-                    case Part part when part.Name == "Platform":
+                    case Part part:
                     {
-                        platform = part.ToPartDto();
+                        platformParts.Add(part.ToPartDto());
                         break;
                     }
                 }
             }
 
-            if (positions.Count == 0 || platform is null)
+            if (positions.Count == 0 || platformParts.Count == 0)
             {
                 GD.Print($"Moving platform missing required children: {instance.Name} @{instance.UniqueId}");
                 return false;
@@ -71,7 +70,9 @@ public class MovingPlatformDetector : IClientObjectDetector
                     ["delay"] = JsonSerializer.SerializeToElement(delaySecs, TowerJsonContext.Default.Double),
                     ["positions"] = JsonSerializer.SerializeToElement(positions, TowerJsonContext.Default.ListVector3Dto)
                 },
-                Parts: [platform]
+                Parts: new Dictionary<string, List<PartDto>> {
+                    ["platform"] = platformParts
+                }
             );
 
         }
