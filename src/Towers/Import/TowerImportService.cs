@@ -48,7 +48,7 @@ public partial class TowerImportService : Node
                 return converter.ConvertFilePath(filePath);
             });
 
-            string targetPath = ProjectSettings.GlobalizePath($"{tower_directory}{towerDtoOutput.Metadata.Name}.json");
+            string targetPath = ProjectSettings.GlobalizePath($"{tower_directory}{towerDtoOutput.Name}.json");
 
             string json = JsonSerializer.Serialize(towerDtoOutput, TowerJsonContext.Default.TowerDto);
 

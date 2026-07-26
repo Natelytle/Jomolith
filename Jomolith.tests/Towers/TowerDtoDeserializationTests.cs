@@ -53,10 +53,9 @@ public class TowerDtoDeserializationTests
 
         // Assert: Metadata
         Assert.NotNull(tower);
-        Assert.Equal("Tower of Blind Fate", tower.Metadata.Name);
-        Assert.Equal("Nosav", tower.Metadata.Creator);
-        Assert.Equal(13, tower.Metadata.Difficulty);
-        Assert.Equal(0, tower.Metadata.Version);
+        Assert.Equal("Tower of Blind Fate", tower.Name);
+        Assert.Equal("Nosav", tower.Creator);
+        Assert.Equal(13, tower.Difficulty);
 
         // Assert: Parts
         Assert.Single(tower.Parts);

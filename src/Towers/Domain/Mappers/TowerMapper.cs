@@ -13,10 +13,9 @@ public class TowerMapper
     {
         var tower = new TowerModel
         {
-            Name = dto.Metadata.Name,
-            Creator = dto.Metadata.Creator,
-            Difficulty = dto.Metadata.Difficulty,
-            Version = dto.Metadata.Version
+            Name = dto.Name,
+            Creator = dto.Creator,
+            Difficulty = dto.Difficulty,
         };
 
         foreach (var partDto in dto.Parts)

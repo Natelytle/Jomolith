@@ -51,7 +51,9 @@ public class RbxmToTowerDtoConverter
         string fileNameWithoutExt = Path.GetFileNameWithoutExtension(rbxmPath);
 
         var towerDto = new TowerDto(
-            Metadata: new TowerMetadataDto(fileNameWithoutExt, "Unknown", 0, 0),
+            Name: fileNameWithoutExt,
+            Creator: "Unknown",
+            Difficulty: 0,
             Parts: parts,
             ClientObjects: clientObjects
         );
