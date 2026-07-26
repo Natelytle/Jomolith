@@ -14,8 +14,8 @@ public class TowerBuilder
         [PartType.Block] = new BlockShapeBuilder(),
         [PartType.Cylinder] = new CylinderShapeBuilder(),
         [PartType.Ball] = new BallShapeBuilder(),
-        [PartType.Wedge] = new WedgeShapeBuilder(),
-        [PartType.CornerWedge] = new CornerWedgeShapeBuilder()
+        [PartType.Wedge] = new BlockShapeBuilder(), // new WedgeShapeBuilder(),
+        [PartType.CornerWedge] = new BlockShapeBuilder() // new CornerWedgeShapeBuilder()
     };
 
     private static readonly IShapeBuilder fallback_builder = new BlockShapeBuilder();

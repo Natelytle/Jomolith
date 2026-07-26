@@ -4,7 +4,8 @@ using Jomolith.Towers.Models;
 namespace Jomolith.Towers.Services;
 
 [JsonSourceGenerationOptions(
-    PropertyNameCaseInsensitive = true
+    PropertyNameCaseInsensitive = true,
+    WriteIndented = true
 )]
 [JsonSerializable(typeof(TowerDto))]
 public partial class TowerJsonContext : JsonSerializerContext
