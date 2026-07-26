@@ -11,12 +11,9 @@ public class TowerDtoDeserializationTests
     {
         const string json = """
         {
-          "metadata": {
-            "name": "Tower of Blind Fate",
-            "creator": "Nosav",
-            "difficulty": 13,
-            "version": 0
-          },
+          "name": "Tower of Blind Fate",
+          "creator": "Nosav",
+          "difficulty": 13,
           "parts": [
             {
               "type": "part",
