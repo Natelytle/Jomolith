@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://c1lmlhmgxrcfs"]
 
-[ext_resource type="Script" uid="uid://dq5aohr5k8e6p" path="res://src/Menu/MenuManager.cs" id="1_7d1vm"]
+[ext_resource type="Script" uid="uid://dq5aohr5k8e6p" path="res://src/Menu/MenuScene.cs" id="1_7d1vm"]
 [ext_resource type="PackedScene" uid="uid://bddgjecey2oyy" path="res://src/Menu/Components/ExitPrompt.tscn" id="5_2kw27"]
 [ext_resource type="PackedScene" uid="uid://s1mk8jrrg8fn" path="res://src/Menu/Components/Footer.tscn" id="6_2kw27"]
 
-[node name="MenuManager" type="Control" unique_id=1818137966]
+[node name="MenuScene" type="Control" unique_id=1818137966]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

@@ -10,11 +10,11 @@ public partial class Main : Node
 {
     public override void _Notification(int what) => this.Notify(what);
 
-    [Node("%MenuManager")]
-    private IMenuManager menuManager { get; set; } = null!;
+    [Node("%MenuScene")]
+    private IMenuScene menuScene { get; set; } = null!;
 
     public void OnResolved()
     {
-        menuManager.QuitRequested += () => GetTree().Quit();
+        menuScene.QuitRequested += () => GetTree().Quit();
     }
 }

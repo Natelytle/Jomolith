@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ciwntaxb4jvc7"]
 
-[ext_resource type="PackedScene" uid="uid://c1lmlhmgxrcfs" path="res://src/Menu/MenuManager.tscn" id="1_4gxt3"]
+[ext_resource type="PackedScene" uid="uid://c1lmlhmgxrcfs" path="res://src/Menu/MenuScene.tscn" id="1_4gxt3"]
 [ext_resource type="Script" uid="uid://i451hv7h0oa7" path="res://src/Main.cs" id="1_hk4rc"]
 [ext_resource type="Script" uid="uid://cq2kkkkwrbqkc" path="res://src/Towers/Import/TowerImportService.cs" id="3_chrbn"]
 
@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_hk4rc")
 
-[node name="MenuManager" parent="." unique_id=1818137966 instance=ExtResource("1_4gxt3")]
+[node name="MenuScene" parent="." unique_id=1818137966 instance=ExtResource("1_4gxt3")]
 unique_name_in_owner = true
 layout_mode = 1
 

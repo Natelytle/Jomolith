@@ -9,13 +9,13 @@ using Jomolith.Menu.State;
 
 namespace Jomolith.Menu;
 
-public interface IMenuManager : IControl, IProvide<IMenuLogic>
+public interface IMenuScene : IControl, IProvide<IMenuLogic>
 {
-    event MenuManager.QuitRequestedEventHandler QuitRequested;
+    event MenuScene.QuitRequestedEventHandler QuitRequested;
 }
 
 [Meta(typeof(IAutoNode))]
-public partial class MenuManager : Control, IMenuManager
+public partial class MenuScene : Control, IMenuScene
 {
     public override void _Notification(int what) => this.Notify(what);
 
