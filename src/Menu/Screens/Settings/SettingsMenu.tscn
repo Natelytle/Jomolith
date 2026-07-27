@@ -11,7 +11,101 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_opcwo")
 
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1129856326]
+[node name="Tabs" type="TabContainer" parent="." unique_id=1092458973]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+current_tab = 1
+
+[node name="Display" type="MarginContainer" parent="Tabs" unique_id=220460934]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+metadata/_tab_index = 0
+
+[node name="Controls" type="MarginContainer" parent="Tabs" unique_id=295018615]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Tabs/Controls" unique_id=1013725401]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Tabs/Controls/VBoxContainer" unique_id=1492217260]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Tabs/Controls/VBoxContainer/VBoxContainer" unique_id=869149140]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Sensitivity:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Tabs/Controls/VBoxContainer/VBoxContainer" unique_id=383101589]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SensitivityBox" type="SpinBox" parent="Tabs/Controls/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1067428373]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 5.0
+step = 0.01
+allow_greater = true
+alignment = 2
+
+[node name="SensitivitySlider" type="HSlider" parent="Tabs/Controls/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1977299265]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 0.16
+max_value = 5.0
+step = 0.01
+value = 1.0
+allow_greater = true
+scrollable = false
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Tabs/Controls/VBoxContainer" unique_id=258925842]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Tabs/Controls/VBoxContainer/VBoxContainer2" unique_id=2134340975]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Keyboard Bindings:"
+
+[node name="BindingsList" type="VBoxContainer" parent="Tabs/Controls/VBoxContainer/VBoxContainer2" unique_id=1466336394]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="RebindPrompt" type="MarginContainer" parent="." unique_id=1305361998]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 100
+
+[node name="Panel" type="Panel" parent="RebindPrompt" unique_id=955673904]
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="RebindPrompt/Panel" unique_id=71139549]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,7 +113,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="CenterContainer" unique_id=924237278]
+[node name="Label" type="Label" parent="RebindPrompt/Panel/CenterContainer" unique_id=1474368648]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "In Settings"
+text = "Press Any Key..."
