@@ -13,7 +13,7 @@ custom_features="dotnet"
 [application]
 
 config/name="Jomolith"
-run/main_scene="res://src/Main.tscn"
+run/main_scene="res://src/App/App.tscn"
 config/features=PackedStringArray("4.7", "C#")
 
 [display]

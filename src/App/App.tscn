@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://ciwntaxb4jvc7"]
+
+[ext_resource type="Script" uid="uid://i451hv7h0oa7" path="res://src/App/App.cs" id="1_tn3dc"]
+[ext_resource type="PackedScene" uid="uid://c1lmlhmgxrcfs" path="res://src/Menu/MenuScene.tscn" id="2_qlumy"]
+[ext_resource type="Script" uid="uid://cq2kkkkwrbqkc" path="res://src/Towers/Import/TowerImportService.cs" id="3_sb8ss"]
+
+[node name="App" type="Control" unique_id=1906007764]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tn3dc")
+
+[node name="MenuScene" parent="." unique_id=1818137966 instance=ExtResource("2_qlumy")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="TowerImportService" type="Node" parent="." unique_id=99426891]
+script = ExtResource("3_sb8ss")
