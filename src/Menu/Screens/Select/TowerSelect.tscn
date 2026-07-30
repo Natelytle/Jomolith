@@ -27,7 +27,7 @@ theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 30
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer" unique_id=639115761]
-custom_minimum_size = Vector2(300, 0)
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer" unique_id=1155185086]
@@ -53,10 +53,12 @@ text = "Preview:"
 [node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer/MarginContainer/VBoxContainer" unique_id=1535366148]
 layout_mode = 2
 size_flags_vertical = 3
+stretch = true
 
 [node name="PreviewViewport" type="SubViewport" parent="HBoxContainer/MarginContainer/VBoxContainer/SubViewportContainer" unique_id=1128489440]
 transparent_bg = true
 handle_input_locally = false
+size = Vector2i(400, 462)
 render_target_update_mode = 4
 
 [node name="PreviewNode" type="Node3D" parent="HBoxContainer/MarginContainer/VBoxContainer/SubViewportContainer/PreviewViewport" unique_id=1090819869]
@@ -70,6 +72,12 @@ far = 40000.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="HBoxContainer/MarginContainer/VBoxContainer/SubViewportContainer/PreviewViewport/PreviewNode/Camera3D" unique_id=610944126]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, -123.256775, -1408.832)
+
+[node name="PlayButton" type="Button" parent="HBoxContainer/MarginContainer/VBoxContainer" unique_id=610338507]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Play"
 
 [node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer" unique_id=2086474514]
 layout_mode = 2

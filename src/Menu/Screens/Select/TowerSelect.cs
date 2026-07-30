@@ -34,9 +34,9 @@ public partial class TowerSelect : Control, IScreen
 
     [Node("%PreviewNode")]
     private INode3D previewNode { get; set; } = null!;
-    //
-    // [Node("%PlayButton")]
-    // private IButton playButton { get; set; } = null!;
+
+    [Node("%PlayButton")]
+    private IButton playButton { get; set; } = null!;
 
     public bool ShowFooter => true;
 
@@ -60,6 +60,7 @@ public partial class TowerSelect : Control, IScreen
             .OnOutput<TowerSelectState.Output.TowerConfirmed>((in o) => menuLogic.Input(new MenuState.Input.ToPlay(o.Tower)));
 
         towerList.ItemSelected += index => selectLogic.Input(new TowerSelectState.Input.Select((int)index));
+        playButton.Pressed += () => selectLogic.Input(new TowerSelectState.Input.Confirm());
 
         selectLogic.Start<TowerSelectState.Loading>();
     }

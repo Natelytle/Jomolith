@@ -1,6 +1,7 @@
 using System;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
+using Jomolith.App.Domain;
 using Jomolith.Towers.Domain.Models;
 
 namespace Jomolith.Menu.State;
@@ -37,8 +38,18 @@ public abstract partial record MenuState : LogicBlockState
         public MainMenu() {
             this.OnEnter(() => Output(new Output.ScreenChanged(typeof(MainMenu), CanGoBack: false)));
         }
-        public Type On(in Input.ToTowerSelect input) { Push(); return To<TowerSelect>(); }
-        public Type On(in Input.ToSettings input) { Push(); return To<Settings>(); }
+
+        public Type On(in Input.ToTowerSelect input)
+        {
+            Push();
+            return To<TowerSelect>();
+        }
+
+        public Type On(in Input.ToSettings input)
+        {
+            Push();
+            return To<Settings>();
+        }
     }
 
     [Meta]
@@ -46,6 +57,7 @@ public abstract partial record MenuState : LogicBlockState
         public Play() {
             this.OnEnter(() => Output(new Output.ScreenChanged(typeof(Play), CanGoBack: true)));
         }
+
         public Type On(in Input.Back input) => Pop() ?? To<MainMenu>();
     }
 
@@ -54,7 +66,15 @@ public abstract partial record MenuState : LogicBlockState
         public TowerSelect() {
             this.OnEnter(() => Output(new Output.ScreenChanged(typeof(TowerSelect), CanGoBack: true)));
         }
-        public Type On(in Input.ToPlay input) { Push(); return To<Play>(); }
+
+        public Type On(in Input.ToPlay input)
+        {
+            Push();
+            Get<IAppRepo>().OnEnteringTower(input.Tower);
+
+            return To<Play>();
+        }
+
         public Type On(in Input.Back input) => Pop() ?? To<MainMenu>();
     }
 

@@ -3,7 +3,7 @@ using Jomolith.Menu.State;
 
 namespace Jomolith.Menu.Screens.Play;
 
-public partial class Player : Control, IScreen
+public partial class PlayScreen : Control, IScreen
 {
     public bool ShowFooter => false;
 

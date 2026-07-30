@@ -4,6 +4,7 @@ using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
+using Jomolith.App.Domain;
 using Jomolith.Menu.Components;
 using Jomolith.Menu.State;
 
@@ -23,6 +24,9 @@ public partial class MenuScene : Control, IMenuScene
     private const string tower_select_scene_path = "res://src/Menu/Screens/Select/TowerSelect.tscn";
     private const string play_scene_path = "res://src/Menu/Screens/Play/Player.tscn";
     private const string settings_screen_path = "res://src/Menu/Screens/Settings/SettingsMenu.tscn";
+
+    [Dependency]
+    private IAppRepo appRepo => this.DependOn<IAppRepo>();
 
     [Signal]
     public delegate void QuitRequestedEventHandler();
@@ -59,6 +63,8 @@ public partial class MenuScene : Control, IMenuScene
             [typeof(MenuState.Play)] = play_scene_path,
             [typeof(MenuState.Settings)] = settings_screen_path,
         };
+
+        menuLogic.Set(appRepo);
 
         menuLogic.Bind()
             .OnOutput<MenuState.Output.ScreenChanged>((in o) =>
