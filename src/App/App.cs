@@ -6,10 +6,12 @@ using Jomolith.App.Domain;
 using Jomolith.App.State;
 using Jomolith.Gameplay;
 using Jomolith.Menu;
+using Jomolith.Settings.Domain.Models;
+using Jomolith.Settings.Services;
 
 namespace Jomolith.App;
 
-public interface IApp : INode, IProvide<IAppRepo>;
+public interface IApp : INode, IProvide<IAppRepo>, IProvide<GameplaySettings>;
 
 [Meta(typeof(IAutoNode))]
 public partial class App : Node, IApp
@@ -17,9 +19,11 @@ public partial class App : Node, IApp
     public override void _Notification(int what) => this.Notify(what);
 
     IAppRepo IProvide<IAppRepo>.Value() => appRepo;
+    GameplaySettings IProvide<GameplaySettings>.Value() => gameplaySettings;
 
     private IAppRepo appRepo { get; set; } = null!;
     private IAppLogic appLogic { get; set; } = null!;
+    private GameplaySettings gameplaySettings { get; set; } = null!;
 
     [Node("%GameplayScene")]
     private IGameplayScene gameplayScene { get; set; } = null!;
@@ -31,6 +35,12 @@ public partial class App : Node, IApp
     {
         appRepo = new AppRepo();
         appLogic = new AppLogic();
+
+        var settingsDto = new LocalSettingsRepository().Load();
+        gameplaySettings = new GameplaySettings
+        {
+            CameraSensitivity = settingsDto.CameraSensitivity
+        };
     }
 
     public void OnResolved()

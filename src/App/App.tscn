@@ -18,6 +18,7 @@ script = ExtResource("1_tn3dc")
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+mouse_filter = 0
 
 [node name="MenuScene" parent="." unique_id=1818137966 instance=ExtResource("2_qlumy")]
 unique_name_in_owner = true

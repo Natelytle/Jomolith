@@ -16,6 +16,7 @@ public class TowerMapper
             Name = dto.Name,
             Creator = dto.Creator,
             Difficulty = dto.Difficulty,
+            SpawnPosition = new Vector3(dto.SpawnPosition.X, dto.SpawnPosition.Y, dto.SpawnPosition.Z)
         };
 
         foreach (var partDto in dto.Parts)

@@ -14,6 +14,7 @@ public abstract partial record GameplayState : LogicBlockState
     {
         public readonly record struct BeginLoading;
         public readonly record struct LoadComplete;
+        public readonly record struct Pause;
     }
 
     public static class Output
@@ -21,6 +22,8 @@ public abstract partial record GameplayState : LogicBlockState
         public readonly record struct Load(TowerModel Tower);
         public readonly record struct Unload;
         public readonly record struct SpawnPlayer(Vector3 SpawnPosition);
+        public readonly record struct SetMouseCaptureMode(bool Captured);
+        public readonly record struct SetPaused(bool Paused);
     }
 
     [Meta]
@@ -49,8 +52,7 @@ public abstract partial record GameplayState : LogicBlockState
 
         public Type On(in Input.LoadComplete input)
         {
-            var d = Get<GameplayData>();
-            Get<IGameplayRepo>().OnGameplayStarted(d.CurrentTower!.SpawnPosition);
+            Get<IGameplayRepo>().OnGameplayStarted();
 
             return To<Playing>();
         }

@@ -25,7 +25,14 @@ public partial class GameplayLogic : LogicBlock, IGameplayLogic
     {
         yield return Get<IAppRepo>().AutoChannel.Bind()
             .On((in IAppRepo.EnteringTower o) => (State as GameplayState.Unloaded)?.OnTowerEntered(o.Tower));
-        yield return Get<IGameplayRepo>().AutoChannel.Bind()
-            .On((in IGameplayRepo.GameplayStarted o) => State?.Output(new GameplayState.Output.SpawnPlayer(o.SpawnPosition)));
+
+        var gameplayRepo = Get<IGameplayRepo>();
+
+        yield return gameplayRepo.IsMouseCaptured.Bind()
+            .OnValue(isMouseCaptured => State?.Output(new GameplayState.Output.SetMouseCaptureMode(isMouseCaptured)));
+
+        // TODO: How to make this work with the Paused gameplay state
+        yield return gameplayRepo.IsPaused.Bind()
+            .OnValue(paused => State?.Input(new GameplayState.Output.SetPaused(paused)));
     }
 }

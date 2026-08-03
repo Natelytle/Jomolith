@@ -2,6 +2,18 @@
 
 [ext_resource type="Script" uid="uid://5yhi6pf7ns1f" path="res://src/Gameplay/GameplayScene.cs" id="1_mchm7"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mchm7"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_c1s2s"]
+sky_material = SubResource("ProceduralSkyMaterial_mchm7")
+
+[sub_resource type="Environment" id="Environment_5an13"]
+background_mode = 2
+sky = SubResource("Sky_c1s2s")
+glow_enabled = true
+
 [node name="GameplayScene" type="Control" unique_id=1276163771]
 layout_mode = 3
 anchors_preset = 15
@@ -9,6 +21,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_mchm7")
 
 [node name="GameplayContainer" type="SubViewportContainer" parent="." unique_id=494473532]
@@ -18,10 +31,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="GameplayContainer" unique_id=405512082]
 handle_input_locally = false
+physics_object_picking = true
+size = Vector2i(1280, 720)
 render_target_update_mode = 4
 
 [node name="World" type="Node3D" parent="GameplayContainer/SubViewport" unique_id=1058568820]
 unique_name_in_owner = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="GameplayContainer/SubViewport/World" unique_id=1234024186]
+environment = SubResource("Environment_5an13")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="GameplayContainer/SubViewport/World" unique_id=1071476346]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
