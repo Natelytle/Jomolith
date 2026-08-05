@@ -14,7 +14,6 @@ public partial class MenuLogic : LogicBlock, IMenuLogic
         Set(new MenuState.MainMenu());
         Set(new MenuState.TowerSelect());
         Set(new MenuState.Settings());
-        Set(new MenuState.Play());
         Set(new MenuState.ExitPromptOpen());
     }
 }

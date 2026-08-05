@@ -10,17 +10,11 @@ public interface IGameplayRepo : IDisposable
 
     IAutoValue<bool> IsMouseCaptured { get; }
 
-    IAutoValue<bool> IsPaused { get; }
-
     readonly record struct GameplayStarted;
 
     void OnGameplayStarted();
 
     void SetIsMouseCaptured(bool captured);
-
-    void Pause();
-
-    void Resume();
 }
 
 public class GameplayRepo : IGameplayRepo
@@ -44,16 +38,6 @@ public class GameplayRepo : IGameplayRepo
     public void SetIsMouseCaptured(bool captured)
     {
         isMouseCaptured.Value = captured;
-    }
-
-    public void Pause()
-    {
-        isPaused.Value = true;
-    }
-
-    public void Resume()
-    {
-        isPaused.Value = false;
     }
 
     #region Internals

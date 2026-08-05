@@ -6,11 +6,15 @@ using Chickensoft.Introspection;
 using Godot;
 using Jomolith.App.Domain;
 using Jomolith.Menu.Components;
+using Jomolith.Menu.Screens.Main;
+using Jomolith.Menu.Screens.Select;
+using Jomolith.Menu.Screens.Settings;
 using Jomolith.Menu.State;
+using Jomolith.Towers.Domain.Models;
 
 namespace Jomolith.Menu;
 
-public interface IMenuScene : IControl, IProvide<IMenuLogic>
+public interface IMenuScene : IControl
 {
     event MenuScene.QuitRequestedEventHandler QuitRequested;
 }
@@ -20,23 +24,25 @@ public partial class MenuScene : Control, IMenuScene
 {
     public override void _Notification(int what) => this.Notify(what);
 
-    private const string main_menu_scene_path = "res://src/Menu/Screens/Main/MainMenu.tscn";
-    private const string tower_select_scene_path = "res://src/Menu/Screens/Select/TowerSelect.tscn";
-    private const string play_scene_path = "res://src/Menu/Screens/Play/Player.tscn";
-    private const string settings_screen_path = "res://src/Menu/Screens/Settings/SettingsMenu.tscn";
-
     [Dependency]
     private IAppRepo appRepo => this.DependOn<IAppRepo>();
 
     [Signal]
     public delegate void QuitRequestedEventHandler();
 
-    IMenuLogic IProvide<IMenuLogic>.Value() => menuLogic;
-
     private MenuLogic menuLogic = null!;
     private IScreen? currentScreen;
 
-    private Dictionary<Type, string> screenScenePaths = null!;
+    private Dictionary<Type, IScreen> screens = null!;
+
+    [Node("%MainMenu")]
+    private MainMenu mainMenu { get; set; } = null!;
+
+    [Node("%TowerSelect")]
+    private TowerSelect towerSelect { get; set; } = null!;
+
+    [Node("%SettingsMenu")]
+    private SettingsMenu settingsMenu { get; set; } = null!;
 
     [Node("%ScreenContainer")]
     private IControl screenContainer { get; set; } = null!;
@@ -52,16 +58,20 @@ public partial class MenuScene : Control, IMenuScene
     public void Setup()
     {
         menuLogic = new MenuLogic();
+
+        mainMenu.PlayButtonPressed += onPlayButtonPressed;
+        mainMenu.SettingsButtonPressed += onSettingsButtonPressed;
+        towerSelect.TowerSelected += onTowerSelected;
+        footer.BackPressed += onBackPressed;
     }
 
     public void OnResolved()
     {
-        screenScenePaths = new Dictionary<Type, string>
+        screens = new Dictionary<Type, IScreen>
         {
-            [typeof(MenuState.MainMenu)] = main_menu_scene_path,
-            [typeof(MenuState.TowerSelect)] = tower_select_scene_path,
-            [typeof(MenuState.Play)] = play_scene_path,
-            [typeof(MenuState.Settings)] = settings_screen_path,
+            [typeof(MenuState.MainMenu)] = mainMenu,
+            [typeof(MenuState.TowerSelect)] = towerSelect,
+            [typeof(MenuState.Settings)] = settingsMenu,
         };
 
         menuLogic.Set(appRepo);
@@ -75,8 +85,6 @@ public partial class MenuScene : Control, IMenuScene
             .OnOutput<MenuState.Output.ExitPromptVisible>((in o) => exitPrompt.Visible = o.Visible)
             .OnOutput<MenuState.Output.QuitGame>((in _) => EmitSignal(SignalName.QuitRequested));
 
-        footer.BackPressed += () => menuLogic.Input(new MenuState.Input.Back());
-
         this.Provide();
 
         menuLogic.Start<MenuState.MainMenu>();
@@ -84,21 +92,19 @@ public partial class MenuScene : Control, IMenuScene
 
     public void SwapScreen(Type screenType)
     {
-        if (currentScreen is not null)
-        {
-            currentScreen.OnExit();
-            currentScreen.QueueFree();
-        }
+        currentScreen?.Hide();
 
-        currentScreen = (IScreen)GD.Load<PackedScene>(screenScenePaths[screenType]).Instantiate();
+        currentScreen = screens[screenType];
+        currentScreen.Show();
 
-        screenContainer.AddChildEx(currentScreen!);
         currentScreen.OnEnter();
         footer.Visible = currentScreen.ShowFooter;
     }
 
-    public override void _UnhandledInput(InputEvent @event) {
-        if (!@event.IsActionPressed("ui_cancel")) return; // Escape, by default
+    public override void _Input(InputEvent @event)
+    {
+        if (!Visible) return; // Only process input if the menu is visible.
+        if (!@event.IsActionPressed("ui_cancel")) return;
 
         if (exitPrompt.Visible)
             menuLogic.Input(new MenuState.Input.ExitCancelled());
@@ -109,4 +115,17 @@ public partial class MenuScene : Control, IMenuScene
 
         GetViewport().SetInputAsHandled();
     }
+
+    public override void _ExitTree()
+    {
+        mainMenu.PlayButtonPressed -= onPlayButtonPressed;
+        mainMenu.SettingsButtonPressed -= onSettingsButtonPressed;
+        towerSelect.TowerSelected -= onTowerSelected;
+        footer.BackPressed -= onBackPressed;
+    }
+
+    private void onPlayButtonPressed() => menuLogic.Input(new MenuState.Input.ToTowerSelect());
+    private void onSettingsButtonPressed() => menuLogic.Input(new MenuState.Input.ToSettings());
+    private void onTowerSelected(TowerModel towerModel) => menuLogic.Input(new MenuState.Input.TowerSelected(towerModel));
+    private void onBackPressed() => menuLogic.Input(new MenuState.Input.Back());
 }

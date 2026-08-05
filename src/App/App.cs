@@ -48,8 +48,8 @@ public partial class App : Node, IApp
         appLogic.Set(appRepo);
 
         appLogic.Bind()
-            .OnOutput((in AppState.Output.ShowGame _) => gameplayScene.Show())
-            .OnOutput((in AppState.Output.HideGame _) => gameplayScene.Hide());
+            .OnOutput((in AppState.Output.SetGameVisibility o) => gameplayScene.Visible = o.Visible)
+            .OnOutput((in AppState.Output.SetMenuVisibility o) => menuScene.Visible = o.Visible);
 
         menuScene.QuitRequested += () => GetTree().Quit();
 

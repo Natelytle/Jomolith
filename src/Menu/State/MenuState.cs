@@ -10,7 +10,7 @@ namespace Jomolith.Menu.State;
 public abstract partial record MenuState : LogicBlockState
 {
     public static class Input {
-        public readonly record struct ToPlay(TowerModel Tower);
+        public readonly record struct TowerSelected(TowerModel Tower);
         public readonly record struct ToTowerSelect;
         public readonly record struct ToSettings;
         public readonly record struct Back;
@@ -53,26 +53,16 @@ public abstract partial record MenuState : LogicBlockState
     }
 
     [Meta]
-    public partial record Play : Screen, IGet<Input.Back> {
-        public Play() {
-            this.OnEnter(() => Output(new Output.ScreenChanged(typeof(Play), CanGoBack: true)));
-        }
-
-        public Type On(in Input.Back input) => Pop() ?? To<MainMenu>();
-    }
-
-    [Meta]
-    public partial record TowerSelect : Screen, IGet<Input.ToPlay>, IGet<Input.Back> {
+    public partial record TowerSelect : Screen, IGet<Input.TowerSelected>, IGet<Input.Back> {
         public TowerSelect() {
             this.OnEnter(() => Output(new Output.ScreenChanged(typeof(TowerSelect), CanGoBack: true)));
         }
 
-        public Type On(in Input.ToPlay input)
+        public Type On(in Input.TowerSelected input)
         {
-            Push();
             Get<IAppRepo>().OnEnteringTower(input.Tower);
 
-            return To<Play>();
+            return ToSelf();
         }
 
         public Type On(in Input.Back input) => Pop() ?? To<MainMenu>();

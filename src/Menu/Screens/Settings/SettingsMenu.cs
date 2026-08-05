@@ -18,9 +18,6 @@ public partial class SettingsMenu : Control, IScreen
     private ISettingsRepository settingsRepository = null!;
 
     [Dependency]
-    private IMenuLogic menuLogic => this.DependOn<IMenuLogic>();
-
-    [Dependency]
     private GameplaySettings gameplaySettings => this.DependOn<GameplaySettings>();
 
     [Node("%Tabs")]

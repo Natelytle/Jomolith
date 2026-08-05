@@ -5,24 +5,16 @@
 [ext_resource type="PackedScene" uid="uid://clf5iaryr1f0s" path="res://src/Gameplay/GameplayScene.tscn" id="2_sb8ss"]
 [ext_resource type="Script" uid="uid://cq2kkkkwrbqkc" path="res://src/Towers/Import/TowerImportService.cs" id="3_sb8ss"]
 
-[node name="App" type="Control" unique_id=1906007764]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="App" type="CanvasLayer" unique_id=888507017]
 script = ExtResource("1_tn3dc")
 
 [node name="GameplayScene" parent="." unique_id=1276163771 instance=ExtResource("2_sb8ss")]
 unique_name_in_owner = true
 visible = false
-layout_mode = 1
 mouse_filter = 0
 
 [node name="MenuScene" parent="." unique_id=1818137966 instance=ExtResource("2_qlumy")]
 unique_name_in_owner = true
-layout_mode = 1
 
 [node name="TowerImportService" type="Node" parent="." unique_id=99426891]
 script = ExtResource("3_sb8ss")

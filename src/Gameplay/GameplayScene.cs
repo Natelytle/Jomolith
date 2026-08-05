@@ -4,6 +4,7 @@ using Chickensoft.Introspection;
 using Godot;
 using Jomolith.App.Domain;
 using Jomolith.Gameplay.Domain;
+using Jomolith.Gameplay.PauseMenu;
 using Jomolith.Gameplay.State;
 using Jomolith.Towers.Domain.Models;
 using Jomolith.Towers.Factory;
@@ -30,6 +31,9 @@ public partial class GameplayScene : Control, IGameplayScene
 
     private readonly TowerBuilder towerBuilder = new();
 
+    [Node("%PauseMenu")]
+    private IPauseMenu pauseMenu { get; set; } = null!;
+
     [Node("%World")]
     private INode3D world { get; set; } = null!;
 
@@ -40,6 +44,9 @@ public partial class GameplayScene : Control, IGameplayScene
     {
         gameplayRepo = new GameplayRepo();
         gameplayLogic = new GameplayLogic();
+
+        pauseMenu.ResumePressed += onResumePressed;
+        pauseMenu.ExitPressed += onExitPressed;
     }
 
     public void OnResolved()
@@ -53,7 +60,7 @@ public partial class GameplayScene : Control, IGameplayScene
             .OnOutput((in GameplayState.Output.SetMouseCaptureMode output) =>
                 Input.SetMouseMode(output.Captured ? Input.MouseModeEnum.Captured : Input.MouseModeEnum.Visible))
             .OnOutput((in GameplayState.Output.SetPaused output) =>
-                CallDeferred(nameof(setPauseMode), output.Paused));
+                CallDeferred(nameof(setPauseMode), output.IsPaused));
 
         this.Provide();
 
@@ -62,7 +69,12 @@ public partial class GameplayScene : Control, IGameplayScene
 
     public override void _UnhandledInput(InputEvent @event)
     {
-        base._UnhandledInput(@event);
+        if (!Visible) return; // Only process input if gameplay is visible.
+
+        if (@event.IsActionPressed("ui_cancel"))
+        {
+            gameplayLogic.Input(new GameplayState.Input.TogglePause());
+        }
     }
 
     private void load(TowerModel model)
@@ -85,5 +97,14 @@ public partial class GameplayScene : Control, IGameplayScene
         towerNode = null;
     }
 
-    private void setPauseMode(bool paused) => GetTree().Paused = paused;
+    private void onResumePressed() => gameplayLogic.Input(new GameplayState.Input.TogglePause());
+
+    private void onExitPressed() => gameplayLogic.Input(new GameplayState.Input.ExitGameplay());
+
+    private void setPauseMode(bool paused)
+    {
+        GetTree().Paused = paused;
+
+        pauseMenu.Visible = paused;
+    }
 }

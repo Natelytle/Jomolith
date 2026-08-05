@@ -17,30 +17,44 @@ public abstract partial record AppState : LogicBlockState
 
     public static class Output
     {
-        public readonly record struct ShowGame;
-        public readonly record struct HideGame;
+        public readonly record struct SetGameVisibility(bool Visible);
+        public readonly record struct SetMenuVisibility(bool Visible);
     }
 
     [Meta]
     public partial record InMenus : AppState, IGet<Input.ToGameplay>
     {
+        public InMenus()
+        {
+            this.OnEnter(() =>
+            {
+                Output(new Output.SetMenuVisibility(true));
+            });
+
+            this.OnExit(() =>
+            {
+                Output(new Output.SetMenuVisibility(false));
+            });
+        }
+
         public void OnTowerEntered(TowerModel tower) => Input(new Input.ToGameplay(tower));
 
         public Type On(in Input.ToGameplay input) => To<InGameplay>();
     }
 
+    [Meta]
     public partial record InGameplay : AppState, IGet<Input.ToMenus>
     {
         public InGameplay()
         {
             this.OnEnter(() =>
             {
-                Output(new Output.ShowGame());
+                Output(new Output.SetGameVisibility(true));
             });
 
             this.OnExit(() =>
             {
-                Output(new Output.HideGame());
+                Output(new Output.SetGameVisibility(false));
             });
         }
 

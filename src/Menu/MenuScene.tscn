@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://c1lmlhmgxrcfs"]
 
 [ext_resource type="Script" uid="uid://dq5aohr5k8e6p" path="res://src/Menu/MenuScene.cs" id="1_7d1vm"]
+[ext_resource type="PackedScene" uid="uid://dshj5vw1tim7f" path="res://src/Menu/Screens/Main/MainMenu.tscn" id="2_l454p"]
+[ext_resource type="PackedScene" uid="uid://cohoji6atpl3g" path="res://src/Menu/Screens/Select/TowerSelect.tscn" id="3_mdblq"]
+[ext_resource type="PackedScene" uid="uid://hmd2hphrq6lm" path="res://src/Menu/Screens/Settings/SettingsMenu.tscn" id="4_sl0pv"]
 [ext_resource type="PackedScene" uid="uid://bddgjecey2oyy" path="res://src/Menu/Components/ExitPrompt.tscn" id="5_2kw27"]
 [ext_resource type="PackedScene" uid="uid://s1mk8jrrg8fn" path="res://src/Menu/Components/Footer.tscn" id="6_2kw27"]
 
@@ -27,6 +30,20 @@ alignment = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="MainMenu" parent="VBoxContainer/ScreenContainer" unique_id=480073684 instance=ExtResource("2_l454p")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="TowerSelect" parent="VBoxContainer/ScreenContainer" unique_id=661138225 instance=ExtResource("3_mdblq")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="SettingsMenu" parent="VBoxContainer/ScreenContainer" unique_id=1123018820 instance=ExtResource("4_sl0pv")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
 
 [node name="Footer" parent="VBoxContainer" unique_id=217426201 instance=ExtResource("6_2kw27")]
 unique_name_in_owner = true

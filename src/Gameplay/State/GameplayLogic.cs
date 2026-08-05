@@ -19,6 +19,7 @@ public partial class GameplayLogic : LogicBlock, IGameplayLogic
         Set(new GameplayState.Loading());
         Set(new GameplayState.Playing());
         Set(new GameplayState.Paused());
+        Set(new GameplayState.Quit());
     }
 
     public override IEnumerable<IDisposable> OnStartSubscriptions()
@@ -30,9 +31,5 @@ public partial class GameplayLogic : LogicBlock, IGameplayLogic
 
         yield return gameplayRepo.IsMouseCaptured.Bind()
             .OnValue(isMouseCaptured => State?.Output(new GameplayState.Output.SetMouseCaptureMode(isMouseCaptured)));
-
-        // TODO: How to make this work with the Paused gameplay state
-        yield return gameplayRepo.IsPaused.Bind()
-            .OnValue(paused => State?.Input(new GameplayState.Output.SetPaused(paused)));
     }
 }
