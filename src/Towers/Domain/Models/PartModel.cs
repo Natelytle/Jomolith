@@ -16,8 +16,8 @@ public class PartModel
     public Quaternion Rotation { get; set; } = Quaternion.Identity;
     public Vector3 Scale { get; set; } = new(1, 2, 4);
 
-    public float Height => Scale.Y;
-    public float CylinderRadius => Math.Min(Scale.X, Scale.Z) / 2.0f;
+    public float Height => Scale.X;
+    public float CylinderRadius => Math.Min(Scale.Y, Scale.Z) / 2.0f;
     public float SphereRadius => Math.Min(Math.Min(Scale.X, Scale.Z), Scale.Y) / 2.0f;
 
     public bool CanCollide { get; set; } = true;

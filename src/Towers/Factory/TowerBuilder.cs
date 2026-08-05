@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 using Jomolith.Towers.Domain.Enums;
@@ -113,6 +114,11 @@ public class TowerBuilder
         {
             partRoot.AddChild(buildPart(childPart, isPreview));
         }
+
+        // Cylinders are centered around the X axis in Roblox, but around the Y axis in Godot
+        // We rotate all cylinders around Z by 90 degrees to account for this.
+        if (part.Shape is PartType.Cylinder)
+            partRoot.RotateObjectLocal(new Vector3(0, 0, 1), float.Pi / 2.0f);
 
         return partRoot;
     }
