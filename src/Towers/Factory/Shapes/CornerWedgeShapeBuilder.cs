@@ -14,4 +14,9 @@ public class CornerWedgeShapeBuilder : IShapeBuilder
     {
         throw new System.NotImplementedException();
     }
+
+    public float GetVolume(PartModel part)
+    {
+        throw new System.NotImplementedException();
+    }
 }

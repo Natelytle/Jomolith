@@ -17,4 +17,6 @@ public class CylinderShapeBuilder : IShapeBuilder
         Height = part.Height,
         Radius = part.CylinderRadius
     };
+
+    public float GetVolume(PartModel part) => float.Pi * part.CylinderRadius * part.CylinderRadius * part.Height;
 }

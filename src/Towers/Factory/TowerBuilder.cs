@@ -49,6 +49,8 @@ public class TowerBuilder
     {
         CollisionObject3D partRoot;
 
+        var shapeBuilder = shape_builders.GetValueOrDefault(part.Shape, fallback_builder);
+
         if (isPreview || part.Anchored)
         {
             partRoot = new StaticBody3D();
@@ -61,7 +63,8 @@ public class TowerBuilder
                 {
                     Friction = part.PhysicalProperties.Friction,
                     Bounce = part.PhysicalProperties.Elasticity
-                }
+                },
+                Mass = part.PhysicalProperties.Density * shapeBuilder.GetVolume(part)
             };
         }
 
@@ -69,8 +72,6 @@ public class TowerBuilder
 
         partRoot.Position = new Vector3(part.Position.X, part.Position.Y, part.Position.Z);
         partRoot.Quaternion = new Quaternion(part.Rotation.X, part.Rotation.Y, part.Rotation.Z, part.Rotation.W);
-
-        var shapeBuilder = shape_builders.GetValueOrDefault(part.Shape, fallback_builder);
 
         if (part.VisualProperties.Opacity > 0.001f)
         {

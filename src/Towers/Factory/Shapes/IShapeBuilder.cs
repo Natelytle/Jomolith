@@ -7,4 +7,5 @@ public interface IShapeBuilder
 {
     Mesh BuildMesh(PartModel part);
     Shape3D BuildCollisionShape(PartModel part);
+    float GetVolume(PartModel part);
 }

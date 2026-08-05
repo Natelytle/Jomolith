@@ -14,4 +14,6 @@ public class BlockShapeBuilder : IShapeBuilder
     {
         Size = new Vector3(part.Scale.X, part.Scale.Y, part.Scale.Z)
     };
+
+    public float GetVolume(PartModel part) => part.Scale.X * part.Scale.Y * part.Scale.Z;
 }

@@ -15,4 +15,6 @@ public class BallShapeBuilder : IShapeBuilder
     {
         Radius = part.SphereRadius
     };
+
+    public float GetVolume(PartModel part) => 4 / 3.0f * float.Pi * part.SphereRadius * part.SphereRadius * part.SphereRadius;
 }

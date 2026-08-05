@@ -32,4 +32,6 @@ public class WedgeShapeBuilder : IShapeBuilder
             }
         };
     }
+
+    public float GetVolume(PartModel part) => part.Scale.X * part.Scale.Y * part.Scale.Z / 2.0f;
 }

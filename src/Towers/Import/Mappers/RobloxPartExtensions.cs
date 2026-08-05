@@ -1,16 +1,18 @@
-using System.Collections.Generic;
+using System.Numerics;
+using Jomolith.Towers.Domain.Enums;
+using Jomolith.Towers.Models;
+using RobloxFiles;
 using RobloxFiles.DataTypes;
+using Quaternion = System.Numerics.Quaternion;
 
 namespace Jomolith.Towers.Import.Mappers;
 
-using System.Numerics;
-using RobloxFiles;
-using RobloxFiles.Enums;
-using Models;
-using Domain.Enums;
-
 public static class RobloxPartExtensions
 {
+    private const float plastic_friction = 0.3f;
+    private const float plastic_density = 0.7f;
+    private const float plastic_bounce = 0.5f;
+
     public static PartDto ToPartDto(this FormFactorPart robloxPart)
     {
         float[] c = robloxPart.CFrame.Rotation.GetComponents();
@@ -22,21 +24,21 @@ public static class RobloxPartExtensions
         );
         var q = Quaternion.CreateFromRotationMatrix(rotationMatrix);
 
-        Domain.Enums.PartType shape = Domain.Enums.PartType.Block;
+        PartType shape = PartType.Block;
 
         if (robloxPart is Part part)
         {
             shape = part.Shape switch
             {
-                RobloxFiles.Enums.PartType.Block => Domain.Enums.PartType.Block,
-                RobloxFiles.Enums.PartType.Ball => Domain.Enums.PartType.Ball,
-                RobloxFiles.Enums.PartType.Cylinder => Domain.Enums.PartType.Cylinder,
+                RobloxFiles.Enums.PartType.Block => PartType.Block,
+                RobloxFiles.Enums.PartType.Ball => PartType.Ball,
+                RobloxFiles.Enums.PartType.Cylinder => PartType.Cylinder,
                 _ => shape // Fallback
             };
         }
         else if (robloxPart is WedgePart)
         {
-            shape = Domain.Enums.PartType.Wedge;
+            shape = PartType.Wedge;
         }
 
         return new PartDto
@@ -50,9 +52,9 @@ public static class RobloxPartExtensions
             CanCollide: robloxPart.CanCollide,
             PhysicalProperties: new PhysicalPropertiesDto
             (
-                Friction: robloxPart.CustomPhysicalProperties?.Friction ?? 1.0f,
-                Density: robloxPart.CustomPhysicalProperties?.Density ?? 1.0f,
-                Elasticity: robloxPart.CustomPhysicalProperties?.Elasticity ?? 0.5f
+                Friction: robloxPart.CustomPhysicalProperties?.Friction ?? plastic_friction,
+                Density: robloxPart.CustomPhysicalProperties?.Density ?? plastic_density,
+                Elasticity: robloxPart.CustomPhysicalProperties?.Elasticity ?? plastic_bounce
             ),
             VisualProperties: new VisualPropertiesDto
             (
