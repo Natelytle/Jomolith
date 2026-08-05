@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Numerics;
 using Jomolith.Towers.Import.Detectors;
 using Jomolith.Towers.Import.Mappers;
 using Jomolith.Towers.Models;
@@ -15,14 +17,12 @@ public class RbxmToTowerDtoConverter
         new SpinningPlatformDetector()
     ];
 
-    public TowerDto ConvertFilePath(string rbxmPath)
+    public TowerDto ConvertRobloxFile(RobloxFile file, string fileName)
     {
-        RobloxFile file = RobloxFile.Open(rbxmPath);
-
         var clientObjects = new List<ClientObjectDto>();
         var processedInstances = new HashSet<Instance>();
 
-        // Pass 1: Detect Interactive Client Objects (Spinners, Pushers, etc.)
+        // 1: Client Objects
         foreach (Instance descendant in file.GetDescendants())
         {
             if (processedInstances.Contains(descendant)) continue;
@@ -38,25 +38,33 @@ public class RbxmToTowerDtoConverter
             }
         }
 
-        // Pass 2: Fallback Parts
+        // 2: Parts
         var parts = new List<PartDto>();
         foreach (Instance descendant in file.GetDescendants())
         {
-            if (descendant is Part robloxPart && !processedInstances.Contains(robloxPart))
+            if (descendant is FormFactorPart robloxPart && !processedInstances.Contains(robloxPart))
             {
                 parts.Add(robloxPart.ToPartDto());
             }
         }
 
-        string fileNameWithoutExt = Path.GetFileNameWithoutExtension(rbxmPath);
+        // 3: Spawn Location
+        Vector3Dto spawnPosition = new Vector3Dto(0, 0, 0);
+
+        var spawn = (SpawnLocation?)file.GetDescendants().FirstOrDefault(p => p is SpawnLocation);
+
+        if (spawn != null)
+        {
+            spawnPosition = new Vector3Dto(spawn.CFrame.Position.X, spawn.CFrame.Position.Y, spawn.CFrame.Position.Z);
+        }
 
         // TODO: SpawnPosition is always 0
         var towerDto = new TowerDto(
-            Name: fileNameWithoutExt,
+            Name: fileName,
             Creator: "Unknown",
             Difficulty: 0,
             Parts: parts,
-            SpawnPosition: new Vector3Dto(0, 0, 0),
+            SpawnPosition: spawnPosition,
             ClientObjects: clientObjects
         );
 

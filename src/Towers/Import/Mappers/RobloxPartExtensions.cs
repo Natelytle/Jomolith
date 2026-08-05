@@ -11,7 +11,7 @@ using Domain.Enums;
 
 public static class RobloxPartExtensions
 {
-    public static PartDto ToPartDto(this Part robloxPart)
+    public static PartDto ToPartDto(this FormFactorPart robloxPart)
     {
         float[] c = robloxPart.CFrame.Rotation.GetComponents();
         var rotationMatrix = new Matrix4x4(
@@ -22,15 +22,22 @@ public static class RobloxPartExtensions
         );
         var q = Quaternion.CreateFromRotationMatrix(rotationMatrix);
 
-        var shape = robloxPart.Shape switch
+        Domain.Enums.PartType shape = Domain.Enums.PartType.Block;
+
+        if (robloxPart is Part part)
         {
-            RobloxFiles.Enums.PartType.Block => Domain.Enums.PartType.Block,
-            RobloxFiles.Enums.PartType.Ball => Domain.Enums.PartType.Ball,
-            RobloxFiles.Enums.PartType.Cylinder => Domain.Enums.PartType.Cylinder,
-            RobloxFiles.Enums.PartType.Wedge => Domain.Enums.PartType.Wedge,
-            RobloxFiles.Enums.PartType.CornerWedge => Domain.Enums.PartType.CornerWedge,
-            _ => Domain.Enums.PartType.Block // Fallback
-        };
+            shape = part.Shape switch
+            {
+                RobloxFiles.Enums.PartType.Block => Domain.Enums.PartType.Block,
+                RobloxFiles.Enums.PartType.Ball => Domain.Enums.PartType.Ball,
+                RobloxFiles.Enums.PartType.Cylinder => Domain.Enums.PartType.Cylinder,
+                _ => shape // Fallback
+            };
+        }
+        else if (robloxPart is WedgePart)
+        {
+            shape = Domain.Enums.PartType.Wedge;
+        }
 
         return new PartDto
         (

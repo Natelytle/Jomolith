@@ -15,7 +15,7 @@ public class TowerBuilder
         [PartType.Block] = new BlockShapeBuilder(),
         [PartType.Cylinder] = new CylinderShapeBuilder(),
         [PartType.Ball] = new BallShapeBuilder(),
-        [PartType.Wedge] = new BlockShapeBuilder(), // new WedgeShapeBuilder(),
+        [PartType.Wedge] = new WedgeShapeBuilder(),
         [PartType.CornerWedge] = new BlockShapeBuilder() // new CornerWedgeShapeBuilder()
     };
 
@@ -119,6 +119,9 @@ public class TowerBuilder
         // We rotate all cylinders around Z by 90 degrees to account for this.
         if (part.Shape is PartType.Cylinder)
             partRoot.RotateObjectLocal(new Vector3(0, 0, 1), float.Pi / 2.0f);
+
+        else if (part.Shape is PartType.Wedge)
+            partRoot.RotateObjectLocal(new Vector3(0, 1, 0), float.Pi / 2.0f);
 
         return partRoot;
     }

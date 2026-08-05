@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Godot;
 using Jomolith.Towers.Models;
 using Jomolith.Towers.Services;
+using RobloxFiles;
 
 namespace Jomolith.Towers.Import;
 
@@ -44,8 +45,9 @@ public partial class TowerImportService : Node
         {
             TowerDto towerDtoOutput = await Task.Run(() =>
             {
-                var converter = new RbxmToTowerDtoConverter();
-                return converter.ConvertFilePath(filePath);
+                RobloxFile file = RobloxFile.Open(filePath);
+
+                return new RbxmToTowerDtoConverter().ConvertRobloxFile(file, Path.GetFileNameWithoutExtension(filePath));
             });
 
             string targetPath = ProjectSettings.GlobalizePath($"{tower_directory}{towerDtoOutput.Name}.json");
