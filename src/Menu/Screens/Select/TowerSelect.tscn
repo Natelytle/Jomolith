@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://nq8uvekr3jpk" path="res://src/Menu/Screens/Select/TowerSelect.cs" id="1_gm6kj"]
 
+[sub_resource type="World3D" id="World3D_mj4ln"]
+
 [node name="TowerSelect" type="Control" unique_id=661138225]
 layout_mode = 3
 anchors_preset = 15
@@ -56,6 +58,8 @@ size_flags_vertical = 3
 stretch = true
 
 [node name="PreviewViewport" type="SubViewport" parent="HBoxContainer/MarginContainer/VBoxContainer/SubViewportContainer" unique_id=1128489440]
+own_world_3d = true
+world_3d = SubResource("World3D_mj4ln")
 transparent_bg = true
 handle_input_locally = false
 size = Vector2i(400, 462)
