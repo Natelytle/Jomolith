@@ -24,6 +24,38 @@
       <PackageReference Include="RobloxFileFormat" Version="1.0.0" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="src\Towers\Factory\ClientObjects\" />
+      <Content Include="src\Gameplay\Player\Camera\Camera.tscn" />
+      <Content Include="src\Gameplay\Player\Camera\State\CameraLogic.CameraData.cs.uid" />
+      <Content Include="src\Gameplay\Player\Camera\State\CameraLogic.cs.uid" />
+      <Content Include="src\Gameplay\Player\Camera\State\CameraLogic.Inputs.cs.uid" />
+      <Content Include="src\Gameplay\Player\Camera\State\CameraLogic.Outputs.cs.uid" />
+      <Content Include="src\Gameplay\Player\Camera\State\States\CameraState.cs.uid" />
+      <Content Include="src\Gameplay\Player\Camera\State\States\CameraState.g.puml" />
+      <Content Include="src\Gameplay\Player\Camera\State\States\Locked.cs.uid" />
+      <Content Include="src\Gameplay\Player\Camera\State\States\Unlocked.cs.uid" />
+      <Content Include="src\Gameplay\Player\Domain\PlayerRepo.cs.uid" />
+      <Content Include="src\Gameplay\Player\Humanoid\Humanoid.cs.uid" />
+      <Content Include="src\Gameplay\Player\Humanoid\Humanoid.tscn" />
+      <Content Include="src\Gameplay\Player\Humanoid\PlayerModel.cs.uid" />
+      <Content Include="src\Gameplay\Player\Humanoid\PlayerModel.tscn" />
+      <Content Include="src\Gameplay\Player\Humanoid\State\FloorData.cs.uid" />
+      <Content Include="src\Gameplay\Player\Humanoid\Utils\PlayerModelMaterials.cs.uid" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Animations\animation_node_state_machine.tres" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Animations\Climb.tres" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Animations\Default.tres" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Animations\Fall.tres" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Animations\Idle.tres" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Animations\Jump.tres" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Animations\RESET.tres" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Animations\Walk.tres" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Avatar.glb" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Avatar.glb.import" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Avatar.tscn" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Avatar_Damjom12_diff.png" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Avatar_Damjom12_diff.png.import" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Avatar_Damjom81_diff.png" />
+      <Content Include="src\Gameplay\Player\Humanoid\Visuals\Avatar\Avatar_Damjom81_diff.png.import" />
+      <Content Include="src\Gameplay\Player\Player.cs.uid" />
+      <Content Include="src\Gameplay\Player\Player.tscn" />
     </ItemGroup>
 </Project>

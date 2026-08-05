@@ -46,7 +46,7 @@ public class TowerBuilder
     /// <returns>The node tree.</returns>
     private Node3D buildPart(PartModel part, bool isPreview)
     {
-        Node3D partRoot;
+        CollisionObject3D partRoot;
 
         if (isPreview || part.Anchored)
         {
@@ -99,6 +99,14 @@ public class TowerBuilder
             {
                 Shape = shapeBuilder.BuildCollisionShape(part)
             });
+
+            // Add camera collision
+            if (part.VisualProperties.Opacity >= 0.99f)
+            {
+                const int camera_collision_layer = 2;
+
+                partRoot.CollisionLayer |= camera_collision_layer;
+            }
         }
 
         foreach (var childPart in part.Children)

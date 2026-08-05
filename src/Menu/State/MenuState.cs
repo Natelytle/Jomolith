@@ -1,6 +1,7 @@
 using System;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
+using Jomolith.App.Domain;
 using Jomolith.Towers.Domain.Models;
 
 namespace Jomolith.Menu.State;
@@ -9,7 +10,7 @@ namespace Jomolith.Menu.State;
 public abstract partial record MenuState : LogicBlockState
 {
     public static class Input {
-        public readonly record struct ToPlay(TowerModel Tower);
+        public readonly record struct TowerSelected(TowerModel Tower);
         public readonly record struct ToTowerSelect;
         public readonly record struct ToSettings;
         public readonly record struct Back;
@@ -37,24 +38,33 @@ public abstract partial record MenuState : LogicBlockState
         public MainMenu() {
             this.OnEnter(() => Output(new Output.ScreenChanged(typeof(MainMenu), CanGoBack: false)));
         }
-        public Type On(in Input.ToTowerSelect input) { Push(); return To<TowerSelect>(); }
-        public Type On(in Input.ToSettings input) { Push(); return To<Settings>(); }
-    }
 
-    [Meta]
-    public partial record Play : Screen, IGet<Input.Back> {
-        public Play() {
-            this.OnEnter(() => Output(new Output.ScreenChanged(typeof(Play), CanGoBack: true)));
+        public Type On(in Input.ToTowerSelect input)
+        {
+            Push();
+            return To<TowerSelect>();
         }
-        public Type On(in Input.Back input) => Pop() ?? To<MainMenu>();
+
+        public Type On(in Input.ToSettings input)
+        {
+            Push();
+            return To<Settings>();
+        }
     }
 
     [Meta]
-    public partial record TowerSelect : Screen, IGet<Input.ToPlay>, IGet<Input.Back> {
+    public partial record TowerSelect : Screen, IGet<Input.TowerSelected>, IGet<Input.Back> {
         public TowerSelect() {
             this.OnEnter(() => Output(new Output.ScreenChanged(typeof(TowerSelect), CanGoBack: true)));
         }
-        public Type On(in Input.ToPlay input) { Push(); return To<Play>(); }
+
+        public Type On(in Input.TowerSelected input)
+        {
+            Get<IAppRepo>().OnEnteringTower(input.Tower);
+
+            return ToSelf();
+        }
+
         public Type On(in Input.Back input) => Pop() ?? To<MainMenu>();
     }
 

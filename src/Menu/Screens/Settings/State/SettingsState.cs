@@ -4,6 +4,7 @@ using System.Linq;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
 using Godot;
+using Jomolith.Settings.Domain.Models;
 using Jomolith.Settings.Models;
 using Jomolith.Settings.Services;
 
@@ -41,8 +42,9 @@ public abstract partial record SettingsState : LogicBlockState
             {
                 var settingsDto = Get<ISettingsRepository>().Load();
                 var settingsData = Get<SettingsData>();
+                var gameSettings = Get<GameplaySettings>();
 
-                settingsData.CameraSensitivity = settingsDto.CameraSensitivity;
+                gameSettings.CameraSensitivity = settingsDto.CameraSensitivity;
                 settingsData.KeyBindings = settingsDto.KeyBindings.ToDictionary(kv => kv.Key, kv => Enum.Parse<Key>(kv.Value));
 
                 Input(new Input.LoadComplete());
@@ -52,7 +54,8 @@ public abstract partial record SettingsState : LogicBlockState
         public Type On(in Input.LoadComplete input)
         {
             var data = Get<SettingsData>();
-            Output(new Output.SettingsLoaded(data.Tab, data.CameraSensitivity, data.KeyBindings));
+            var gameSettings = Get<GameplaySettings>();
+            Output(new Output.SettingsLoaded(data.Tab, gameSettings.CameraSensitivity, data.KeyBindings));
             return To<Editing>();
         }
     }
@@ -77,7 +80,7 @@ public abstract partial record SettingsState : LogicBlockState
 
         public Type On(in Input.SetSensitivity input)
         {
-            Get<SettingsData>().CameraSensitivity = input.Value;
+            Get<GameplaySettings>().CameraSensitivity = input.Value;
             Output(new Output.SensitivityChanged(input.Value));
             return ToSelf();
         }
@@ -95,8 +98,9 @@ public abstract partial record SettingsState : LogicBlockState
         public Type On(in Input.Save input)
         {
             var settingsData = Get<SettingsData>();
+            var gameSettings = Get<GameplaySettings>();
             Get<ISettingsRepository>().Save(new SettingsDto(
-                CameraSensitivity: settingsData.CameraSensitivity,
+                CameraSensitivity: gameSettings.CameraSensitivity,
                 KeyBindings: settingsData.KeyBindings.ToDictionary(kv => kv.Key, kv => kv.Value.ToString())));
 
             return ToSelf();

@@ -10,26 +10,33 @@ public partial class MainMenu : Control, IScreen
 {
     public bool ShowFooter => false;
 
-    public override void _Notification(int what) => this.Notify(what);
+    [Signal]
+    public delegate void PlayButtonPressedEventHandler();
 
-    [Dependency]
-    private IMenuLogic menuLogic => this.DependOn<IMenuLogic>();
+    [Signal]
+    public delegate void SettingsButtonPressedEventHandler();
+
+    public override void _Notification(int what) => this.Notify(what);
 
     [Export] private Button playButton { get; set; } = null!;
     [Export] private Button settingsButton { get; set; } = null!;
 
-    public void OnEnter()
+    public void OnReady()
     {
         playButton.Pressed += OnPlayPressed;
         settingsButton.Pressed += OnSettingsPressed;
     }
 
-    public void OnExit()
+    public void OnExitTree()
     {
         playButton.Pressed -= OnPlayPressed;
         settingsButton.Pressed -= OnSettingsPressed;
     }
 
-    private void OnPlayPressed() => menuLogic.Input(new MenuState.Input.ToTowerSelect());
-    private void OnSettingsPressed() => menuLogic.Input(new MenuState.Input.ToSettings());
+    public void OnEnter() { }
+
+    public void OnExit() { }
+
+    private void OnPlayPressed() => EmitSignal(SignalName.PlayButtonPressed);
+    private void OnSettingsPressed() => EmitSignal(SignalName.SettingsButtonPressed);
 }

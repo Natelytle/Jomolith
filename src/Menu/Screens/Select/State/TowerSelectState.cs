@@ -12,6 +12,7 @@ public abstract partial record TowerSelectState : LogicBlockState
 {
     public static class Input
     {
+        public readonly record struct Reload;
         public readonly record struct LoadComplete;
         public readonly record struct Select(int Index);
         public readonly record struct Confirm;
@@ -40,7 +41,7 @@ public abstract partial record TowerSelectState : LogicBlockState
     }
 
     [Meta]
-    public partial record Browsing : TowerSelectState, IGet<Input.Select>, IGet<Input.Confirm>
+    public partial record Browsing : TowerSelectState, IGet<Input.Reload>, IGet<Input.Select>, IGet<Input.Confirm>
     {
         public Browsing()
         {
@@ -71,7 +72,12 @@ public abstract partial record TowerSelectState : LogicBlockState
             if (data.SelectedIndex >= 0)
                 Output(new Output.TowerConfirmed(data.Towers[data.SelectedIndex]));
 
-            return To<Browsing>();
+            return ToSelf();
+        }
+
+        public Type On(in Input.Reload input)
+        {
+            return To<Loading>();
         }
     }
 }

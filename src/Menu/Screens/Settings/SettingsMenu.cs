@@ -5,6 +5,7 @@ using Chickensoft.Introspection;
 using Godot;
 using Jomolith.Menu.Screens.Settings.State;
 using Jomolith.Menu.State;
+using Jomolith.Settings.Domain.Models;
 using Jomolith.Settings.Services;
 
 namespace Jomolith.Menu.Screens.Settings;
@@ -17,7 +18,7 @@ public partial class SettingsMenu : Control, IScreen
     private ISettingsRepository settingsRepository = null!;
 
     [Dependency]
-    private IMenuLogic menuLogic => this.DependOn<IMenuLogic>();
+    private GameplaySettings gameplaySettings => this.DependOn<GameplaySettings>();
 
     [Node("%Tabs")]
     private ITabContainer tabs { get; set; } = null!;
@@ -47,6 +48,7 @@ public partial class SettingsMenu : Control, IScreen
     public void OnResolved()
     {
         settingsLogic.Set(settingsRepository);
+        settingsLogic.Set(gameplaySettings);
 
         settingsLogic.Bind()
             .OnOutput<SettingsState.Output.SettingsLoaded>((in o) =>

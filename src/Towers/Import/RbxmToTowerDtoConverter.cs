@@ -50,11 +50,13 @@ public class RbxmToTowerDtoConverter
 
         string fileNameWithoutExt = Path.GetFileNameWithoutExtension(rbxmPath);
 
+        // TODO: SpawnPosition is always 0
         var towerDto = new TowerDto(
             Name: fileNameWithoutExt,
             Creator: "Unknown",
             Difficulty: 0,
             Parts: parts,
+            SpawnPosition: new Vector3Dto(0, 0, 0),
             ClientObjects: clientObjects
         );
 
