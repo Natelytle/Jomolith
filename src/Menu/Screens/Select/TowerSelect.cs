@@ -65,7 +65,10 @@ public partial class TowerSelect : Control, IScreen
         selectLogic.Start<TowerSelectState.Loading>();
     }
 
-    public void OnEnter() { }
+    public void OnEnter()
+    {
+        selectLogic.Input(new TowerSelectState.Input.Reload());
+    }
 
     public void OnExit() { }
 
