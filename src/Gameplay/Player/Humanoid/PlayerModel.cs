@@ -73,9 +73,7 @@ public partial class PlayerModel : Node3D, IPlayerModel
 
     public void OnResolved()
     {
-        using var binding = PlayerLogic.Bind();
-
-        binding
+        PlayerLogic.Bind()
             .OnOutput((in PlayerLogic.Outputs.Animations.Idle _) =>
                 AnimationStateMachine.Travel("Idle")
             )
