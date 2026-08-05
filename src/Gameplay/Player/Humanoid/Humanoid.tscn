@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://j847e625d02t"]
 
-[ext_resource type="Script" uid="uid://dgavc2gj8b5kc" path="res://Src/Play/Player/Humanoid/Humanoid.cs" id="1_hljhc"]
-[ext_resource type="PackedScene" uid="uid://dfnxcsu6tk23e" path="res://Src/Play/Player/Humanoid/PlayerModel.tscn" id="2_6hwek"]
+[ext_resource type="Script" uid="uid://dgavc2gj8b5kc" path="res://src/Gameplay/Player/Humanoid/Humanoid.cs" id="1_hljhc"]
+[ext_resource type="PackedScene" uid="uid://dfnxcsu6tk23e" path="res://src/Gameplay/Player/Humanoid/PlayerModel.tscn" id="2_6hwek"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hljhc"]
 friction = 0.5

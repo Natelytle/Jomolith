@@ -247,13 +247,25 @@ public partial class Humanoid : RigidBody3D, IHumanoid
         };
     }
 
-    // TODO: Add the missing downward facing raycast
     public bool IsClimbing()
     {
-        const float y_position_initial = -2.7f + 1 / 7.0f;
+        const float start_offset = 2.7f;
         const float y_position_increments = 1 / 7.0f;
+        const float y_position_initial = -start_offset + y_position_increments;
+
         const float z_search_length_truss = 1.05f;
         const float z_search_length_ladder = 0.7f;
+
+        Vector3 heightOffset = Vector3.Zero;
+
+        climbRaycast.Position = LocalRootPosition;
+        climbRaycast.TargetPosition = new Vector3(0, -start_offset, 0);
+        climbRaycast.ForceRaycastUpdate();
+
+        if (climbRaycast.IsColliding())
+        {
+            heightOffset.Y = start_offset - (climbRaycast.GlobalPosition.Y - climbRaycast.GetCollisionPoint().Y);
+        }
 
         // TODO: Searching for trusses
 
@@ -268,7 +280,7 @@ public partial class Humanoid : RigidBody3D, IHumanoid
 
         for (int i = 0; i < 27; i++)
         {
-            climbRaycast.Position = LocalRootPosition + new Vector3(0, y_position_initial + i * y_position_increments, 0);
+            climbRaycast.Position = LocalRootPosition + heightOffset + new Vector3(0, y_position_initial + i * y_position_increments, 0);
             climbRaycast.ForceRaycastUpdate();
 
             if (i < 3 && climbRaycast.IsColliding())
