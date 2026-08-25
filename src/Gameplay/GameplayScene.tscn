@@ -13,7 +13,10 @@ sky_material = SubResource("ProceduralSkyMaterial_mchm7")
 [sub_resource type="Environment" id="Environment_5an13"]
 background_mode = 2
 sky = SubResource("Sky_c1s2s")
-glow_enabled = true
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_sky_contribution = 0.0
+ambient_light_energy = 0.7
+tonemap_exposure = 0.6
 
 [node name="GameplayScene" type="Control" unique_id=1276163771]
 process_mode = 3
