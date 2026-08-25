@@ -83,15 +83,21 @@ public class TowerBuilder
             meshInstance.Scale = shapeBuilder.MeshScale(part);
 
             var color = Color.FromHtml(part.VisualProperties.ColourHex);
-            color.A = part.VisualProperties.Opacity;
 
-            meshInstance.MaterialOverride = new StandardMaterial3D
-            {
-                AlbedoColor = color,
-                Transparency = part.VisualProperties.Opacity < 0.99f
-                    ? BaseMaterial3D.TransparencyEnum.Alpha
-                    : BaseMaterial3D.TransparencyEnum.Disabled
-            };
+            string matPath = part.VisualProperties.Opacity >= 0.99f
+                ? "res://src/Towers/Factory/Materials/Plastic.tres"
+                : "res://src/Towers/Factory/Materials/PlasticAlpha.tres";
+
+            var baseMat = GD.Load<ShaderMaterial>(matPath);
+            var mat = (ShaderMaterial)baseMat.Duplicate();
+
+            mat.SetShaderParameter("albedoTint", color);
+            mat.SetShaderParameter("opacity", part.VisualProperties.Opacity);
+
+            mat.SetShaderParameter("xyzSurfaceVariantPos", new Vector3I((int)part.VisualProperties.SurfaceXp, (int)part.VisualProperties.SurfaceYp, (int)part.VisualProperties.SurfaceZp));
+            mat.SetShaderParameter("xyzSurfaceVariantNeg", new Vector3I((int)part.VisualProperties.SurfaceXn, (int)part.VisualProperties.SurfaceYn, (int)part.VisualProperties.SurfaceZn));
+
+            meshInstance.MaterialOverride = mat;
 
             meshInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
 

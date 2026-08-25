@@ -1,0 +1,23 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://udon8ru6imxh"]
+
+[ext_resource type="Shader" uid="uid://bved77x7aycif" path="res://src/Towers/Factory/Shaders/PlasticAlpha.gdshader" id="1_6le1u"]
+[ext_resource type="CompressedTexture2DArray" uid="uid://co7q018nu8g4i" path="res://src/Towers/Factory/Textures/PlasticAlbedo.png" id="2_oecfs"]
+[ext_resource type="CompressedTexture2DArray" uid="uid://bl58ypdjo55cp" path="res://src/Towers/Factory/Textures/PlasticNormal.png" id="3_7rwca"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_6le1u")
+shader_parameter/surfaceVariant0IsSmooth = true
+shader_parameter/detailFadeStart = 128.0
+shader_parameter/detailFadeEnd = 256.0
+shader_parameter/texturesAlbedo = ExtResource("2_oecfs")
+shader_parameter/textureAlbedoBase = Color(0.49019608, 0.49019608, 0.49019608, 1)
+shader_parameter/albedoTint = Color(1, 1, 1, 1)
+shader_parameter/opacity = 1.0
+shader_parameter/albedoScale = 1.0
+shader_parameter/texturesNormal = ExtResource("3_7rwca")
+shader_parameter/normalScale = 1.0
+shader_parameter/uvScale = Vector2(0.5, 0.5)
+shader_parameter/specular = 0.0999999977648
+shader_parameter/xyzSurfaceVariantPos = Vector3i(3, 3, 3)
+shader_parameter/xyzSurfaceVariantNeg = Vector3i(3, 3, 3)
