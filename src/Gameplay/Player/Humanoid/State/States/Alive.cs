@@ -38,13 +38,21 @@ public partial record PlayerState
             PlayerData playerData = Get<PlayerData>();
             IPlayerRepo playerRepo = Get<IPlayerRepo>();
 
-            Vector2 desiredMovementVector = input.DesiredMovement * settings.MoveSpeed;
-            Vector3 targetMovementVector = new Vector3(desiredMovementVector.X, 0, desiredMovementVector.Y);
-            Vector3 correctionVector = targetMovementVector - new Vector3(player.LinearVelocity.X, 0, player.LinearVelocity.Z);
+            Vector3 targetMovementVector = new Vector3(input.DesiredMovement.X, 0, input.DesiredMovement.Y);
+            Vector3? floorNormal = player.GetFloorData(playerData.WasOnFloor).FloorNormal;
+
+            if (floorNormal is not null)
+            {
+                var plane = new Plane(floorNormal.Value);
+                targetMovementVector *= (plane.Project(targetMovementVector).Normalized() with { Y = 0 }).Length();
+            }
+
+            Vector3 moveVector = targetMovementVector * settings.MoveSpeed;
+            Vector3 correctionVector = moveVector - new Vector3(player.LinearVelocity.X, 0, player.LinearVelocity.Z);
             correctionVector = correctionVector.Normalized() * Math.Min(MaxForce, Gain * correctionVector.Length());
             Vector3 desiredForce = correctionVector * player.Mass;
 
-            float desiredTorque = ComputeTorque(targetMovementVector, playerData, player, playerRepo.IsPlayerRotationLocked.Value);
+            float desiredTorque = ComputeTorque(moveVector, playerData, player, playerRepo.IsPlayerRotationLocked.Value);
 
             Output(new Outputs.ApplyForce(desiredForce, Vector3.Up * desiredTorque));
 
