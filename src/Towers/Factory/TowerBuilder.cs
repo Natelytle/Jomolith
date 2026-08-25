@@ -1,4 +1,4 @@
-using System;
+
 using System.Collections.Generic;
 using Godot;
 using Jomolith.Towers.Domain.Enums;
@@ -10,16 +10,16 @@ namespace Jomolith.Towers.Factory;
 public class TowerBuilder
 {
     // TODO: No support for wedges or corner wedges.
-    private static readonly Dictionary<PartType, IShapeBuilder> shape_builders = new()
+    private static readonly Dictionary<PartType, ShapeBuilder> shape_builders = new()
     {
         [PartType.Block] = new BlockShapeBuilder(),
         [PartType.Cylinder] = new CylinderShapeBuilder(),
         [PartType.Ball] = new BallShapeBuilder(),
         [PartType.Wedge] = new WedgeShapeBuilder(),
-        [PartType.CornerWedge] = new BlockShapeBuilder() // new CornerWedgeShapeBuilder()
+        [PartType.CornerWedge] = new CornerWedgeShapeBuilder()
     };
 
-    private static readonly IShapeBuilder fallback_builder = new BlockShapeBuilder();
+    private static readonly ShapeBuilder fallback_builder = new BlockShapeBuilder();
 
     /// <summary>
     /// Builds the actual node tree that contains everything represented in a Tower DTO.
@@ -80,6 +80,8 @@ public class TowerBuilder
                 Mesh = shapeBuilder.BuildMesh(part)
             };
 
+            meshInstance.Scale = shapeBuilder.MeshScale(part);
+
             var color = Color.FromHtml(part.VisualProperties.ColourHex);
             color.A = part.VisualProperties.Opacity;
 
@@ -91,16 +93,27 @@ public class TowerBuilder
                     : BaseMaterial3D.TransparencyEnum.Disabled
             };
 
+            meshInstance.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
+
             partRoot.AddChild(meshInstance);
         }
 
         // We don't generate a collision shape when previewing the tower
         if (part.CanCollide && !isPreview)
         {
-            partRoot.AddChild(new CollisionShape3D
+            var collisionShape = new CollisionShape3D
             {
                 Shape = shapeBuilder.BuildCollisionShape(part)
-            });
+            };
+
+            partRoot.AddChild(collisionShape);
+
+            // Cylinders are centered around the X axis in Roblox, but around the Y axis in Godot
+            // We rotate cylinder hitboxes around Z by 90 degrees to account for this.
+            if (part.Shape is PartType.Cylinder)
+                collisionShape.RotateObjectLocal(new Vector3(0, 0, 1), float.Pi / 2.0f);
+            else if (part.Shape is PartType.Wedge)
+                collisionShape.RotateObjectLocal(new Vector3(0, 1, 0), float.Pi / 2.0f);
 
             // Add camera collision
             if (part.VisualProperties.Opacity >= 0.99f)
@@ -115,14 +128,6 @@ public class TowerBuilder
         {
             partRoot.AddChild(buildPart(childPart, isPreview));
         }
-
-        // Cylinders are centered around the X axis in Roblox, but around the Y axis in Godot
-        // We rotate all cylinders around Z by 90 degrees to account for this.
-        if (part.Shape is PartType.Cylinder)
-            partRoot.RotateObjectLocal(new Vector3(0, 0, 1), float.Pi / 2.0f);
-
-        else if (part.Shape is PartType.Wedge)
-            partRoot.RotateObjectLocal(new Vector3(0, 1, 0), float.Pi / 2.0f);
 
         return partRoot;
     }

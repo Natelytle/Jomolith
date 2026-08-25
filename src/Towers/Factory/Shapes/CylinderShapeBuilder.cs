@@ -1,22 +1,21 @@
+
 using Godot;
 using Jomolith.Towers.Domain.Models;
 
 namespace Jomolith.Towers.Factory.Shapes;
 
-public class CylinderShapeBuilder : IShapeBuilder
+public class CylinderShapeBuilder : ShapeBuilder
 {
-    public Mesh BuildMesh(PartModel part) => new CylinderMesh
-    {
-        BottomRadius = part.CylinderRadius,
-        TopRadius = part.CylinderRadius,
-        Height = part.Height
-    };
+    public override Mesh BuildMesh(PartModel part) => BuildBlockMesh(2, ROUND_SEGMENTS, false, true, true);
 
-    public Shape3D BuildCollisionShape(PartModel part) => new CylinderShape3D
+    public override Vector3 MeshScale(PartModel part) =>
+        new(part.Height, part.CylinderRadius * 2f, part.CylinderRadius * 2f);
+
+    public override Shape3D BuildCollisionShape(PartModel part) => new CylinderShape3D
     {
         Height = part.Height,
         Radius = part.CylinderRadius
     };
 
-    public float GetVolume(PartModel part) => float.Pi * part.CylinderRadius * part.CylinderRadius * part.Height;
+    public override float GetVolume(PartModel part) => float.Pi * part.CylinderRadius * part.CylinderRadius * part.Height;
 }

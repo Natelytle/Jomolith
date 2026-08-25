@@ -3,15 +3,13 @@ using Jomolith.Towers.Domain.Models;
 
 namespace Jomolith.Towers.Factory.Shapes;
 
-public class WedgeShapeBuilder : IShapeBuilder
+public class WedgeShapeBuilder : ShapeBuilder
 {
-    public Mesh BuildMesh(PartModel part) => new PrismMesh
-    {
-        LeftToRight = 0f,
-        Size = new Vector3(part.Scale.Z, part.Scale.Y, part.Scale.X)
-    };
+    public override Mesh BuildMesh(PartModel part) => BuildWedgeMesh(false);
 
-    public Shape3D BuildCollisionShape(PartModel part)
+    public override Vector3 MeshScale(PartModel part) => new(part.Scale.X, part.Scale.Y, part.Scale.Z);
+
+    public override Shape3D BuildCollisionShape(PartModel part)
     {
         // X and Z are flipped because in roblox, the wedge shape's slope is dictated by Z, but in godot it is dictated by X.
         // We rotate the whole part around the Y axis afterward to fix this.
@@ -33,5 +31,5 @@ public class WedgeShapeBuilder : IShapeBuilder
         };
     }
 
-    public float GetVolume(PartModel part) => part.Scale.X * part.Scale.Y * part.Scale.Z / 2.0f;
+    public override float GetVolume(PartModel part) => part.Scale.X * part.Scale.Y * part.Scale.Z / 2.0f;
 }
