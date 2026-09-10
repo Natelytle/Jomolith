@@ -53,8 +53,6 @@ public partial class MenuScene : Control, IMenuScene
     [Node("%ExitPrompt")]
     private IExitPrompt exitPrompt { get; set; } = null!;
 
-    private bool canGoBack;
-
     public void Setup()
     {
         menuLogic = new MenuLogic();
@@ -80,7 +78,6 @@ public partial class MenuScene : Control, IMenuScene
             .OnOutput<MenuState.Output.ScreenChanged>((in o) =>
             {
                 SwapScreen(o.NewScreen);
-                canGoBack = o.CanGoBack;
             })
             .OnOutput<MenuState.Output.ExitPromptVisible>((in o) => exitPrompt.Visible = o.Visible)
             .OnOutput<MenuState.Output.QuitGame>((in _) => EmitSignal(SignalName.QuitRequested));
@@ -92,6 +89,7 @@ public partial class MenuScene : Control, IMenuScene
 
     public void SwapScreen(Type screenType)
     {
+        currentScreen?.OnExit();
         currentScreen?.Hide();
 
         currentScreen = screens[screenType];
@@ -106,12 +104,7 @@ public partial class MenuScene : Control, IMenuScene
         if (!Visible) return; // Only process input if the menu is visible.
         if (!@event.IsActionPressed("ui_cancel")) return;
 
-        if (exitPrompt.Visible)
-            menuLogic.Input(new MenuState.Input.ExitCancelled());
-        else if (canGoBack)
-            menuLogic.Input(new MenuState.Input.Back());
-        else
-            menuLogic.Input(new MenuState.Input.RequestExit());
+        menuLogic.Input(new MenuState.Input.Back());
 
         GetViewport().SetInputAsHandled();
     }

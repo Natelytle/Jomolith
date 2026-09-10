@@ -20,7 +20,7 @@ public partial class AppLogic : LogicBlock, IAppLogic
     public override IEnumerable<IDisposable> OnStartSubscriptions()
     {
         yield return Get<IAppRepo>().AutoChannel.Bind()
-            .On((in IAppRepo.EnteringTower o) => (State as AppState.InMenus)?.OnTowerEntered(o.Tower))
-            .On((in IAppRepo.ExitingTower _) => (State as AppState.InGameplay)?.OnTowerExited());
+            .On((in IAppRepo.EnteringTower o) => Input(new AppState.Input.ToGameplay(o.Tower)))
+            .On((in IAppRepo.ExitingTower _) => Input(new AppState.Input.ToMenus()));
     }
 }
