@@ -10,10 +10,10 @@ public partial class MainMenu : Control, IScreen
 {
     public bool ShowFooter => false;
 
-    [Signal]
+    public event PlayButtonPressedEventHandler? PlayButtonPressed;
     public delegate void PlayButtonPressedEventHandler();
 
-    [Signal]
+    public event SettingsButtonPressedEventHandler? SettingsButtonPressed;
     public delegate void SettingsButtonPressedEventHandler();
 
     public override void _Notification(int what) => this.Notify(what);
@@ -37,6 +37,6 @@ public partial class MainMenu : Control, IScreen
 
     public void OnExit() { }
 
-    private void OnPlayPressed() => EmitSignal(SignalName.PlayButtonPressed);
-    private void OnSettingsPressed() => EmitSignal(SignalName.SettingsButtonPressed);
+    private void OnPlayPressed() => PlayButtonPressed?.Invoke();
+    private void OnSettingsPressed() => SettingsButtonPressed?.Invoke();
 }
