@@ -12,45 +12,37 @@ public abstract partial record TowerSelectState : LogicBlockState
 {
     public static class Input
     {
-        public readonly record struct Reload;
-        public readonly record struct LoadComplete;
+        public readonly record struct LoadComplete(IReadOnlyList<TowerModel> Towers);
         public readonly record struct Select(int Index);
         public readonly record struct Confirm;
     }
 
     public static class Output
     {
-        public readonly record struct TowersLoaded(IReadOnlyList<TowerModel> Towers);
+        public readonly record struct TowerListUpdated(IReadOnlyList<TowerModel> Towers);
         public readonly record struct SelectionChanged(TowerModel Tower);
         public readonly record struct TowerConfirmed(TowerModel Tower);
     }
 
     [Meta]
-    public partial record Loading : TowerSelectState, IGet<Input.LoadComplete>
-    {
-        public Loading()
-        {
-            this.OnEnter(() =>
-            {
-                Get<TowerSelectionData>().Towers = Get<ITowerRepository>().LoadAllTowers();
-                Input(new Input.LoadComplete());
-            });
-        }
-
-        public Type On(in Input.LoadComplete input) => To<Browsing>();
-    }
-
-    [Meta]
-    public partial record Browsing : TowerSelectState, IGet<Input.Reload>, IGet<Input.Select>, IGet<Input.Confirm>
+    public partial record Browsing : TowerSelectState, IGet<Input.LoadComplete>, IGet<Input.Select>, IGet<Input.Confirm>
     {
         public Browsing()
         {
             this.OnEnter(() =>
             {
                 var data = Get<TowerSelectionData>();
-                Output(new Output.TowersLoaded(data.Towers));
+                Output(new Output.TowerListUpdated(data.Towers));
                 if (data.Towers.Count > 0) Input(new Input.Select(0));
             });
+        }
+
+        public Type On(in Input.LoadComplete input)
+        {
+            Get<TowerSelectionData>().Towers = input.Towers;
+            Output(new Output.TowerListUpdated(input.Towers));
+
+            return ToSelf();
         }
 
         public Type On(in Input.Select input)
@@ -73,11 +65,6 @@ public abstract partial record TowerSelectState : LogicBlockState
                 Output(new Output.TowerConfirmed(data.Towers[data.SelectedIndex]));
 
             return ToSelf();
-        }
-
-        public Type On(in Input.Reload input)
-        {
-            return To<Loading>();
         }
     }
 }

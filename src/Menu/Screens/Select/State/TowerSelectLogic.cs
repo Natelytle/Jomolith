@@ -11,7 +11,6 @@ public partial class TowerSelectLogic : LogicBlock, ITowerSelectLogic
     public TowerSelectLogic()
     {
         Set(new TowerSelectionData());
-        Set(new TowerSelectState.Loading());
         Set(new TowerSelectState.Browsing());
     }
 }
