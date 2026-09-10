@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
@@ -33,8 +32,6 @@ public partial class MenuScene : Control, IMenuScene
     private MenuLogic menuLogic = null!;
     private IScreen? currentScreen;
 
-    private Dictionary<Type, IScreen> screens = null!;
-
     [Node("%MainMenu")]
     private MainMenu mainMenu { get; set; } = null!;
 
@@ -65,20 +62,12 @@ public partial class MenuScene : Control, IMenuScene
 
     public void OnResolved()
     {
-        screens = new Dictionary<Type, IScreen>
-        {
-            [typeof(MenuState.MainMenu)] = mainMenu,
-            [typeof(MenuState.TowerSelect)] = towerSelect,
-            [typeof(MenuState.Settings)] = settingsMenu,
-        };
-
         menuLogic.Set(appRepo);
 
         menuLogic.Bind()
-            .OnOutput<MenuState.Output.ScreenChanged>((in o) =>
-            {
-                SwapScreen(o.NewScreen);
-            })
+            .OnOutput<MenuState.Output.ShowMainMenu>((in _) => SwapScreen(mainMenu))
+            .OnOutput<MenuState.Output.ShowTowerSelect>((in _) => SwapScreen(towerSelect))
+            .OnOutput<MenuState.Output.ShowSettings>((in _) => SwapScreen(settingsMenu))
             .OnOutput<MenuState.Output.ExitPromptVisible>((in o) => exitPrompt.Visible = o.Visible)
             .OnOutput<MenuState.Output.QuitGame>((in _) => EmitSignal(SignalName.QuitRequested));
 
@@ -87,12 +76,14 @@ public partial class MenuScene : Control, IMenuScene
         menuLogic.Start<MenuState.MainMenu>();
     }
 
-    public void SwapScreen(Type screenType)
+    public void SwapScreen(IScreen screen)
     {
+        if (ReferenceEquals(screen, currentScreen)) return;
+
         currentScreen?.OnExit();
         currentScreen?.Hide();
 
-        currentScreen = screens[screenType];
+        currentScreen = screen;
         currentScreen.Show();
 
         currentScreen.OnEnter();
