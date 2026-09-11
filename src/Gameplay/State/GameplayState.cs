@@ -13,7 +13,7 @@ public abstract partial record GameplayState : LogicBlockState
 {
     public static class Input
     {
-        public readonly record struct BeginLoading;
+        public readonly record struct TowerEntered(TowerModel Tower);
         public readonly record struct LoadComplete;
         public readonly record struct TogglePause;
         public readonly record struct ExitGameplay;
@@ -30,15 +30,14 @@ public abstract partial record GameplayState : LogicBlockState
     }
 
     [Meta]
-    public partial record Unloaded : GameplayState, IGet<Input.BeginLoading>
+    public partial record Unloaded : GameplayState, IGet<Input.TowerEntered>
     {
-        public void OnTowerEntered(TowerModel tower)
+        public Type On(in Input.TowerEntered input)
         {
-            Get<GameplayData>().CurrentTower = tower;
-            Input(new Input.BeginLoading());
-        }
+            Get<GameplayData>().CurrentTower = input.Tower;
 
-        public Type On(in Input.BeginLoading input) => To<Loading>();
+            return To<Loading>();
+        }
     }
 
     [Meta]

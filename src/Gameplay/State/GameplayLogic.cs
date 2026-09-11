@@ -25,7 +25,7 @@ public partial class GameplayLogic : LogicBlock, IGameplayLogic
     public override IEnumerable<IDisposable> OnStartSubscriptions()
     {
         yield return Get<IAppRepo>().AutoChannel.Bind()
-            .On((in IAppRepo.EnteringTower o) => (State as GameplayState.Unloaded)?.OnTowerEntered(o.Tower));
+            .On((in IAppRepo.EnteringTower o) => Input(new GameplayState.Input.TowerEntered(o.Tower)));
 
         var gameplayRepo = Get<IGameplayRepo>();
 

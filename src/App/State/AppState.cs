@@ -1,8 +1,6 @@
 using System;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
-using Jomolith.App.Domain;
-using Jomolith.Towers.Domain.Models;
 
 namespace Jomolith.App.State;
 
@@ -11,7 +9,7 @@ public abstract partial record AppState : LogicBlockState
 {
     public static class Input
     {
-        public readonly record struct ToGameplay(TowerModel Tower);
+        public readonly record struct ToGameplay;
         public readonly record struct ToMenus;
     }
 
