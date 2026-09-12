@@ -3,7 +3,7 @@ using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
 using Godot;
 using Jomolith.Gameplay.Player.Domain;
-using Jomolith.Settings.Domain.Models;
+using Jomolith.Settings;
 using static Jomolith.Gameplay.Player.Camera.State.CameraLogic;
 
 namespace Jomolith.Gameplay.Player.Camera.State.States;
@@ -64,7 +64,7 @@ public abstract partial record CameraState : LogicBlockState,
             return ToSelf();
 
         ICamera camera = Get<ICamera>();
-        GameplaySettings settings = Get<GameplaySettings>();
+        UserSettings settings = Get<UserSettings>();
 
         Vector2 moveVector = input.Motion.Relative * mouse_px_to_units * settings.CameraSensitivity;
 

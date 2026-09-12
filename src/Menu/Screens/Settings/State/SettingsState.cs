@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
 using Godot;
-using Jomolith.Settings.Domain.Models;
-using Jomolith.Settings.Models;
-using Jomolith.Settings.Services;
+using Jomolith.Settings;
 
 namespace Jomolith.Menu.Screens.Settings.State;
 
@@ -15,7 +12,7 @@ public abstract partial record SettingsState : LogicBlockState
 {
     public static class Input
     {
-        public readonly record struct LoadComplete;
+        public readonly record struct SettingDisplayComplete;
         public readonly record struct SelectTab(SettingsTab Tab);
         public readonly record struct SetSensitivity(float Value);
         public readonly record struct BeginRebind(string Action);
@@ -34,28 +31,23 @@ public abstract partial record SettingsState : LogicBlockState
     }
 
     [Meta]
-    public partial record Loading : SettingsState, IGet<Input.LoadComplete>
+    public partial record Loading : SettingsState, IGet<Input.SettingDisplayComplete>
     {
         public Loading()
         {
             this.OnEnter(() =>
             {
-                var settingsDto = Get<ISettingsRepository>().Load();
-                var settingsData = Get<SettingsData>();
-                var gameSettings = Get<GameplaySettings>();
+                var settings = Get<ISettingsService>().Load();
+                var data = Get<SettingsMenuData>();
 
-                gameSettings.CameraSensitivity = settingsDto.CameraSensitivity;
-                settingsData.KeyBindings = settingsDto.KeyBindings.ToDictionary(kv => kv.Key, kv => Enum.Parse<Key>(kv.Value));
+                data.SettingsCache = settings;
 
-                Input(new Input.LoadComplete());
+                Output(new Output.SettingsLoaded(data.Tab, settings.CameraSensitivity, settings.KeyBindings));
             });
         }
 
-        public Type On(in Input.LoadComplete input)
+        public Type On(in Input.SettingDisplayComplete input)
         {
-            var data = Get<SettingsData>();
-            var gameSettings = Get<GameplaySettings>();
-            Output(new Output.SettingsLoaded(data.Tab, gameSettings.CameraSensitivity, data.KeyBindings));
             return To<Editing>();
         }
     }
@@ -67,27 +59,23 @@ public abstract partial record SettingsState : LogicBlockState
         IGet<Input.BeginRebind>,
         IGet<Input.Save>
     {
-        public Editing()
-        {
-        }
-
         public Type On(in Input.SelectTab input)
         {
-            Get<SettingsData>().Tab = input.Tab;
+            Get<SettingsMenuData>().Tab = input.Tab;
             Output(new Output.TabChanged(input.Tab));
             return ToSelf();
         }
 
         public Type On(in Input.SetSensitivity input)
         {
-            Get<GameplaySettings>().CameraSensitivity = input.Value;
+            Get<SettingsMenuData>().SettingsCache.CameraSensitivity = input.Value;
             Output(new Output.SensitivityChanged(input.Value));
             return ToSelf();
         }
 
         public Type On(in Input.BeginRebind input)
         {
-            Get<SettingsData>().PendingRebindAction = input.Action;
+            Get<SettingsMenuData>().PendingRebindAction = input.Action;
             Push();
 
             Output(new Output.SetRebindPromptVisible(true, input.Action));
@@ -97,11 +85,9 @@ public abstract partial record SettingsState : LogicBlockState
 
         public Type On(in Input.Save input)
         {
-            var settingsData = Get<SettingsData>();
-            var gameSettings = Get<GameplaySettings>();
-            Get<ISettingsRepository>().Save(new SettingsDto(
-                CameraSensitivity: gameSettings.CameraSensitivity,
-                KeyBindings: settingsData.KeyBindings.ToDictionary(kv => kv.Key, kv => kv.Value.ToString())));
+            var settingsData = Get<SettingsMenuData>();
+
+            Get<ISettingsService>().Save(settingsData.SettingsCache);
 
             return ToSelf();
         }
@@ -117,11 +103,11 @@ public abstract partial record SettingsState : LogicBlockState
 
         public Type On(in Input.KeyCaptured input)
         {
-            var data = Get<SettingsData>();
+            var data = Get<SettingsMenuData>();
 
             // Shouldn't be null, we just set this
             string action = data.PendingRebindAction!;
-            data.KeyBindings[action] = input.Key;
+            data.SettingsCache.KeyBindings[action] = input.Key;
             data.PendingRebindAction = null;
 
             Output(new Output.BindingChanged(action, input.Key));
@@ -131,7 +117,7 @@ public abstract partial record SettingsState : LogicBlockState
 
         public Type On(in Input.CancelRebind input)
         {
-            Get<SettingsData>().PendingRebindAction = null;
+            Get<SettingsMenuData>().PendingRebindAction = null;
             return To<Editing>();
         }
     }

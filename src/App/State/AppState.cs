@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Chickensoft.Introspection;
 using Chickensoft.LogicBlocks;
+using Godot;
+using Jomolith.Settings;
 
 namespace Jomolith.App.State;
 
@@ -9,8 +12,8 @@ public abstract partial record AppState : LogicBlockState
 {
     public static class Input
     {
-        public readonly record struct ToGameplay;
         public readonly record struct ToMenus;
+        public readonly record struct ToGameplay;
     }
 
     public static class Output
@@ -35,6 +38,8 @@ public abstract partial record AppState : LogicBlockState
             });
         }
 
+        public void OnEnteringTower() => Input(new Input.ToGameplay());
+
         public Type On(in Input.ToGameplay input) => To<InGameplay>();
     }
 
@@ -53,6 +58,8 @@ public abstract partial record AppState : LogicBlockState
                 Output(new Output.SetGameVisibility(false));
             });
         }
+
+        public void OnExitingTower() => Input(new Input.ToMenus());
 
         public Type On(in Input.ToMenus input) => To<InMenus>();
     }

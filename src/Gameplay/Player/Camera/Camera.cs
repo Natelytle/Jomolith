@@ -7,7 +7,7 @@ using Jomolith.Gameplay.Domain;
 using Jomolith.Gameplay.Player.Domain;
 using Jomolith.Gameplay.Player.Camera.State;
 using Jomolith.Gameplay.Player.Camera.State.States;
-using Jomolith.Settings.Domain.Models;
+using Jomolith.Settings;
 
 namespace Jomolith.Gameplay.Player.Camera;
 
@@ -39,7 +39,7 @@ public partial class Camera : Node3D, ICamera
 
     [Dependency] private IGameplayRepo gameplayRepo => this.DependOn<IGameplayRepo>();
 
-    [Dependency] private GameplaySettings gameplaySettings => this.DependOn<GameplaySettings>();
+    [Dependency] private ISettingsService settingsService => this.DependOn<ISettingsService>();
 
     #endregion
 
@@ -89,11 +89,12 @@ public partial class Camera : Node3D, ICamera
         cameraLogic.Set(this as ICamera);
         cameraLogic.Set(playerRepo);
         cameraLogic.Set(cameraData);
-        cameraLogic.Set(gameplaySettings);
     }
 
     public void OnResolved()
     {
+        cameraLogic.Set(settingsService.Load()); // TODO: Make some kind of repo for settings with a bindable for sensitivity
+
         cameraLogic.Bind()
             .OnOutput((in CameraLogic.Outputs.GlobalPositionChanged output) =>
             {

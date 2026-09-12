@@ -10,7 +10,7 @@ public partial class SettingsLogic : LogicBlock, ISettingsLogic
 {
     public SettingsLogic()
     {
-        Set(new SettingsData());
+        Set(new SettingsMenuData());
         Set(new SettingsState.Loading());
         Set(new SettingsState.Editing());
         Set(new SettingsState.RebindingAction());

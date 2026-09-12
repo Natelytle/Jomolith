@@ -1,60 +1,69 @@
+using System.Collections.Generic;
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
+using Chickensoft.LogicBlocks;
 using Godot;
 using Jomolith.App.Domain;
 using Jomolith.App.State;
 using Jomolith.Gameplay;
 using Jomolith.Menu;
-using Jomolith.Settings.Domain.Models;
-using Jomolith.Settings.Services;
+using Jomolith.Settings;
 
 namespace Jomolith.App;
 
-public interface IApp : INode, IProvide<IAppRepo>, IProvide<GameplaySettings>;
+public interface IApp : INode, IProvide<IAppRepo>, IProvide<ISettingsService>;
 
 [Meta(typeof(IAutoNode))]
 public partial class App : Node, IApp
 {
     public override void _Notification(int what) => this.Notify(what);
 
-    IAppRepo IProvide<IAppRepo>.Value() => appRepo;
-    GameplaySettings IProvide<GameplaySettings>.Value() => gameplaySettings;
+    IAppRepo IProvide<IAppRepo>.Value() => AppRepo;
+    ISettingsService IProvide<ISettingsService>.Value() => SettingsService;
 
-    private IAppRepo appRepo { get; set; } = null!;
-    private IAppLogic appLogic { get; set; } = null!;
-    private GameplaySettings gameplaySettings { get; set; } = null!;
+    public IAppRepo AppRepo { get; set; } = null!;
+    public IAppLogic AppLogic { get; set; } = null!;
+    public LogicBlock.Binding AppBinding { get; set; } = null!;
+    public ISettingsService SettingsService { get; set; } = null!;
 
-    [Node("%GameplayScene")]
-    private IGameplayScene gameplayScene { get; set; } = null!;
+    [Node("%GameplayScene")] public IGameplayScene GameplayScene { get; set; } = null!;
 
-    [Node("%MenuScene")]
-    private IMenuScene menuScene { get; set; } = null!;
+    [Node("%MenuScene")] public IMenuScene MenuScene { get; set; } = null!;
 
     public void Setup()
     {
-        appRepo = new AppRepo();
-        appLogic = new AppLogic();
+        AppRepo = new AppRepo();
+        AppLogic = new AppLogic();
 
-        var settingsDto = new LocalSettingsRepository().Load();
-        gameplaySettings = new GameplaySettings
-        {
-            CameraSensitivity = settingsDto.CameraSensitivity
-        };
+        SettingsService = new SettingsService();
     }
 
     public void OnResolved()
     {
-        appLogic.Set(appRepo);
+        AppLogic.Set(AppRepo);
 
-        appLogic.Bind()
-            .OnOutput((in AppState.Output.SetGameVisibility o) => gameplayScene.Visible = o.Visible)
-            .OnOutput((in AppState.Output.SetMenuVisibility o) => menuScene.Visible = o.Visible);
+        SettingsService.ApplyBindings(SettingsService.Load().KeyBindings);
 
-        menuScene.QuitRequested += () => GetTree().Quit();
+        AppBinding = AppLogic.Bind()
+            .OnOutput((in AppState.Output.SetGameVisibility o) => GameplayScene.Visible = o.Visible)
+            .OnOutput((in AppState.Output.SetMenuVisibility o) => MenuScene.Visible = o.Visible);
+
+        MenuScene.QuitRequested += quitRequested;
 
         this.Provide();
 
-        appLogic.Start<AppState.InMenus>();
+        AppLogic.Start<AppState.InMenus>();
     }
+
+    public void OnExitTree()
+    {
+        AppLogic.Stop();
+        AppBinding.Dispose();
+        AppRepo.Dispose();
+
+        MenuScene.QuitRequested -= quitRequested;
+    }
+
+    private void quitRequested() => GetTree().Quit();
 }

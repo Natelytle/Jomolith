@@ -4,9 +4,7 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 using Jomolith.Menu.Screens.Settings.State;
-using Jomolith.Menu.State;
-using Jomolith.Settings.Domain.Models;
-using Jomolith.Settings.Services;
+using Jomolith.Settings;
 
 namespace Jomolith.Menu.Screens.Settings;
 
@@ -15,10 +13,8 @@ public partial class SettingsMenu : Control, IScreen
 {
     public override void _Notification(int what) => this.Notify(what);
 
-    private ISettingsRepository settingsRepository = null!;
-
     [Dependency]
-    private GameplaySettings gameplaySettings => this.DependOn<GameplaySettings>();
+    private ISettingsService settingsService => this.DependOn<ISettingsService>();
 
     [Node("%Tabs")]
     private ITabContainer tabs { get; set; } = null!;
@@ -41,26 +37,26 @@ public partial class SettingsMenu : Control, IScreen
 
     public void Setup()
     {
-        settingsRepository = new LocalSettingsRepository();
         settingsLogic = new SettingsLogic();
     }
 
     public void OnResolved()
     {
-        settingsLogic.Set(settingsRepository);
-        settingsLogic.Set(gameplaySettings);
+        settingsLogic.Set(settingsService);
 
         settingsLogic.Bind()
             .OnOutput<SettingsState.Output.SettingsLoaded>((in o) =>
             {
                 tabs.SetCurrentTab((int)o.Tab);
                 setSensitivityDisplay(o.Sensitivity);
-                rebuildBindingsList(o.Bindings);
+                buildBindingsList(o.Bindings);
+
+                settingsLogic.Input(new SettingsState.Input.SettingDisplayComplete());
             })
             .OnOutput<SettingsState.Output.BindingChanged>((in o) =>
             {
                 updateBindingRow(o.Action, o.Key);
-                applyToInputMap(o.Action, o.Key);
+                settingsService.UpdateBinding(o.Action, o.Key);
             })
             .OnOutput<SettingsState.Output.SensitivityChanged>((in o) =>
             {
@@ -96,7 +92,7 @@ public partial class SettingsMenu : Control, IScreen
         GetViewport().SetInputAsHandled();
     }
 
-    private void rebuildBindingsList(IReadOnlyDictionary<string, Key> bindingsDict)
+    private void buildBindingsList(IReadOnlyDictionary<string, Key> bindingsDict)
     {
         foreach (var child in bindingsList.GetChildren())
             child.QueueFree();
@@ -121,12 +117,6 @@ public partial class SettingsMenu : Control, IScreen
         {
             button.Text = key.ToString();
         }
-    }
-
-    private static void applyToInputMap(string action, Key key)
-    {
-        InputMap.ActionEraseEvents(action);
-        InputMap.ActionAddEvent(action, new InputEventKey { PhysicalKeycode = key });
     }
 
     private void setSensitivityDisplay(float value)

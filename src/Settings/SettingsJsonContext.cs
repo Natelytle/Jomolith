@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
-using Jomolith.Settings.Models;
 
-namespace Jomolith.Settings.Services;
+namespace Jomolith.Settings;
 
 [JsonSourceGenerationOptions(
     PropertyNameCaseInsensitive = true,

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Jomolith.Settings.Models;
+namespace Jomolith.Settings;
 
 public record SettingsDto(
     [property: JsonPropertyName("camera_sensitivity")] float CameraSensitivity,

@@ -19,8 +19,9 @@ public partial class AppLogic : LogicBlock, IAppLogic
 
     public override IEnumerable<IDisposable> OnStartSubscriptions()
     {
+        // Ensure the state makes sense for the input by casting
         yield return Get<IAppRepo>().AutoChannel.Bind()
-            .On((in IAppRepo.EnteringTower _) => Input(new AppState.Input.ToGameplay()))
-            .On((in IAppRepo.ExitingTower _) => Input(new AppState.Input.ToMenus()));
+            .On((in IAppRepo.EnteringTower _) => (State as AppState.InMenus)?.OnEnteringTower())
+            .On((in IAppRepo.ExitingTower _) => (State as AppState.InGameplay)?.OnExitingTower());
     }
 }
