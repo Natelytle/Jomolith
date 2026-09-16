@@ -8,7 +8,7 @@ using Jomolith.Gameplay.PauseMenu;
 using Jomolith.Gameplay.State;
 using Jomolith.Towers.Domain.Models;
 using Jomolith.Towers.Factory;
-using Jomolith.Gameplay.Player;
+using Jomolith.Player;
 
 namespace Jomolith.Gameplay;
 
@@ -19,7 +19,7 @@ public partial class GameplayScene : Control, IGameplayScene
 {
     public override void _Notification(int what) => this.Notify(what);
 
-    private const string player_scene_path = "res://src/Gameplay/Player/Player.tscn";
+    private const string player_scene_path = "res://src/Player/Player.tscn";
 
     [Dependency]
     private IAppRepo appRepo => this.DependOn<IAppRepo>();
